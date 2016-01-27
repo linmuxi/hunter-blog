@@ -1,0 +1,36 @@
+<% if (theme.addthis.enable){ %>
+  <div class="addthis addthis_toolbox addthis_default_style">
+    <% if (theme.addthis.facebook){ %>
+      <a class="addthis_button_facebook_like" fb:like:layout="button_count"></a>
+    <% } %>
+    <% if (theme.addthis.twitter){ %>
+      <a class="addthis_button_tweet"></a>
+    <% } %>
+    <% if (theme.addthis.google){ %>
+      <a class="addthis_button_google_plusone" g:plusone:size="medium"></a>
+    <% } %>
+    <% if (theme.addthis.pinterest){ %>
+      <a class="addthis_button_pinterest_pinit" pi:pinit:layout="horizontal"></a>
+    <% } %>
+    <!--
+    <a class="addthis_counter addthis_pill_style"></a>
+    -->
+
+    <% if(theme.addthis.shared){ %>
+      <div class="ds-share flat" data-thread-key="<%= item.path %>" data-title="<%= config.title %>-<%= item.title %>" data-images="此处请替换为分享时显示的图片的链接地址" data-content="" data-url="<%= config.url %><%= config.root %><%= item.path %>">
+        <div class="ds-share-inline">
+          <ul  class="ds-share-icons-16">
+            <li data-toggle="ds-share-icons-more"><a class="ds-more" href="javascript:void(0);">分享到：</a></li>
+            <li><a class="ds-weibo" href="javascript:void(0);" data-service="weibo">微博</a></li>
+            <li><a class="ds-qzone" href="javascript:void(0);" data-service="qzone">QQ空间</a></li>
+            <li><a class="ds-qqt" href="javascript:void(0);" data-service="qqt">腾讯微博</a></li>
+            <li><a class="ds-wechat" href="javascript:void(0);" data-service="wechat">微信</a></li>
+          </ul>
+          <div class="ds-share-icons-more">
+          </div>
+        </div>
+     </div>
+    <% } %>
+  </div>
+  <script type="text/javascript" src="//s7.addthis.com/js/300/addthis_widget.js<% if (theme.addthis.pubid){ %>#pubid=<%= theme.addthis.pubid %><% } %>"></script>
+<% } %>

@@ -1,0 +1,40 @@
+menu:
+  Home:
+  Archives: archives
+  About:
+
+widgets:
+- search
+- category
+- tag
+- recent_posts
+- tagcloud
+
+excerpt_link: Read More
+
+twitter:
+  username:
+  show_replies: false
+  tweet_count: 5
+
+addthis:
+  enable: true
+  pubid:
+  facebook: false
+  twitter: false
+  google: false
+  pinterest: false
+  shared: true
+
+fancybox: true
+
+google_analytics:
+rss:
+
+comment_provider: facebook
+# Facebook comment
+facebook:
+  appid: 0
+  comment_count: 5
+  comment_width: 840
+  comment_colorscheme: light
