@@ -1,7 +1,7 @@
 menu:
   Home:
   Archives: archives
-  About:
+  About: about
 
 widgets:
 - search
@@ -9,6 +9,7 @@ widgets:
 - tag
 - recent_posts
 - tagcloud
+- myWidget
 
 excerpt_link: Read More
 
@@ -24,17 +25,29 @@ addthis:
   twitter: false
   google: false
   pinterest: false
-  shared: true
 
 fancybox: true
 
-google_analytics:
+google_analytics: false
 rss:
 
-comment_provider: facebook
+# comment_provider: facebook
+comment_provider: duoshuo
 # Facebook comment
 facebook:
   appid: 0
   comment_count: 5
   comment_width: 840
   comment_colorscheme: light
+
+# 百度统计
+baidu_tongji: true
+
+# 多说评论
+duoshuo: true 
+
+# 多说分享
+duoshuo_shared: true
+
+# 不蒜子统计博客访问量
+visit_statis_bsz: false

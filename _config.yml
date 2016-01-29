@@ -72,9 +72,6 @@ deploy:
   repo: https://github.com/linmuxi/hunter-blog.git
   branch: gh-pages
 
-# duosuo
-duoshuo: true 
-
 search:
   path: search.xml
   field: post
