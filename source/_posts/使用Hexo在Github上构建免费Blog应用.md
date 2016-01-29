@@ -57,11 +57,11 @@ E:\demo\nodejs\blog>hexo server
 INFO  Hexo is running at http://0.0.0.0:4000/. Press Ctrl+C to stop.
 ~~~
 到这里Hexo就搭建好了,打开浏览器访问：http://localhost:4000 正常情况会显示如下
-![Hexo效果](http://linmuxi.github.io/me/screenshot/hexo.png)
+![Hexo效果](http://7xqlat.com1.z0.glb.clouddn.com/hexo.png)
 
 ** Hexo使用 **
 1、Hexo目录和文件
-![Hexo目录和文件](http://linmuxi.github.io/me/screenshot/hexo_file.png)
+![Hexo目录和文件](http://7xqlat.com1.z0.glb.clouddn.com/hexo_file.png)
 node_modules:依赖的nodejs模块文件
 scaffolds：工具模版文件，文件以md扩展名，语法采用markdown
 source:存放blog正文内容
@@ -85,7 +85,7 @@ E:\demo\nodejs\blog>hexo new first
 INFO  Created: E:\demo\nodejs\blog\source\_posts\first.md
 ~~~
 可以看到在_post目录下新增了first.md文件
-![](http://linmuxi.github.io/me/screenshot/hexo_new.png)
+![](http://7xqlat.com1.z0.glb.clouddn.com/hexo_new.png)
 再次访问：http://localhost:4000 可以发现我们刚才新加的文章已经发布上去了。
 
 5、语法

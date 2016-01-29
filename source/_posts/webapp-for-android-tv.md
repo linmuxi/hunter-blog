@@ -23,4 +23,4 @@ android运行环境：4.4.2
 全部代码已经提交到github上：https://github.com/linmuxi/realtimeData
 
 实现之后的效果图：
-![交易数据](http://linmuxi.github.io/phly/screenshot/realtimeData/realtimeData_2016010601.jpg)
+![交易数据](http://7xqlat.com1.z0.glb.clouddn.com/realtimeData_2016010601.jpg)

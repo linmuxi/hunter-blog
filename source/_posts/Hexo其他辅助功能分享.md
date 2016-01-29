@@ -5,8 +5,8 @@ date: 2016-01-29 09:09:50
 tags: [Hexo,Node.js,Github]
 categories: [技术]
 photos: 
-- http://linmuxi.github.io/me/screenshot/gaoqing1.jpg
-- http://linmuxi.github.io/me/screenshot/gaoqing2.jpg
+- http://7xqlat.com1.z0.glb.clouddn.com/gaoqing1.jpg
+- http://7xqlat.com1.z0.glb.clouddn.com/gaoqing2.jpg
 ---
 这是关于Hexo的第三篇文章了，这里主要分享下Hexo上一些辅助功能项。
 <!--more-->
@@ -25,14 +25,14 @@ photos:
 
 ** fancybox使用 **
 fancybox效果使用，就是在文章头部增加可以切换显示的图片效果，具体效果如下：
-![fancybox效果](http://linmuxi.github.io/me/screenshot/fancybox1.png)
+![fancybox效果](http://7xqlat.com1.z0.glb.clouddn.com/fancybox1.png)
  
 具体配置是在文章头部添加photos配置项：
 ~~~markdown
 ---
 photos: 
-- http://linmuxi.github.io/me/screenshot/gaoqing1.jpg
-- http://linmuxi.github.io/me/screenshot/gaoqing2.jpg
+- http://7xqlat.com1.z0.glb.clouddn.com/gaoqing1.jpg
+- http://7xqlat.com1.z0.glb.clouddn.com/gaoqing2.jpg
 ---
 ~~~
  
@@ -46,7 +46,7 @@ layout: false
  
 ** 文章摘要 **
 在首页只显示more以上的内容，余文需要点击【> Read More】连接打开全文才能显示，效果如下：
-![文章摘要效果](http://linmuxi.github.io/me/screenshot/more1.png)
+![文章摘要效果](http://7xqlat.com1.z0.glb.clouddn.com/more1.png)
 具体配置是使用<!-more-->:
 ~~~markdown
 ---
@@ -56,8 +56,8 @@ date: 2016-01-29 09:09:50
 tags: [第一次]
 categories: [日志,生活]
 photos: 
-- http://linmuxi.github.io/me/screenshot/gaoqing1.jpg
-- http://linmuxi.github.io/me/screenshot/gaoqing2.jpg
+- http://7xqlat.com1.z0.glb.clouddn.com/gaoqing1.jpg
+- http://7xqlat.com1.z0.glb.clouddn.com/gaoqing2.jpg
 ---
 上面都是在首页显示的摘要信息
 <!--more-->
@@ -144,7 +144,10 @@ widgets:
 第二步，发布blog到github上面，本地是无法看到效果的，一定要发布到github上面去。
 第三步，[查看效果](http://linmuxi.github.io/hunter-blog/2016/01/29/hello/1)
 
-先到这里，下面两个以后再补上
-~~** 图床 **~~
+** 图床 **
+之前把所有图片都托管在github上，发现访问有点慢，后来改把所有图片资源都放到[七牛云](https://portal.qiniu.com/signin)上托管了，速度还可以。
+七牛注册成功后，会有10GB永久免费存储空间+每月10GB下载流量、10万次PUT请求、100万次Get请求，对于目前个人博客来说已经够用了。在这里我也发一个[七牛邀请码](https://portal.qiniu.com/signup?code=3ldifmoydek42)
 
+
+先到这里，下面以后再补上
 ~~** 博客访问量统计 **~~

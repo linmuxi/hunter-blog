@@ -81,4 +81,4 @@ exports.connectLogger = function(logger,options){
 ~~~
 
 ** 运行输出 **
-![Log4js打印效果](http://linmuxi.github.io/me/screenshot/log4js.png)
+![Log4js打印效果](http://7xqlat.com1.z0.glb.clouddn.com/log4js.png)
