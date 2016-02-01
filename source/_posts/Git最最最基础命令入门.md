@@ -1,7 +1,8 @@
 ---
 title: Git最最最基础命令入门
 date: 2016-01-29 12:11:26
-tags:
+tags: [Git]
+categories: [技术]
 ---
 这篇只是和大家分享下Git的最简单的基础命令入门
 <!--more-->
