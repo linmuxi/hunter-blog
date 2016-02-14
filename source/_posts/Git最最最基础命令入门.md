@@ -7,9 +7,9 @@ categories: [技术]
 这篇只是和大家分享下Git的最简单的基础命令入门
 <!--more-->
 目录
-1. 创建版本库
-1. 从版本库下载文件到本地
-1. 提交文件到版本库
+	1. 创建版本库
+	2. 从版本库下载文件到本地
+	3. 提交文件到版本库
 
 ** 创建版本库 **
 直接登录github网站创建一个reps,这里就不具体描述了，我创建的resp就命名为test-git，地址为：https://github.com/linmuxi/test-git.git
@@ -95,7 +95,7 @@ To http://github.com/linmuxi/test-git.git
 Branch master set up to track remote branch master from origin.
 ~~~
 在输入github账户和密码之后，文件hello-world.txt就被同步到github上去了
-
+<!-- 也可以简写命令：`git push` 所有提交的文件会被默认同步到当前所在分支下面 -->
 
 会用到基础命令：
 
@@ -114,3 +114,5 @@ Branch master set up to track remote branch master from origin.
 	git clone giturl #从版本库下载代码
 
 	git rm newFile.txt --cached #将newFile.txt从索引中移出
+
+	git checkout newFile.txt #撤销newFile.txt的修改
