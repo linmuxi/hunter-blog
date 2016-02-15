@@ -17,7 +17,7 @@ categories: [技术]
 &nbsp;&nbsp;&nbsp;&nbsp;"A fast, simple & powerful blog framework"这是[Hexo官方](http://hexo.io)上面的介绍，Hexo是基于Node.js的一个静态blog框架，通过Hexo可以仅仅使用几条简短的命令就能方便我们快速创建自己的blog。Hexo可以部署在Node服务器上，也可以部署在github上面。当然部署在github上好处多多，不紧可以省去服务器的成本，还可以免去了相关系统运维方便的事情。
 
 ** Hexo安装 **
-~~~ nodejs
+~~~ bat
 #查看Node版本
 E:\demo\nodejs>node -v
 v0.12.7
@@ -94,7 +94,7 @@ INFO  Created: E:\demo\nodejs\blog\source\_posts\first.md
 2：正文：markdown语法和Swig语法(掌握一个就行)
 3：特殊标记：引用，链接，图片，代码块，iframe
 编辑文章内容：
-~~~ markdown
+~~~ md
 ---
 title: 我的第一篇文章
 date: 2016-01-26 14:45:07
