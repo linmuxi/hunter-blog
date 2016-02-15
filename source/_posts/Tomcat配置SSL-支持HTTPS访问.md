@@ -11,7 +11,7 @@ categories: [技术]
 会在用户目录下面创建一个.keystore的文件
 
 第二步：修改tomcat\config\server.xml文件
-~~~
+~~~xml
 <Connector port="8443" protocol="org.apache.coyote.http11.Http11Protocol"
 maxThreads="150" SSLEnabled="true" scheme="https" secure="true"
 clientAuth="false" sslProtocol="TLS" keystorePass="这里是第一步配置的是keystore密码" />
@@ -21,7 +21,7 @@ clientAuth="false" sslProtocol="TLS" keystorePass="这里是第一步配置的�
 
 通过下面的配置，能让http访问自动转换到https协议上去进行访问:
 修改应用服务web.xml文件
-~~~
+~~~xml
 <security-constraint>
     <web-resource-collection>
         <web-resource-name>securedapp</web-resource-name>

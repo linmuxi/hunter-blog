@@ -9,7 +9,7 @@ categories: [技术]
 第一步：将fcexporter.jar、fcexporthandler.jar导入lib下
 
 第二步：在classs下新建导出配置文件fusioncharts_export.properties
-~~~
+~~~prolog
 #Please specify the path to a folder with write permissions relative to web application root
 SAVEPATH=./images/
 #This constant HTTP_URI stores the HTTP reference to 
@@ -28,7 +28,7 @@ FILESUFFIXFORMAT=TIMESTAMP
 ~~~
 
 第三步：修改web.xml
-~~~
+~~~xml
 <servlet>
 	<display-name>FCExporter</display-name>
 	<servlet-name>FCExporter</servlet-name>
@@ -42,18 +42,18 @@ FILESUFFIXFORMAT=TIMESTAMP
 ~~~
 
 第四步：编辑报表属性
-~~~
+~~~xml
 <chart exportEnabled="1" exportAction="save" exportAtClient="0" exportFileName="fileName" exporthandler="FCExporter">
 ~~~
 
 第五步：调用JS函数
-~~~
+~~~js
 var chartObject = getChartFromId('myChart');
 if( chartObject.hasRendered()) chartObject.exportChart();
 ~~~
 
 第六步：将图片写入Excel中
-~~~
+~~~java
 ByteArrayOutputStream allOutputStream = new ByteArrayOutputStream();
 ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
 Workbook book = WorkbookFactory.create(fileTransfer.getInputStream());

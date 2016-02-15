@@ -153,7 +153,7 @@ compact([0,1,false,2,'',3]);
 1、静态化处理
 github只托管静态文件，所以这里我们需要将hexo项目的node剥离出来生成只包括html、js、css文件的静态资源文件。
 使用hexo提供的命令可以轻松实现:
-~~~ nodejs
+~~~dos
 E:\demo\nodejs\blog>hexo generate
 INFO  Files loaded in 314 ms
 INFO  Generated: js/script.js
@@ -167,7 +167,7 @@ INFO  36 files generated in 907 ms
 1：在github上新建rep、gh-pages分支
 这里我的rep命名为：nodejs-hexo
 2：修改_config.yml
-~~~ yml
+~~~html
 root: /nodejs-hexo
 deploy:
   type: git
@@ -180,7 +180,7 @@ deploy:
 ** Hexo主题 **
 Hexo默认主题是landscape，我们可以到Hexo网站去下载其他主题并应用到我们的blog上面去。
 首先，找到我们需要的主题git地址，并下载到Hexo根目录下面的thems文件夹下。
-~~~
+~~~dos
 E:\demo\nodejs\blog>git clone git://github.com/tommy351/hexo-theme-light.git the
 mes/light
 Cloning into 'themes/light'...

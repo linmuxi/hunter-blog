@@ -90,14 +90,14 @@ http://192.168.100.101:8081
 
 第一步：进行nginx.conf文件配置。
 1、在#gzip on下面新增
-~~~
+~~~nginx
 upstream local_ng_01{
 	server 192.168.100.101:8080;
 	server 192.168.100.102:8080;
 }
 ~~~
 2、修改Server的配置
-~~~
+~~~nginx
 server {
     listen       80;
     server_name  192.168.100.88;
@@ -112,7 +112,7 @@ server {
 这样我们在访问192.168.100.88的时候，请求会被均衡到101和102两台服务器上去了
 
 完整nginx.conf配置：
-~~~ nginx_config
+~~~nginx
 #user  nobody;
 worker_processes  4;
 

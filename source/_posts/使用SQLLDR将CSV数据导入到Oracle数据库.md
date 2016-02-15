@@ -11,7 +11,7 @@ SQLLDR是Oracle下提供的一款数据导入工具，使用简单方便，推�
 命令如下：`sqlldr 用户名/密码@SID control=SQLLDR语法文件(例如：control.ctl)`
 
 control.ctl文件内容：
-~~~
+~~~sql
 LOAD DATA 
 INFILE 'D:\data\inputData.csv'       --要导入到数据库中的数据文件 
 INFILE 'D:\data\inputData2.csv'      --可以导入多个文件 

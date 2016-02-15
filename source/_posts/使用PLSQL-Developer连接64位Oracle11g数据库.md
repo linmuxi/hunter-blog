@@ -24,7 +24,7 @@ OCI Library ：D:\Oracle\app\hunter\product\instantclient_11_2\oci.dll
 
 第六步：设置环境变量(修改PATH和TNS_ADMIN环境变量)
 对于NLS_LANG环境变量, 最好设置成和数据库端一致, 首先从数据库端查询字符集信息:
-~~~
+~~~dos
 SQL> select userenv('language') nls_lang from dual;
 NLS_LANG
 ----------------------------------------------------

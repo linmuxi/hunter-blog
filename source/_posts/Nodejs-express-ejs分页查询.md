@@ -7,7 +7,7 @@ categories: [技术]
 学习Nodejs、express做的一个简单分页查询，前端分页控件用的是bootstrap-paginator
 <!--more-->
 ** dbhelper **
-~~~
+~~~js
 var mysql = require("mysql");
 var pool = mysql.createPool({
 	host:"localhost",
@@ -74,7 +74,7 @@ exports.helper = helper;
 ~~~
 
 ** Controller **
-~~~
+~~~js
 var fs = require("fs");
 
 var express = require("express");
@@ -124,7 +124,7 @@ app.listen(3000,function(){
 ~~~
 
 ** Ejs模版 **
-~~~
+~~~html
 <!DOCTYPE html>
 <html lang="en">
 <head>

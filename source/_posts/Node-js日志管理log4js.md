@@ -7,12 +7,12 @@ categories: [技术]
 Nodejs采用log4js进行日志管理，log4js的输出级别有6个: trace, debug, info, warn, error, fatal
 <!--more-->
 ** 安装log4js **
-~~~
+~~~dos
 npm install log4js
 ~~~
  
 ** 代码app.js **
-~~~
+~~~js
 var express = require("express");
 var app = express();
 
@@ -51,7 +51,7 @@ app.listen(3000,function(){
 ~~~
 
 ** 代码logger.js **
-~~~
+~~~js
 var log4js = require("log4js");
 log4js.configure({
 	appenders:[

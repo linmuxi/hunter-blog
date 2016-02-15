@@ -39,7 +39,7 @@ Nodejs提供了20多种内置的中间件：
 关于内置中间件的具体用法可以参考：[Nodejs内置中间件用法](http://blog.fens.me/nodejs-connect/) [Nodejs内置中间件API](https://github.com/senchalabs/connect#middleware)
 
 这里，我们主要分享下如何实现自定义中间件,下面我们定义了一个中间件，处理逻辑是禁止早上9点以前的访问：
-~~~
+~~~js
 var connect = require("connect");
 var app = connect();
 

@@ -16,7 +16,7 @@ categories: [技术]
 
 ** 从版本库下载文件到本地 **
 输入命令：`git clone http://github.com/linmuxi/test-git.git`
-~~~
+~~~dos
 E:\demo\git>git clone http://github.com/linmuxi/test-git.git
 Cloning into 'test-git'...
 remote: Counting objects: 3, done.
@@ -30,7 +30,7 @@ Checking connectivity... done.
 假如，我在test-git目录下面增加了一个hello-world.txt文件，那么如何把它提交到版本库上去呢。这里我们描述细致点。
 路径切换到包含.git的目录也就是test-git目录下面来
 先输入命令查看工作树状态:`git status`
-~~~
+~~~dos
 E:\demo\git\test-git>git status
 On branch master
 Your branch is up-to-date with 'origin/master'.
@@ -47,7 +47,7 @@ nothing added to commit but untracked files present (use "git add" to track)
 到这一步,文件hello-world.txt就被添加到索引中了
 
 然后再次查看工作树状态：`git status`
-~~~
+~~~dos
 E:\demo\git\test-git>git status
 On branch master
 Your branch is up-to-date with 'origin/master'.
@@ -59,7 +59,7 @@ Changes to be committed:
 系统提示检测到了一个新的文件，并提示我们使用'git reset head'来进行操作，我们的目的是要将文件提交到版本库，这里就不能使用这个命令了。
 
 我们改输入命令：`git commit -m "new file helloworld.txt"`
-~~~
+~~~dos
 E:\demo\git\test-git>git commit -m "new file helloworld.txt"
 [master 2d620a7] new file helloworld.txt
  1 file changed, 0 insertions(+), 0 deletions(-)
@@ -68,7 +68,7 @@ E:\demo\git\test-git>git commit -m "new file helloworld.txt"
 到这一步，文件hello-world.txt就被添加到本地库了，此时还没有提交到github远程库中去。
 
 再次查看工作树状态：`git status`
-~~~
+~~~dos
 E:\demo\git\test-git>git status
 On branch master
 Your branch is ahead of 'origin/master' by 1 commit.
@@ -79,7 +79,7 @@ nothing to commit, working directory clean
 
 接下来，我们就要把提交到本地库中的hello-world.txt文件同步到github运程库中去了
 使用命令:`git push -u origin master`
-~~~
+~~~dos
 E:\demo\git\test-git>git push -u origin master
 error: cannot spawn sh: No such file or directory
 Username for 'https://github.com': linmuxi

@@ -9,7 +9,7 @@ categories: [技术]
 关于Flex环境搭建和Red5服务器的部署和操作，不在本篇介绍范围内。
 
 具体操作代码比较简单，关键点都有中文注释，Flex代码如下：
-~~~
+~~~xml
 <?xml version="1.0" encoding="utf-8"?>
 <s:Application xmlns:fx="http://ns.adobe.com/mxml/2009" 
                xmlns:s="library://ns.adobe.com/flex/spark" 

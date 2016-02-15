@@ -1,5 +1,4 @@
 ---
-layout: data
 title: Data Files的使用
 date: 2016-02-01 09:18:27
 tags: [Hexo]
@@ -18,7 +17,7 @@ categories: [技术]
 ![Hexo版本](http://7xqlat.com1.z0.glb.clouddn.com/hexo_version.png)
 
 修改后的for标签写法：
-~~~for
+~~~html
 <% if (site.data.menu) { %>
 	<% for (item in site.data.menu) { %>
 		<li><%= item %> <%= site.data.menu[item] %></li>

@@ -27,7 +27,7 @@ require方法接受以下几种参数的传递：
 
 ** 自定义模块 **
 首先，我们创建一个文件命名为：hello.js，内容如下：
-~~~
+~~~js
 exports.world = function(){
 	console.log("hello world");
 }
@@ -46,7 +46,7 @@ exports.car = car;
 在hello.js文件中，我们通过exports对象将我们定义好的对象发布出去，供其他nodejs应用程序调用。
 
 接下来我们创建另外一个文件：main.js,内容如下：
-~~~
+~~~js
 var hello = require("./hello");
 hello.world();
 console.log(hello.test("张三"));
@@ -61,7 +61,7 @@ car.say("历史");
 ** 服务端模块 **
 Node.js提供了很多内置的服务端模块供我们使用，大大的提高了我们的开发效率。
 例如：使用提供的http模块
-~~~
+~~~js
 var http = require("http");
 ...
 http.createServer(...);

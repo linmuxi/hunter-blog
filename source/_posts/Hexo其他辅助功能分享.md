@@ -85,7 +85,7 @@ photos:
 第二步，登录百度统计管理平台，在网站中心选项卡配置我们的博客地址信息
 第三步，获取统计的JS代码
 第四步，在themes/主题/layout/_partial目录下面新建baidu_tongji.ejs文件，将复制的统计js代码粘贴进去，可以在主题_config.yml配置文件中定义一个变量来控制是否启用百度统计。
-~~~ejs
+~~~js
 <% if(theme.baidu_tongji){ %>
   <!-- baidu统计 -->
   <script>
@@ -101,7 +101,7 @@ photos:
 <% } %>
 ~~~
 第五步，编辑同目录下面的head.ejs，在&lt;/head&gt;之前增加代码
-~~~ejs
+~~~html
  <!-- 添加baidu统计 -->
   <%- partial('baidu_tongji') %>
   <!-- end 添加baidu统计 -->
@@ -113,7 +113,7 @@ photos:
 ** 自定义挂件 ** 
 在博客的右边显示了很多挂件，hexo默认提供了5个挂件：分类、最近发布的文章、标签、标签云、查询
 自定义挂件第一步在themes/主题/layout/_widget目录下面新建myWidget.ejs文件
-~~~
+~~~html
 <div class="widget tag">
   <h3 class="title">自定义挂件</h3>
   <ul class="entry">
@@ -125,7 +125,7 @@ photos:
 </div>
 ~~~
 第二步：编辑主题下面的配置文件_config.yml,在widgets变量下面增加新建的自定义挂件ejs文件名
-~~~
+~~~json
 widgets:
 - search
 - category
