@@ -1,10 +1,6 @@
 <div class="widget tag">
   <h3 class="title"><%= __('mywidget') %></h3>
   <ul class="entry">
-  	<li>自定义挂件1</li>
-  	<li>自定义挂件2</li>
-  	<li>自定义挂件3</li>
-  	<li><a href="404">404</a></li>
 	<% if (site.data.widget_menu) { %>
 		<% for (item in site.data.widget_menu) { %>
 			<li><a href="<%= site.data.widget_menu[item] %>"><%= item %></a></li>

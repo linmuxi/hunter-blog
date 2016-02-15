@@ -1,7 +1,7 @@
 ---
 title: 'Tomcat配置SSL,支持HTTPS访问'
 date: 2016-02-01 15:29:36
-tags: [Tomcat,HTTPS,SSL]
+tags: [Tomcat]
 categories: [技术]
 ---
 这篇主要分享在Tomcat上配置SSL，开启HTTPS访问。

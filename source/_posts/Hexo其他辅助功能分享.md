@@ -2,7 +2,7 @@
 # layout: false
 title: Hexo其他辅助功能分享
 date: 2016-01-29 09:09:50
-tags: [Hexo,Node.js,Github]
+tags: [Hexo]
 categories: [技术]
 photos: 
 - http://7xqlat.com1.z0.glb.clouddn.com/gaoqing1.jpg

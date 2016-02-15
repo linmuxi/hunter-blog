@@ -1,7 +1,7 @@
 ---
 title: Hexo博客配置留言和分享功能
 date: 2016-01-28 11:49:01
-tags: [Hexo,Node.js,Github]
+tags: [Hexo]
 categories: [技术]
 ---
 接上一篇[《使用Hexo在Github上构建免费Blog应用》](http://linmuxi.github.io/hunter-blog/2016/01/27/使用Hexo在Github上构建免费Blog应用/)，这篇介绍下如何在Hexo博客上配置留言和分享功能。
