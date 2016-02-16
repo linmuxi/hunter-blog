@@ -182,7 +182,7 @@ http {
         #
         #location ~ \.php$ {
         #    proxy_pass   http://127.0.0.1;
-        #}
+        # }
 
         # pass the PHP scripts to FastCGI server listening on 127.0.0.1:9000
         #
@@ -192,14 +192,14 @@ http {
         #    fastcgi_index  index.php;
         #    fastcgi_param  SCRIPT_FILENAME  /scripts$fastcgi_script_name;
         #    include        fastcgi_params;
-        #}
+        # }
 
         # deny access to .htaccess files, if Apache's document root
         # concurs with nginx's one
         #
         #location ~ /\.ht {
         #    deny  all;
-        #}
+        # }
     }
 
 
@@ -214,7 +214,7 @@ http {
     #        root   html;
     #        index  index.html index.htm;
     #    }
-    #}
+    # }
 
 
     # HTTPS server
@@ -236,7 +236,7 @@ http {
     #        root   html;
     #        index  index.html index.htm;
     #    }
-    #}
+    # }
 }
 ~~~
 

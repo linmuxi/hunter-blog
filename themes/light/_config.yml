@@ -55,4 +55,4 @@ duoshuo_shared: true
 visit_statis_bsz: true
 
 # google代码高亮
-google_code_prettify: false
+google_code_prettify: true

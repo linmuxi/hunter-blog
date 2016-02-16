@@ -1,7 +1,7 @@
-/* Tomorrow Night Theme */
-/* Original theme - https://github.com/chriskempson/tomorrow-theme */
+/* Vibrant Ink Theme */
+/* Original theme - http://alternateidea.com/blog/articles/2006/1/3/textmate-vibrant-ink-theme-and-prototype-bundle */
 .prettyprint {
-  background: #1d1f21 !important;
+  background: black;
   font-family: Menlo, 'Bitstream Vera Sans Mono', 'DejaVu Sans Mono', Monaco, Consolas, monospace;
   font-size: 12px;
   line-height: 1.5;
@@ -10,64 +10,64 @@
 }
 
 .pln {
-  color: #c5c8c6;
+  color: white;
 }
 
 @media screen {
   .str {
-    color: #b5bd68;
+    color: #66ff00;
   }
 
   .kwd {
-    color: #b294bb;
+    color: #ff6600;
   }
 
   .com {
-    color: #969896;
+    color: #9933cc;
   }
 
   .typ {
-    color: #81a2be;
+    color: #445588;
   }
 
   .lit {
-    color: #de935f;
+    color: #445588;
   }
 
   .pun {
-    color: #c5c8c6;
+    color: white;
   }
 
   .opn {
-    color: #c5c8c6;
+    color: white;
   }
 
   .clo {
-    color: #c5c8c6;
+    color: white;
   }
 
   .tag {
-    color: #cc6666;
+    color: white;
   }
 
   .atn {
-    color: #de935f;
+    color: #99cc99;
   }
 
   .atv {
-    color: #8abeb7;
+    color: #66ff00;
   }
 
   .dec {
-    color: #de935f;
+    color: white;
   }
 
   .var {
-    color: #cc6666;
+    color: white;
   }
 
   .fun {
-    color: #81a2be;
+    color: #ffcc00;
   }
 }
 @media print, projection {

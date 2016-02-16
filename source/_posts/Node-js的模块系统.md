@@ -57,6 +57,29 @@ car.say("历史");
 ~~~
 在main.js文件中，代码require("./hello")引入了当前目录下的hello.js文件(默认.js后缀),即引入了我们定义的hello模块，并能调用hello模块发布出来的对象。
 
+注意：require("./hello") 是引入当前目录下面的hello.js,也可以是引入当前目录下的hello目录(hello目录中有index.js文件)，这两种方法效果一样，hexo的启动方式就是采用第二种方式进行的。
+目录结构如下：
+* demo
+	* main.js
+	* lib
+		* index.js
+
+index.js文件内容如下：
+~~~js
+'use strict'
+module.exports = function(){
+	console.log("hello world");
+}
+~~~
+
+main.js文件内容如下：
+~~~js
+'use strict'
+require('./lib')();
+~~~
+
+即：require('./lib/index.js') == require('./lib');
+
 
 ** 服务端模块 **
 Node.js提供了很多内置的服务端模块供我们使用，大大的提高了我们的开发效率。

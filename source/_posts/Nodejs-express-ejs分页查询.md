@@ -147,7 +147,7 @@ app.listen(3000,function(){
             <td>UserName</td>
             <td>Password</td>
         </tr>
-        <%for(var i = 0;i<items.length;i++){%>
+        <%for(var i = 0;i<items.length;i++){ %>
             <tr>
                 <td><%=items[i].id%></td>
                 <td><%=items[i].userName%></td>
