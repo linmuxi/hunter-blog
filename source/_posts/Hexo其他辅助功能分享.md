@@ -67,7 +67,7 @@ photos:
 ** 自定义目录 ** 
 使用命令：`hexo new page about`
 在source下面会创建一个about目录，里面有个index.md文件
-将自定义目录挂接到博客首页菜单上去，需要在全局配置文件_config.yml中的menu下面新增About: about即可，其中Abount是在页面显示的名称，可自定义，about是新创建的目录，名称必须一致
+将自定义目录挂接到博客首页菜单上去，需要在全局配置文件_config.yml中的menu下面新增About: about即可，其中About是在页面显示的名称，可自定义，about是新创建的目录，名称必须一致
 
 ** 草稿文章的处理 ** 
 在source/_drafts目录下面存放的是草稿文章，默认情况下草稿文章是不会发布到博客上面去，可以通过以下两种方式进行发布。
