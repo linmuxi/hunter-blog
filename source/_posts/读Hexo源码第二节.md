@@ -237,3 +237,17 @@ module.exports = function(ctx){
 };
 ~~~
 
+
+
+<!--
+Hexo相关Node.js库
+
+bluebird:https://github.com/petkaantonov/bluebird
+bluebird是一个功能齐全的库,专注于创新的特性和性能
+
+warehouse:https://github.com/tommy351/warehouse
+Hexo使用的数据库
+
+titlecase：首字母转大写
+
+-->
