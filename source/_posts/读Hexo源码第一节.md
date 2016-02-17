@@ -4,7 +4,7 @@ date: 2016-02-16 14:40:55
 tags: [Hexo]
 categories: [技术]
 ---
-Hexo使用已经有几天了，昨天想对Hexo的代码做高亮配置，修改了_config.yml的highlight为false，结果在生成静态文件的时候报错，由于对Hexo内部运转不是太清楚，为了解决这个问题，我不得不深入研究下Hexo的源码来了解其运行过程。
+Hexo使用已经有段时间了，昨天想利用Google-Code-Prettify取代Hexo默认的高亮配置，修改了_config.yml的highlight为false，结果在生成静态文件的时候报错，由于对Hexo内部运转不是太清楚，为了解决这个问题，我不得不深入研究下Hexo的源码来了解其运行过程。
 <!--more-->
 hexo-cli安装完成后，需要进行环境变量配置，这样我们才能在dos中使用hexo命令。
 我这里的nodejs是安装在E:\opensource\nodejs目录下面,那么需要把E:\opensource\nodejs配置到path变量中。
@@ -54,7 +54,7 @@ exports = module.exports = function() {
   return findPkg(cwd, args).then(function(path) {
     //如果当前目录不存在则调用hexo-cli命令输出
     if (!path) return runCLICommand(args);
-    //如果找到了指定的包加载Hexo模块
+    //如果找到了package.json，则加载Hexo模块
     return loadHexoModule(path, args);
   }).catch(handleError);
 };
@@ -64,7 +64,7 @@ exports = module.exports = function() {
 主要是查找当前目录下的package.json文件
 ~~~js
 function findPkg(path) {
-  //查找当前目录下面的package.json,例如：E:/demo/nodejs/pakcage.json
+  //查找当前目录下面的package.json,例如：E:\demo\hexo\source_analy\pakcage.json
   var pkgPath = pathFn.join(path, 'package.json');
 
   return fs.exists(pkgPath).then(function(exist) {
@@ -81,7 +81,7 @@ function findPkg(path) {
 }
 ~~~
 
-假设我们的hexo环境已经配置好，通过find_pkg模块已经查找到了package.json，接着会加载Hexo模块
+假设我们的hexo环境已经初始化好(hexo init)，通过find_pkg模块已经查找到了package.json，接着会加载Hexo模块
 <!-- 新建一个目录E:/demo/hexo/source_analy,切换当前路径到该目录下面，然后执行:`hexo init & npm install hexo --save`。 -->
 ~~~js
 function loadHexoModule(path, args) {
@@ -107,3 +107,4 @@ function loadHexoModule(path, args) {
 "main": "lib/hexo"
 ~~~
 
+到这里基本就很清楚Hexo模块是如何加载进来的，下一节着重分析下Hexo模块代码。

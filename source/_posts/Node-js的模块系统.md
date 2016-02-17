@@ -7,9 +7,9 @@ categories: [技术]
 这篇主要分享下如何自定义模块以及服务端模块的加载规则
 <!--more-->
 目录：
-	1. exports和require
-	2. 自定义模块
-	3. 服务端模块
+* exports和require
+* 自定义模块
+* 服务端模块
 
 ** 前言 **
 为了让Node.js之间可以相互调用，Node.js提供了一个简单的模块系统。

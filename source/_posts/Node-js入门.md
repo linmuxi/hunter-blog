@@ -7,8 +7,8 @@ categories: [技术]
 本篇主要分享Node环境安装和Hello World示例
 <!--more-->
 目录：
-	1. 安装Node环境
-	2. Hello World！
+* 安装Node环境
+* Hello World！
 
 ** 安装Node环境 **
 本章节介绍window和Linux下安装Node的方法。

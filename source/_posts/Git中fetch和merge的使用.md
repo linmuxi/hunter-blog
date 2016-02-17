@@ -7,8 +7,8 @@ categories: [技术]
 这篇主要分享下Git中fetch和merge命令的使用，使用过svn的同学应该都知道，如果远程版本库有更新，我们要同步本地代码与版本库保持一致可以使用update操作。git上是通过fetch和merge命令来从远程库中获取最新的版本并合并到本地版本中去的。
 <!--more-->
 目录
-	1. fetch命令
-	2. merge命令
+* fetch命令
+* merge命令
 
 ** fetch命令 **
 命令：`git fetch origin master` 从远程origin的master分支下载最新的版本到本地master分支

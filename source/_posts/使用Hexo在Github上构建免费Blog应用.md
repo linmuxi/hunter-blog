@@ -7,11 +7,11 @@ categories: [技术]
 &nbsp;&nbsp;&nbsp;&nbsp;"A fast, simple & powerful blog framework"这是Hexo官方上面的介绍，Hexo是基于Node.js的一个静态blog框架，通过Hexo可以仅仅使用几条简短的命令就能方便我们快速创建自己的blog。Hexo可以部署在Node服务器上，也可以部署在github上面。当然部署在github上好处多多，不紧可以省去服务器的成本，还可以免去了相关系统运维方便的事情。
 <!--more-->
 目录
-	1. Hexo介绍
-	2. Hexo安装
-	3. Hexo使用
-	4. Hexo发布到Github
-	5. Hexo主题
+* Hexo介绍
+* Hexo安装
+* Hexo使用
+* Hexo发布到Github
+* Hexo主题
 
 ** Hexo介绍 **
 &nbsp;&nbsp;&nbsp;&nbsp;"A fast, simple & powerful blog framework"这是[Hexo官方](http://hexo.io)上面的介绍，Hexo是基于Node.js的一个静态blog框架，通过Hexo可以仅仅使用几条简短的命令就能方便我们快速创建自己的blog。Hexo可以部署在Node服务器上，也可以部署在github上面。当然部署在github上好处多多，不紧可以省去服务器的成本，还可以免去了相关系统运维方便的事情。
@@ -94,7 +94,7 @@ INFO  Created: E:\demo\nodejs\blog\source\_posts\first.md
 2：正文：markdown语法和Swig语法(掌握一个就行)
 3：特殊标记：引用，链接，图片，代码块，iframe
 编辑文章内容：
-~~~ md
+~~~
 ---
 title: 我的第一篇文章
 date: 2016-01-26 14:45:07
@@ -111,37 +111,19 @@ categories:
 这是**我的第一篇文章**，是用hexo创建的。
 
 # 引用
-** Swing语法 **
-{% blockquote Seth Godin http://sethgodin.typepad.com/seths_blog/2009/07/welcome-to-island-marketing.html Welcome to Island Marketing %}
-Every interaction is both precious and an opportunity to delight.
-{% endblockquote %}
-
 ** Markdown语法 **
 > Every interaction is both precious and an opportunity to delight.
 
-
 # 代码块
-** Swing语法 **
-{% codeblock compact http://www.baidu.com Baidu.js %}
-compact([0,1,false,2,'',3]);
-=> [1,2,3]
-{% endcodeblock %}
-
 ** Markdown语法 **
 `compact([0,1,false,2,'',3]);`
 
 # 链接
-** Swing语法 **
-{% link 我的日志 http://linmuxi.github.io/nodejs-hexo true 我的日志 %}
-
 ** Markdown语法 **
 [我的日志](http://linmuxi.github.io/nodejs-hexo)
 
 # 图片
 * 图片，对于本地图片，需要在source目录下面新建一个images目录存放图片 *
-
-** Swing语法 **
-{% img images/1.png 这是第一张图片 %}
 
 ** Markdown语法 **
 ![这是第一张图片](images/1.png)
