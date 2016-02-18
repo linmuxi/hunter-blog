@@ -4,9 +4,10 @@ date: 2016-01-16 10:57:38
 tags: [Node.js]
 categories: [技术]
 ---
-简单的说 Node.js 就是运行在服务端的 JavaScript。
-Node.js是一个基于Chrome JavaScript 运行时建立的一个平台。
-Node.js是一个事件驱动I/O服务端JavaScript环境，基于Google的V8引擎，V8引擎执行Javascript的速度非常快，性能非常好。
+Node.js® is a JavaScript runtime built on Chrome's V8 JavaScript engine. Node.js uses an event-driven, non-blocking I/O model that makes it lightweight and efficient. Node.js' package ecosystem, npm, is the largest ecosystem of open source libraries in the world.
+
+Node.js是基于Chrome V8 JavaScript引擎构建的JavaScript运行时环境，Node.js使用事件驱动、非阻塞式I/O模型，使其轻量又高效。Node.js的包管理器npm，是全球最大的开源库生态系统。
+
 
 <!-- Node.js是一个基于 Chrome V8 引擎的 JavaScript 运行环境。Node.js 使用了一个事件驱动、非阻塞式 I/O 的模型，使其轻量又高效。Node.js 的包管理器 npm，是全球最大的开源库生态系统。 -->
 <!--more-->
