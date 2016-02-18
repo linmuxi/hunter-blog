@@ -4,7 +4,7 @@ date: 2016-01-28 11:49:01
 tags: [Hexo]
 categories: [技术]
 ---
-接上一篇[《使用Hexo在Github上构建免费Blog应用》](http://linmuxi.github.io/hunter-blog/2016/01/27/使用Hexo在Github上构建免费Blog应用/)，这篇介绍下如何在Hexo博客上配置留言和分享功能。
+接上一篇[《使用Hexo在Github上构建免费Blog应用》](http://linmuxi.github.io/hunter-blog/2016/01/27/hexo-on-github-build-blog/)，这篇介绍下如何在Hexo博客上配置留言和分享功能。
 <!--more-->
 我们的留言控件采用[多说](http://duoshuo.com/)这款插件，话不多说，直接进入主题吧。
  

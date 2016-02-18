@@ -1,7 +1,7 @@
 ---
 title: 使用Fusionchart导出图表并写入Excel中
 date: 2016-02-01 15:16:41
-tags: [图表,Fusionchart]
+tags: [图形报表,Fusionchart]
 categories: [技术]
 ---
 本篇主要分享下如何将Fusionchart图表导出到Excel中，导出到Excel中的仅仅为一张图形图片，并不具备Excel图表编辑功能

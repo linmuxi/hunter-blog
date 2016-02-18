@@ -1,5 +1,5 @@
 ---
-title: Nodejs+Express+ejs分页查询
+title: Node.js+Express+ejs基础入门
 date: 2016-01-19 11:58:06
 tags: [Node.js]
 categories: [技术]

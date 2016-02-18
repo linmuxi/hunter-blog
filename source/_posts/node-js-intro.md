@@ -7,8 +7,13 @@ categories: [技术]
 本篇主要分享Node环境安装和Hello World示例
 <!--more-->
 目录：
+* Node.js介绍
 * 安装Node环境
 * Hello World！
+
+**Node.js介绍**
+Node.js® is a JavaScript runtime built on Chrome's V8 JavaScript engine. Node.js uses an event-driven, non-blocking I/O model that makes it lightweight and efficient. Node.js' package ecosystem, npm, is the largest ecosystem of open source libraries in the world.
+Node.js是基于Chrome V8 JavaScript引擎构建的JavaScript运行时环境，Node.js使用事件驱动、非阻塞式I/O模型，使其轻量又高效。Node.js的包管理器npm，是全球最大的开源库生态系统。
 
 ** 安装Node环境 **
 本章节介绍window和Linux下安装Node的方法。

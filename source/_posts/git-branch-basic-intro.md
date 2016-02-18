@@ -15,10 +15,10 @@ categories: [技术]
 * 删除分支
 
 ** 前提 **
-在上一篇[Git最最最基础命令入门](http://linmuxi.github.io/hunter-blog/2016/01/29/Git最最最基础命令入门)中，我已经创建了一个版本库：https://github.com/linmuxi/test-git.git 
+在上一篇[Git最最最基础命令入门](http://linmuxi.github.io/hunter-blog/2016/01/29/git-basic-cmd-intro)中，我已经创建了一个版本库：https://github.com/linmuxi/test-git.git 
 下面的演示就基于这个版本库来操作。
 
-第一步先将版本库clone到本地，具体操作步骤可以参考[上一篇文章](http://linmuxi.github.io/hunter-blog/2016/01/29/Git最最最基础命令入门) ，这里就不做具体介绍
+第一步先将版本库clone到本地，具体操作步骤可以参考[上一篇文章](http://linmuxi.github.io/hunter-blog/2016/01/29/git-basic-cmd-intro) ，这里就不做具体介绍
 
 
 ** 查看分支 **
