@@ -104,10 +104,9 @@ function Hexo(base, args) {
   
   //下面的模块都提供了register方法，在hexo的init方法中会将nodejs模块注册到下面对应的模块中去
   this.extend = {
-    //注册控制台相关命令
     console: new extend.Console(),
-    //注册项目部署操作
     deployer: new extend.Deployer(),
+    // 过滤器链，提供了注册、异步和同步执行方法，可以将我们自定义的nodejs应用注册进去，可以参考nodejs模块：hexo-server
     filter: new extend.Filter(),
     generator: new extend.Generator(),
     helper: new extend.Helper(),
