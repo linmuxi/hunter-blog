@@ -44,6 +44,8 @@ facebook:
 baidu_tongji: true
 # 百度验证
 baidu_verifi: true
+# google验证
+google_verifi: true
 
 # 多说评论
 duoshuo: true 

@@ -69,10 +69,16 @@ theme: light
 
 # Deployment
 ## Docs: http://hexo.io/docs/deployment.html
+# deploy:
+#  type: git
+#  repo: https://github.com/linmuxi/hunter-blog.git
+#  branch: gh-pages
+
 deploy:
   type: git
-  repo: https://github.com/linmuxi/hunter-blog.git
-  branch: gh-pages
+  repo:
+    github: https://github.com/linmuxi/hunter-blog.git,gh-pages
+    gitcafe: https://gitcafe.com/hunterlin/hunterlin.git,gitcafe-pages
 
 search:
   path: search.xml
