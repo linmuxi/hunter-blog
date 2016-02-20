@@ -77,7 +77,7 @@ theme: light
 deploy:
   type: git
   repo:
-    github: https://github.com/linmuxi/hunter-blog.git,gh-pages
+    github: git@github.com:linmuxi/hunter-blog.git,gh-pages
     gitcafe: https://gitcafe.com/hunterlin/hunterlin.git,gitcafe-pages
 
 search:
