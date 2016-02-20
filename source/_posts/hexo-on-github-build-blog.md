@@ -120,7 +120,7 @@ categories:
 
 # 链接
 ** Markdown语法 **
-[我的日志](http://linmuxi.github.io/nodejs-hexo)
+[我的日志](http://www.linmuxi.com)
 
 # 图片
 * 图片，对于本地图片，需要在source目录下面新建一个images目录存放图片 *

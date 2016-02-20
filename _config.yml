@@ -12,8 +12,10 @@ timezone:
 
 # URL
 ## If your site is put in a subdirectory, set url as 'http://yoursite.com/child' and root as '/child/'
-url: http://linmuxi.github.io
-root: /hunter-blog
+# url: http://linmuxi.github.io
+url: http://www.linmuxi.com
+# root: /hunter-blog/
+root: /
 permalink: :year/:month/:day/:title/
 permalink_defaults:
 
@@ -76,6 +78,20 @@ search:
   path: search.xml
   field: post
 
+sitemap:
+	path: sitemap.xml
+
 # 演示自定义插件
 #test:
 #	_target: true
+
+# Extensions
+Plugins:
+- hexo-generator-feed
+- hexo-generator-sitemap
+
+#Feed Atom
+feed:
+  type: atom
+  path: atom.xml
+  limit: 20

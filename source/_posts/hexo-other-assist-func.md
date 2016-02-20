@@ -106,7 +106,7 @@ photos:
   <%- partial('baidu_tongji') %>
   <!-- end 添加baidu统计 -->
 ~~~
-第六步，发布hexo博客到github，不知道怎么发布可以参看第一篇文章[《使用Hexo在Github上构建免费Blog应用》](http://linmuxi.github.io/hunter-blog/2016/01/27/hexo-on-github-build-blog/)
+第六步，发布hexo博客到github，不知道怎么发布可以参看第一篇文章[《使用Hexo在Github上构建免费Blog应用》](2016/01/27/hexo-on-github-build-blog/)
 第七步，在百度统计管理平台-网站中心去验证下首页代码是否安装正确
 第八步，如果安装正确，一般过24小时就可以百度统计就可以采集到博客的统计信息了
 
@@ -142,7 +142,7 @@ widgets:
 第一步，在blog根目录下面新建404.html，将腾讯公益404js代码粘贴进去
 `<script type="text/javascript" src="http://www.qq.com/404/search_children.js" charset="utf-8"></script>`
 第二步，发布blog到github上面，本地是无法看到效果的，一定要发布到github上面去。
-第三步，[查看效果](http://linmuxi.github.io/hunter-blog/2016/01/29/hello/1)
+第三步，[查看效果](2016/01/29/hello/1)
 
 ** 图床 **
 之前把所有图片都托管在github上，发现访问有点慢，后来改把所有图片资源都放到[七牛云](https://portal.qiniu.com/signin)上托管了，速度还可以。

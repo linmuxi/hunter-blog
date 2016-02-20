@@ -4,7 +4,7 @@ date: 2016-02-17 09:12:56
 tags: [Hexo]
 categories: [技术]
 ---
-在[上一篇](https://linmuxi.github.io/hunter-blog/2016/02/16/hexo-source-analy-01/)中已经介绍了Hexo-cli是如何加载到Hexo模块的，这篇着重分析下Hexo模块代码。
+在[上一篇](2016/02/16/hexo-source-analy-01/)中已经介绍了Hexo-cli是如何加载到Hexo模块的，这篇着重分析下Hexo模块代码。
 <!--more-->
 
 **hexo-cli/lib/index.js**
