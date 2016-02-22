@@ -58,3 +58,8 @@ visit_statis_bsz: true
 
 # google代码高亮
 google_code_prettify: true
+
+# http://blog.csdn.net/v123411739/article/details/45092871
+swiftype: 
+  enable: true
+
