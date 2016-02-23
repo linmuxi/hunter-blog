@@ -3,6 +3,8 @@ title: Hexo博客配置留言和分享功能
 date: 2016-01-28 11:49:01
 tags: [Hexo]
 categories: [技术]
+description: Hexo博客配置留言和分享功能
+keywords: Hexo,留言,分享
 ---
 接上一篇[《使用Hexo在Github上构建免费Blog应用》](2016/01/27/hexo-on-github-build-blog/)，这篇介绍下如何在Hexo博客上配置留言和分享功能。
 <!--more-->

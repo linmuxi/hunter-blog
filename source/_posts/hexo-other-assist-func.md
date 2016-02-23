@@ -4,6 +4,8 @@ title: Hexo其他辅助功能分享
 date: 2016-01-29 09:09:50
 tags: [Hexo]
 categories: [技术]
+description: Hexo其他辅助功能分享
+keywords: Hexo,fancybox,自定义目录,百度统计,图床
 photos: 
 - http://7xqlat.com1.z0.glb.clouddn.com/gaoqing1.jpg
 - http://7xqlat.com1.z0.glb.clouddn.com/gaoqing2.jpg

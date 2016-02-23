@@ -3,6 +3,8 @@ title: 更改ORACLE归档路径及归档模式
 date: 2016-02-22 16:19:25
 tags: [Oracle]
 categories: [技术]
+description: 更改ORACLE归档路径及归档模式
+keywords: Oracle,归档
 ---
 本篇分享下如何更改ORACLE归档路径及归档模式
 <!--more-->

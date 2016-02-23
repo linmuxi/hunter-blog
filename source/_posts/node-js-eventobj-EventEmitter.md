@@ -3,6 +3,8 @@ title: Node.js事件对象EventEmitter
 date: 2016-02-17 09:48:30
 tags: [Node.js]
 categories: [技术]
+description: Node.js事件对象EventEmitter
+keywords: Node.js,EventEmitter
 ---
 这篇主要分享下Node.js事件对象EventEmiiter的介绍和使用
 <!--more-->

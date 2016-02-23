@@ -3,6 +3,8 @@ title: Node.js日志管理log4js
 date: 2016-01-25 11:58:29
 tags: [Node.js]
 categories: [技术]
+description: Node.js日志管理log4js
+keywords: Node.js,log4js
 ---
 Nodejs采用log4js进行日志管理，log4js的输出级别有6个: trace, debug, info, warn, error, fatal
 <!--more-->

@@ -3,6 +3,8 @@ title: 'CommonJS,AMD,CMD及UMD规范介绍'
 date: 2016-02-18 09:35:56
 tags: [JavaScript]
 categories: [技术]
+description: CommonJS,AMD,CMD及UMD规范介绍
+keywords: CommonJS,AMD,CMD,UMD,模块规范
 ---
 本篇分享下关于前端模块规范CommonJS、AMD、CMD及UMD的介绍。
 <!--more-->

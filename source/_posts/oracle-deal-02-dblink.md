@@ -3,6 +3,8 @@ title: 解决DBLink带有后缀的问题
 date: 2016-02-01 16:57:28
 tags: [Oracle]
 categories: [技术]
+description: 解决DBLink带有后缀的问题
+keywords: Oracle,dblink
 ---
 这篇主要分享在默认配置下创建DBLink带有后缀的问题。
 <!--more-->

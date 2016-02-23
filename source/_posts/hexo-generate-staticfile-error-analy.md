@@ -3,6 +3,8 @@ title: Hexo生成静态文件异常分析
 date: 2016-02-17 09:32:13
 tags: [Hexo]
 categories: [技术]
+description: Hexo生成静态文件异常分析
+keywords: Hexo,异常
 ---
 关闭Hexo默认highlight代码高亮，执行`hexo g`生成静态文件，出现异常：`FATAL Template render error: tag name expected`
 <!--more-->

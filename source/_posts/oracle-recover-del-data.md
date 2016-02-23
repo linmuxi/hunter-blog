@@ -3,6 +3,8 @@ title: Oracle恢复被误删的数据
 date: 2016-02-22 16:46:28
 tags: [Oracle]
 categories: [技术]
+description: Oracle恢复被误删的数据
+keywords: Oracle,恢复数据
 ---
 这篇分享下如何恢复被Delete掉的数据。
 <!--more-->

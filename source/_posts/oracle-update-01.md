@@ -3,6 +3,8 @@ title: 对Oracle数据做批量更新的两种方法
 date: 2016-02-22 15:34:11
 tags: [Oracle]
 categories: [技术]
+description: 对Oracle数据做批量更新的两种方法
+keywords: Oracle,批量更新
 ---
 同时对多条(w)数据做update操作，我用到了下面的两种方法
 <!--more-->

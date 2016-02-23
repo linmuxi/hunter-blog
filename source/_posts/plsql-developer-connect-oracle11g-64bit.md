@@ -3,6 +3,8 @@ title: 使用PLSQL Developer连接64位Oracle11g数据库
 date: 2016-02-01 16:45:38
 tags: [Oracle]
 categories: [技术]
+description: 使用PLSQL Developer连接64位Oracle11g数据库
+keywords: Oracle,plsql developer
 ---
 这篇主要分享如何使用PLSQL Developer连接64位Oracle数据库。
 <!--more-->

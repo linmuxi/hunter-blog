@@ -3,6 +3,8 @@ title: Node.js入门
 date: 2016-01-17 11:57:38
 tags: [Node.js]
 categories: [技术]
+description: Node.js入门
+keywords: Node.js,入门
 ---
 本篇主要分享Node环境安装和Hello World示例
 <!--more-->

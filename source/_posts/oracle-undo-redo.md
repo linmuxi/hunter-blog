@@ -3,6 +3,8 @@ title: Undo与Redo的介绍
 date: 2016-02-22 17:06:42
 tags: [Oracle]
 categories: [技术]
+description: Undo与Redo的介绍
+keywords: Oracle,undo,redo
 ---
 本篇主要分享下Oracle中Undo与Redo的介绍
 <!--more-->

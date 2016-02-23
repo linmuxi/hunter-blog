@@ -3,6 +3,8 @@ title: 使用Hexo在Github上构建免费Blog应用
 date: 2016-01-27 11:18:43
 tags: [Hexo]
 categories: [技术]
+description: 使用Hexo在Github上构建免费Blog应用
+keywords: Hexo,Github,免费blog
 ---
 &nbsp;&nbsp;&nbsp;&nbsp;"A fast, simple & powerful blog framework"这是Hexo官方上面的介绍，Hexo是基于Node.js的一个静态blog框架，通过Hexo可以仅仅使用几条简短的命令就能方便我们快速创建自己的blog。Hexo可以部署在Node服务器上，也可以部署在github上面。当然部署在github上好处多多，不紧可以省去服务器的成本，还可以免去了相关系统运维方便的事情。
 <!--more-->

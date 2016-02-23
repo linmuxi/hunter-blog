@@ -3,6 +3,8 @@ title: 使用Flex4进行视频流采集并发布到Red5服务器上
 date: 2016-02-01 15:52:49
 tags: [Flex4,Red5]
 categories: [技术]
+description: 使用Flex4进行视频流采集并发布到Red5服务器上
+keywords: Flex4,Red5,视频流
 ---
 这篇主要分享如何通过Flex4进行本地视频流采集并实时发布到Red5服务器上去。
 <!--more-->

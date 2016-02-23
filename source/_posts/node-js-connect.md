@@ -3,6 +3,8 @@ title: Node.js基础中间件Connect
 date: 2016-01-26 11:58:37
 tags: [Node.js]
 categories: [技术]
+description: Node.js基础中间件Connect
+keywords: Node.js,Connect,中间件
 ---
 什么是中间件？什么是Connect？
 <!--more-->

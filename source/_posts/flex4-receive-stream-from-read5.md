@@ -3,6 +3,8 @@ title: 使用Flex4接受Red5服务器上的实时流数据
 date: 2016-02-01 15:53:21
 tags: [Flex4,Red5]
 categories: [技术]
+description: 使用Flex4进行视频流采集并发布到Red5服务器上
+keywords: Flex4,Red5,视频流
 ---
 这篇主要分享如何使用Flex4从Red5服务器上接受实时流数据。
 <!--more-->

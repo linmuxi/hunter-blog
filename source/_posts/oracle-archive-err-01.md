@@ -3,6 +3,8 @@ title: '问题：ORA-00257: 归档程序错误。在释放之前仅限于内部�
 date: 2016-02-22 15:57:14
 tags: [Oracle]
 categories: [技术]
+description: '问题：ORA-00257: 归档程序错误。在释放之前仅限于内部连接'
+keywords: Oracle,归档错误
 ---
 本篇分享下Oracle异常问题的处理方法
 <!--more-->

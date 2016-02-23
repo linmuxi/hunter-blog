@@ -3,6 +3,8 @@ title: 使用SQLLDR将CSV数据导入到Oracle数据库
 date: 2016-02-01 11:06:36
 tags: [Oracle]
 categories: [技术]
+description: 使用SQLLDR将CSV数据导入到Oracle数据库
+keywords: oracle,sqlldr,csv
 ---
 这篇分享下使用SQLLDR工具将CSV表中的数据导入到Oracle数据库中。
 <!--more-->

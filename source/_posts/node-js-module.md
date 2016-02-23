@@ -3,6 +3,8 @@ title: Node.js的模块系统
 date: 2016-02-15 11:02:46
 tags: [Node.js]
 categories: [技术]
+description: Node.js的模块系统
+keywords: Node.js,模块,模块系统
 ---
 这篇主要分享下如何自定义模块以及服务端模块的加载规则
 <!--more-->

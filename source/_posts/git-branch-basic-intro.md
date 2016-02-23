@@ -3,6 +3,8 @@ title: Git分支的基础使用
 date: 2016-02-14 10:22:02
 tags: [Git]
 categories: [技术]
+description: Git分支的基础使用
+keywords: Git,Git分支
 ---
 这篇主要分享下Git分支的基本操作，关于具体的概念大家可以去百度搜索了解，本篇不做介绍
 <!--more-->

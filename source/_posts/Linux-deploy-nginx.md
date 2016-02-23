@@ -3,6 +3,8 @@ title: Linux下部署Nginx服务
 date: 2016-02-01 11:21:12
 tags: [Linux,Nginx]
 categories: [技术]
+description: Linux下部署Nginx服务
+keywords: Linux,Nginx,Nginx部署
 ---
 这篇主要分享下如何在Linux下部署Nginx服务。
 <!--more-->

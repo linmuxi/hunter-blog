@@ -3,6 +3,8 @@ title: WebApp for Android TV
 date: 2016-01-14 12:00:23
 tags: [Android,WebApp,Echarts,HTML5]
 categories: [技术,工作]
+description: WebApp for Android TV
+keywords: android,webapp,tv
 ---
 一款在TV上显示实时交易数据的android应用
 <!--more-->

@@ -3,6 +3,8 @@ title: Data Files的使用
 date: 2016-02-01 09:18:27
 tags: [Hexo]
 categories: [技术]
+description: Data Files的使用
+keywords: Node.js,Data_Files
 ---
 这篇主要分享Hexo中DataFiles的使用,记录这篇的原因是，官网提供的DataFiles Doc介绍在我本地没有运行出效果来。
 <!--more-->

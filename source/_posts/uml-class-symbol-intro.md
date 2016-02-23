@@ -3,6 +3,8 @@ title: UML类图符号变量介绍
 date: 2016-02-01 10:52:53
 tags: [UML,PowerDesigner]
 categories: [技术]
+description: UML类图符号变量介绍
+keywords: uml,powerdesigner
 ---
 这篇主要分享UML类图符号变量的介绍，画图工具使用的是PowerDeisgner15
 <!--more-->

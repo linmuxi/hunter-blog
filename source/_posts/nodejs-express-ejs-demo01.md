@@ -3,6 +3,8 @@ title: Node.js+Express+ejs基础入门
 date: 2016-01-19 11:58:06
 tags: [Node.js]
 categories: [技术]
+description: Node.js+Express+ejs基础入门
+keywords: Node.js,Express,ejs
 ---
 学习Nodejs、express做的一个简单分页查询，前端分页控件用的是bootstrap-paginator
 <!--more-->

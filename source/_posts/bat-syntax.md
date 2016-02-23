@@ -3,6 +3,8 @@ title: Bat语法总结
 date: 2016-02-16 11:53:29
 tags: [Bat]
 categories: [技术]
+description: Bat语法总结
+keywords: bat,dos,windows
 ---
 这篇主要分享下Window下Bat相关语法的介绍和使用
 <!--more-->

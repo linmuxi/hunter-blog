@@ -3,6 +3,8 @@ title: ORA-01555：快照过旧，回滚段号10(名称为“_SYSSMU10$”)过�
 date: 2016-02-22 17:01:33
 tags: [Oracle]
 categories: [技术]
+description: ORA-01555：快照过旧，回滚段号10(名称为“_SYSSMU10$”)过小
+keywords: Oracle,ORA-01555,快照过旧
 ---
 前篇介绍了利用闪回查询可以将误删的数据恢复，但该操作并不能100%进行数据恢复。本篇就该问题进行分享下。
 <!--more-->

@@ -3,6 +3,8 @@ title: 如何编写Hexo插件
 date: 2016-02-19 09:32:13
 tags: [Hexo]
 categories: [技术]
+description: 如何编写Hexo插件
+keywords: Hexo,插件
 ---
 本篇主要分享下如何在Hexo中自定义插件。
 <!--more-->

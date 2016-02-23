@@ -3,6 +3,8 @@ title: 发布Node.js应用到NPM
 date: 2016-02-19 14:16:06
 tags: [Node.js,NPM]
 categories: [技术]
+description: 发布Node.js应用到NPM
+keywords: Node.js,NPM
 ---
 本篇主要分享下如何将Node.js应用发布到NPM
 <!--more-->

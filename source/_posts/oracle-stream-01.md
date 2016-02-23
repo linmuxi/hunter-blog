@@ -3,6 +3,8 @@ title: Oracle单向高级流复制的使用
 date: 2016-02-22 17:15:10
 tags: [Oracle]
 categories: [技术]
+description: Oracle单向高级流复制的使用
+keywords: Oracle,流
 ---
 本篇分享下Oracle中流复制的使用。
 <!--more-->

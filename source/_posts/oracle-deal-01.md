@@ -3,6 +3,8 @@ title: Oracle小数点转字符丢失0的处理方法
 date: 2016-02-01 16:42:47
 tags: [Oracle]
 categories: [技术]
+description: Oracle小数点转字符丢失0的处理方法
+keywords: Oracle,小数点
 ---
 Oracle中将含有小数点的数值进行字符串转换，会出现0丢失的情况，大家是怎么处理这种情况的？我是这样做的：
 ~~~sql

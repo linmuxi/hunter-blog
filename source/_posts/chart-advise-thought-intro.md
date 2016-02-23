@@ -3,6 +3,8 @@ title: 图形报表使用建议及思维指南
 date: 2016-02-01 11:51:57
 tags: [图形报表]
 categories: [技术]
+description: 图形报表使用建议及思维指南
+keywords: 图表,思维指南
 ---
 业界关于图表的软件琳琅满目，例如我常用的echarts、fusionchart，基本上能够满足工作需求，而且自定义功能也很健全。
 <!--more-->

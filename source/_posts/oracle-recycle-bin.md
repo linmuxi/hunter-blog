@@ -3,6 +3,8 @@ title: Oracle回收站(Recycle Bin)的使用
 date: 2016-02-22 16:30:58
 tags: [Oracle]
 categories: [技术]
+description: Oracle回收站(Recycle Bin)的使用
+keywords: Oracle,回收站,recycle bin
 ---
 我们Drop掉的表还能被找回来吗？答案是必须的。就该问题本篇分享下Oracle中Recycle Bin的使用。
 <!--more-->
