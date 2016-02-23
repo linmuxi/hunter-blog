@@ -28,7 +28,7 @@ addthis:
 
 fancybox: true
 
-google_analytics: false
+google_analytics: "UA-74187619-1"
 rss:
 
 # comment_provider: facebook
