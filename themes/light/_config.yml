@@ -47,6 +47,8 @@ baidu_tongji: true
 baidu_verifi: true
 # google验证
 google_verifi: true
+# sougou验证
+sougou_verifi: true
 
 # 多说评论
 duoshuo: true 
