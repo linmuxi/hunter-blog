@@ -11,13 +11,4 @@
   <%- partial('_partial/after_footer') %>
 </body>
 
-<% if(theme.google_code_prettify){ %>
-<script>
-	$(window).load(function(){
-		$('pre').addClass('prettyprint linenums').attr('style', 'overflow:auto;');
-		prettyPrint();
-	})
-</script>
-<% } %>
-
 </html>

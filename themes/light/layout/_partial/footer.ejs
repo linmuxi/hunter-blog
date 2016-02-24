@@ -5,11 +5,10 @@
   &copy; <%= new Date().getFullYear() %> <%= config.title %>
   <% } %>
 
-  <!-- 使用不蒜子统计博客访问量 -->
+  <!-- 不蒜子统计 -->
   <% if(theme.visit_statis_bsz){ %>
-  	<%- partial('visit_statis_bsz') %>
+  &nbsp;&nbsp;本站总访问量<span id="busuanzi_value_site_pv"></span>次
+  &nbsp;&nbsp;本站访客数<span id="busuanzi_value_site_uv"></span>人次
   <% } %>
-  <!-- end 使用不蒜子统计博客访问量 -->
-
 </div>
 <div class="clearfix"></div>

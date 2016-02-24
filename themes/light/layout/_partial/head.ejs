@@ -32,23 +32,40 @@
   <meta property="og:site_name" content="<%= config.title %>"/>
 
   <% if(page.cover) { %>
-    <meta property="og:image" content="<%= page.cover %>" />
+  <meta property="og:image" content="<%= page.cover %>" />
   <% } else { %>
-    <meta property="og:image" content="<%= config.cover %>"/>
+  <meta property="og:image" content="<%= config.cover %>"/>
+  <% } %>
+  
+  <!-- 百度验证 -->
+  <% if(theme.baidu_verifi){ %>
+  <meta name="baidu-site-verification" content="xyDHnOQvLc" />
+  <% } %>
+
+  <!-- google验证 -->
+  <% if(theme.google_verifi){ %>
+  <meta name="google-site-verification" content="XetGPCVQcMEMmGykIpHKZTAIQzRX1uLgL5FrmjoMXSE" />
   <% } %>
 
   <link href="<%- config.root %>favicon.png" rel="icon">
   <link rel="alternate" href="<% if (theme.rss){ %><%- theme.rss %><% } else { %><%- config.root %>atom.xml<% } %>" title="<%= config.title %>" type="application/atom+xml">
   <link rel="stylesheet" href="<%- config.root %>css/style.css" media="screen" type="text/css">
   <!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
-  <%- partial('google_analytics') %>
-  <!-- 添加baidu统计 -->
-  <%- partial('baidu_tongji') %>
-  <!-- end 添加baidu统计 -->
-  <%- partial('baidu_verifi') %>
-  <%- partial('google_verifi') %>
+
   <!-- 使用google代码高亮 -->
-  <%- partial('google-code-prettify') %>
+  <% if(theme.google_code_prettify){ %>
+  <!--
+  <link rel="stylesheet" href="<%- config.root %>plugins/google-code-prettify/prettify.css" type="text/css">
+  -->
+  <!--
+  <link rel="stylesheet" href="<%- config.root %>plugins/google-code-prettify/vibrant-ink.css" type="text/css">
+  -->
+  <link rel="stylesheet" href="<%- config.root %>plugins/google-code-prettify/tomorrow-night.css" type="text/css"> 
+  <% } %>
+
+  <% if (theme.fancybox){ %>
+  <link rel="stylesheet" href="<%- config.root %>fancybox/jquery.fancybox.css" media="screen" type="text/css">
+  <% } %>
 
   <style type="text/css">
   pre{
