@@ -1,0 +1,10 @@
+<div class="widget tag">
+  <h3 class="title"><%= __('blogroll') %></h3>
+  <ul class="entry">
+	<% if (site.data.blogroll_menu) { %>
+		<% for (item in site.data.blogroll_menu) { %>
+			<li><a href="<%= site.data.blogroll_menu[item] %>"><%= item %></a></li>
+		<% } %>
+	<% } %>
+  </ul>
+</div>

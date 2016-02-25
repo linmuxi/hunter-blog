@@ -10,4 +10,5 @@ archive_a: 归档
 archive_b: 归档：%s
 page: 第 %d 页
 recent_posts: 最新文章
-mywidget: 友情连接
+blogroll: 友情连接
+newComment: 最新评论

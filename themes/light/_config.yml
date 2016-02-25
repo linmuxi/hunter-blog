@@ -10,7 +10,8 @@ widgets:
 - tag
 - recent_posts
 - tagcloud
-- myWidget
+# - blogroll
+- newComment
 
 excerpt_link: Read More
 
@@ -55,6 +56,9 @@ duoshuo: true
 
 # 多说分享
 duoshuo_shared: true
+
+# 显示最新多少评论
+duoshuo_newcomment: true
 
 # 不蒜子统计博客访问量
 visit_statis_bsz: true

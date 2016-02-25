@@ -36,7 +36,7 @@ class Test {
 }
 ~~~
 看了问题后，得出了以下几个问题：
-* 如果在 try 语句块里使用 return 语句，那么 finally 语句块还会执行吗？（果你的答案是不会执行，请务必要看下去 ^_^）
+* 如果在 try 语句块里使用 return 语句，那么 finally 语句块还会执行吗？（如果你的答案是不会执行，请务必要看下去 ^_^）
 * 如果执行，那么是怎样实现既执行 return 又执行 finally 的呢？（如果你的答案是不知道，请继续看下去！！）
 * 上面的程序输出为什么是2？（ 如果不知道，继续看下去~~）
 * 在网上看到还有人还问“是先执行return还是先执行finally？”的
@@ -83,7 +83,7 @@ The only time finally won't be called is: if you call System.exit(), another thr
 
 从上面过程中可以看到，
 * 在 **try** 里 使用 **return** 还是会执行finally语句的（我们用debug的模式看到了程序会条件 finally语句里执行）
-* 执行完finally语句才执行 return。为什么?从上面的图可以合理推理出return +xx;是分开来执行的，先执行++x，再执行finally，最后才执行return跳出函数。因为程序调两次跳到了 return +xx; 语句上。（其实要验证 return ++x 是分开两部分执行的方法很简单，把变量x变成static变量并在main函数里输出，会发现x的值还是3，即使两次跳到 return ++x 也只是第一次执行了加1操作，第二次只是执行了return而没有执行++x。这里是合理推理，后面有真凭实据~~）
+* 执行完finally语句才执行 return。为什么?从上面的图可以合理推理出return ++x是分开来执行的，先执行++x，再执行finally，最后才执行return跳出函数。因为程序调两次跳到了 return +xx; 语句上。（其实要验证 return ++x 是分开两部分执行的方法很简单，把变量x变成static变量并在main函数里输出，会发现x的值还是3，即使两次跳到 return ++x 也只是第一次执行了加1操作，第二次只是执行了return而没有执行++x。这里是合理推理，后面有真凭实据~~）
 
 看到这，我们可能会再次纠结起来了。从上面的验证可以看出，finally语句执行了，而且x的值也确实加到3了，那么为什么y是2呢？
 
