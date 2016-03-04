@@ -132,7 +132,8 @@ No shared spaces configured.
 **-XX:+MaxTenuringThreshold=1**
 ~~~
 /**
-	VM Args: -Xms20m -Xmx20m -Xmn10m -XX:+PrintGCDetails -XX:SurvivorRatio=8 -XX:MaxTenuringThreshold=1 -XX:+UseSerialGC
+	VM Args: -Xms20m -Xmx20m -Xmn10m -XX:+PrintGCDetails -XX:SurvivorRatio=8 
+	-XX:MaxTenuringThreshold=1 -XX:+UseSerialGC -XX:+PrintTenuringDistribution
 **/
 public class TestMaxTenuringThreshold {
 	private static final int _1MB = 1024*1024;
@@ -182,6 +183,57 @@ No shared spaces configured.
 
 最后通过日志可以看到`def new generation   total 9216K, used 4259K`,年轻代占用了4259k的内存（eden区的allocation3新对象），`tenured generation   total 10240K, used 4836K`老年代占用了4836K的内存(allocation1和allocation2两个对象)
 
+
+**-XX:+MaxTenuringThreshold=15**
+GC日志：
+~~~
+[GC [DefNew
+Desired survivor size 524288 bytes, new threshold 15 (max 15)
+- age   1:     445680 bytes,     445680 total
+: 4703K->435K(9216K), 0.0025569 secs] 4703K->4531K(19456K), 0.0025839 secs] [Times: user=0.00 sys=0.00, real=0.00 secs] 
+[GC [DefNew
+Desired survivor size 524288 bytes, new threshold 15 (max 15)
+- age   2:     445680 bytes,     445680 total
+: 4531K->435K(9216K), 0.0004236 secs] 8627K->4531K(19456K), 0.0004367 secs] [Times: user=0.00 sys=0.00, real=0.00 secs] 
+Heap
+ def new generation   total 9216K, used 4859K [0x00000000f9a00000, 0x00000000fa400000, 0x00000000fa400000)
+  eden space 8192K,  54% used [0x00000000f9a00000, 0x00000000f9e51f98, 0x00000000fa200000)
+  from space 1024K,  42% used [0x00000000fa200000, 0x00000000fa26ccf0, 0x00000000fa300000)
+  to   space 1024K,   0% used [0x00000000fa300000, 0x00000000fa300000, 0x00000000fa400000)
+ tenured generation   total 10240K, used 4096K [0x00000000fa400000, 0x00000000fae00000, 0x00000000fae00000)
+   the space 10240K,  40% used [0x00000000fa400000, 0x00000000fa800010, 0x00000000fa800200, 0x00000000fae00000)
+ compacting perm gen  total 21248K, used 3045K [0x00000000fae00000, 0x00000000fc2c0000, 0x0000000100000000)
+   the space 21248K,  14% used [0x00000000fae00000, 0x00000000fb0f9740, 0x00000000fb0f9800, 0x00000000fc2c0000)
+No shared spaces configured.
+~~~
+从GC日志可以分析：
+
+第一次GC操作之前：新生代Eden区有allocation1对象（256KB）和allocation2对象（4MB）。
+GC操作之后：将Eden区域的两个对象进行迁移（采用复制算法），由于Survivor区(1024K)无法容纳allocation2对象(4MB)，所以将allocation1对象迁移到了老年代中，而allocation1对象（256K）则迁移到了Survivor区，所以此时新生代内存占有总容量只有Survivor区域的allocation1对象。这就是GC操作内存变换的缘由`4703K->435K(9216K)`
+
+第二次GC之前：新生代Eden区域有老的allocation3对象(4MB),Survivor区域的allocation1对象(256KB)。
+GC操作之后：由于老的allocation3对象已经是无效对象，所以其占用的内存会被清理掉；而Survivor区的allocation1对象则在Survivor区域来回倒腾下(to-from)还停留在Survivor区域，只是年龄加1(原因是我们配置了MaxTenuringThreshold=15)。所以此时新生代内存占有总容量还是只有Survivor区域的allocation1对象。这就是GC操作内存变换的缘由`4531K->435K(9216K)`
+
+所以最后新生代占用内存4859K（eden区allocation3对象的4MB，Survivor区的allocation1对象）；老年代占用内存4096K（allocation2对象的4MB）
+
+**说明**
+在测试MaxTenuringThreshold=15的过程中，发现在JDK1.7上运行该参数无效，设置与否都是1；切换到JDK1.6上运行该参数就有效；
+
+JDK1.6版本：
+~~~
+java version "1.6.0_45"
+Java(TM) SE Runtime Environment (build 1.6.0_45-b06)
+Java HotSpot(TM) 64-Bit Server VM (build 20.45-b01, mixed mode)
+~~~
+
+JDK1.7版本：
+~~~
+java version "1.7.0_79"
+Java(TM) SE Runtime Environment (build 1.7.0_79-b15)
+Java HotSpot(TM) 64-Bit Server VM (build 24.79-b02, mixed mode)
+~~~
+
+PS：不知道是JDK1.7做了调整还是怎么回事，目前还没有找到答案，知道原因的可以留言分享下。
 
 
 
