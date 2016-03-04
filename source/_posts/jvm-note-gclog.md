@@ -3,7 +3,7 @@ title: 读《深入理解Java虚拟机》-理解GC日志
 date: 2016-03-03 16:54:57
 tags: [JVM]
 categories: [技术]
-description: '本篇主要介绍下int类型数值入栈指令iconst、bipush、sipush、ldc'
+description: '本篇参考《深入理解Java虚拟机》第3.5.8章-理解GC日志做的测试分析日志'
 keywords: jvm,gc
 ---
 读到第3.5.8章，按照文章描述跟着作者的步伐一起测试了下，特做下日志分析记录。
