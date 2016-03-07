@@ -233,7 +233,7 @@ Java(TM) SE Runtime Environment (build 1.7.0_79-b15)
 Java HotSpot(TM) 64-Bit Server VM (build 24.79-b02, mixed mode)
 ~~~
 
-PS：不知道是JDK1.7做了调整还是怎么回事，目前还没有找到答案，知道原因的可以留言分享下。
+PS：大家可以留言分享下。
 
 
 
