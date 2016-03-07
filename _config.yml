@@ -85,7 +85,7 @@ search:
   field: post
 
 sitemap:
-	path: sitemap.xml
+  path: sitemap.xml
 
 # 演示自定义插件
 #test:
