@@ -78,7 +78,7 @@ deploy:
   type: git
   repo:
     github: https://github.com/linmuxi/hunter-blog.git,gh-pages
-    gitcafe: https://gitcafe.com/hunterlin/hunterlin.git,gitcafe-pages
+    # gitcafe: https://gitcafe.com/hunterlin/hunterlin.git,gitcafe-pages
 
 search:
   path: search.xml
