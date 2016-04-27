@@ -2,7 +2,7 @@
 title: "webpack 是什么？"
 date: 2016-04-13 09:15:32
 tags: [webpack]
-categories: [webpack]
+categories: [技术]
 description: webpack是什么
 keywords: webpack
 ---

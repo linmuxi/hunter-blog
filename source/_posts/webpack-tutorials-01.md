@@ -2,7 +2,7 @@
 title: webpack入门教程
 date: 2016-04-13 09:23:49
 tags: [webpack]
-categories: [webpack]
+categories: [技术]
 description: webpack入门
 keywords: webpack
 ---
