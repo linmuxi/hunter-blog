@@ -18,7 +18,7 @@ keywords: AndroidStudio
 
 步骤：
 step1：将app目录下build.gradle内容复制到工程(TV)下的build.gradle里面。
-step2：关键的一步，在Android节点中增加如下代码
+step2：关键的一步，在Android闭包中增加如下代码
 ~~~groovy
 sourceSets {
     main {
