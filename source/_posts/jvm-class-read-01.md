@@ -99,7 +99,7 @@ public test.Test();
    line 3: 0
 ~~~
 
-PS：由于认识较肤浅，如文中有不适当或有误的地方还望大家不吝指出。
+<!-- PS：由于认识较肤浅，如文中有不适当或有误的地方还望大家不吝指出。 -->
 
 ## **参考**
 [Java字节码指令列表](https://en.wikipedia.org/wiki/Java_bytecode_instruction_listings)
