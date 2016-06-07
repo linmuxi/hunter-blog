@@ -61,7 +61,7 @@ duoshuo_shared: true
 duoshuo_newcomment: true
 
 # 不蒜子统计博客访问量
-visit_statis_bsz: true
+visit_statis_bsz: false
 
 # google代码高亮
 google_code_prettify: true
