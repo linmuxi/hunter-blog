@@ -3,6 +3,7 @@ menu:
   Archives: archives
   # About: about
   RSS: atom.xml
+  Book: Book
 
 widgets:
 - search
