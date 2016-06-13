@@ -18,10 +18,12 @@ categories: []
 <img src="http://7xqlat.com1.z0.glb.clouddn.com/books-dxwzjsjg.png" width="30%" height="300px" alt="大型网站技术架构-核心原理与案例分析"/>
 
 ## **计划看**
-<img src="http://7xqlat.com1.z0.glb.clouddn.com/books-jtcss.jpg" width="30%" height="300px" alt="精通CSS：高级Web标准解决方案（第2版）"/>
+<!-- <img src="http://7xqlat.com1.z0.glb.clouddn.com/books-jtcss.jpg" width="30%" height="300px" alt="精通CSS：高级Web标准解决方案（第2版）"/> -->
 
 <img src="http://7xqlat.com1.z0.glb.clouddn.com/books-bmzjaq.png" width="30%" height="300px" alt="白帽子讲Web安全"/>
 
-<img src="http://7xqlat.com1.z0.glb.clouddn.com/books-webhkjm.png" width="30%" height="300px" alt="Web前端黑客技术揭秘"/>
+<!-- <img src="http://7xqlat.com1.z0.glb.clouddn.com/books-webhkjm.png" width="30%" height="300px" alt="Web前端黑客技术揭秘"/> -->
 
-<img src="http://7xqlat.com1.z0.glb.clouddn.com/fbbqbb.png" width="30%" height="300px" alt="富爸爸穷爸爸"/>
+<!-- <img src="http://7xqlat.com1.z0.glb.clouddn.com/fbbqbb.png" width="30%" height="300px" alt="富爸爸穷爸爸"/> -->
+
+<img src="http://7xqlat.com1.z0.glb.clouddn.com/books-xgdjkdsjs.png" width="30%" height="300px" alt="写给大家看的设计书"/>
