@@ -12,7 +12,7 @@ keywords: Oracle,批量更新
 ## 前言
 其实对表数据做更新一个update操作的事情，为啥还要整出下面的两种方法，之前在工作中测试数据，需要批量对数据做更新，都是在plsql中执行update，有一会遇到数据量稍微大点的，基本就“卡死”在update了。所以对数据量大点的操作基本不推荐直接update，根据测试结果我更偏向第二种方式。
 
-## 使用Bulk Collect
+## 1. Bulk Collect
 ~~~ sql
 DECLARE
   TYPE rowid_list IS TABLE OF UROWID INDEX BY BINARY_INTEGER;
@@ -31,7 +31,7 @@ BEGIN
 END;
 ~~~
 
-## insert append
+## 2. insert append
 ~~~ sql
 --创建临时表(不产生undo)
 CREATE TABLE T_TARGET_TEMP NOLOGGING AS SELECT * FROM T_TARGET WHERE 1=0;
