@@ -13,7 +13,7 @@ Spring Security是一个强大的和高度可定制的身份认证和访问控�
 
 ## 原理：
 
-Spring Security核心是他提供的**过滤器**，默认情况下用到了**11个过滤器**，及通过实例化一个虚拟过滤器链来对11个过滤器进行递归调用，源码如下图：
+Spring Security核心是他提供的**过滤器**，默认情况下用到了以下过滤器，及通过实例化一个虚拟过滤器链来对这些过滤器进行递归调用，源码如下图：
 ![SpringSecurity核心](http://7xqlat.com1.z0.glb.clouddn.com/SpringSecurity核心.png)
 
 
