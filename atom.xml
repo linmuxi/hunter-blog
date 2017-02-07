@@ -1,0 +1,1554 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <title>Hunter的博客</title>
+  <subtitle>努力工作，幸福生活</subtitle>
+  <link href="/atom.xml" rel="self"/>
+  
+  <link href="http://www.linmuxi.com/"/>
+  <updated>2017-02-07T08:45:10.652Z</updated>
+  <id>http://www.linmuxi.com/</id>
+  
+  <author>
+    <name>Hunter Lin</name>
+    
+  </author>
+  
+  <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>设计模式の构造器</title>
+    <link href="http://www.linmuxi.com/2016/07/18/design-pattern-builder-01/"/>
+    <id>http://www.linmuxi.com/2016/07/18/design-pattern-builder-01/</id>
+    <published>2016-07-18T06:42:04.000Z</published>
+    <updated>2017-02-07T08:45:10.652Z</updated>
+    
+    <content type="html"><![CDATA[<p>本篇分享有点逼格的实例化javabean的方式<br><a id="more"></a></p>
+<p>一般实例化javabean有如下两种方式：</p>
+<h3 id="构造器"><a href="#构造器" class="headerlink" title="构造器"></a><strong>构造器</strong></h3><pre><code class="java">User user = new User(...);
+</code></pre>
+<p>优点：代码行数较少<br>缺点：参数设置不够灵活</p>
+<h3 id="SET方法"><a href="#SET方法" class="headerlink" title="SET方法"></a><strong>SET方法</strong></h3><pre><code class="java">User user = new User();
+user.setXX(..);
+user.setXX(..);
+user.setXX(..);
+user.setXX(..);
+user.setXX(..);
+user.setXX(..);
+</code></pre>
+<p>优点：参数设置灵活<br>缺点：代码行数较多</p>
+<p>通过构造器模式可以兼容以上两种方式优点。</p>
+<p>使用：</p>
+<pre><code class="java">User user = new User.Builder().id(1).name(&quot;hunter&quot;).age(27).build();
+</code></pre>
+<p>定义：</p>
+<pre><code class="java">package build;
+
+public class User {
+
+    private final int id;
+    private final String name;
+    private final int age;
+
+    public User(int id, String name, int age) {
+        super();
+        this.id = id;
+        this.name = name;
+        this.age = age;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public int getAge() {
+        return age;
+    }
+
+    public static class Builder {
+        private int id;
+        private String name;
+        private int age;
+
+        public Builder id(int id){
+            this.id = id;
+            return this;
+        }
+        public Builder name(String name){
+            this.name = name;
+            return this;
+        }
+        public Builder age(int age){
+            this.age = age;
+            return this;
+        }
+
+        public User build(){
+            return new User(this.id,this.name,this.age);
+        }
+    }
+}
+</code></pre>
+<p>当然也有缺点：<br>1、bean定义相比以上两种略显复杂<br>2、而外的内存开销(builder对象)</p>
+]]></content>
+    
+    <summary type="html">
+    
+      设计模式の构造器
+    
+    </summary>
+    
+      <category term="技术" scheme="http://www.linmuxi.com/categories/%E6%8A%80%E6%9C%AF/"/>
+    
+    
+      <category term="设计模式" scheme="http://www.linmuxi.com/tags/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>集成Spring Security</title>
+    <link href="http://www.linmuxi.com/2016/07/04/spring-security-integration/"/>
+    <id>http://www.linmuxi.com/2016/07/04/spring-security-integration/</id>
+    <published>2016-07-04T07:42:25.000Z</published>
+    <updated>2017-02-07T08:45:10.675Z</updated>
+    
+    <content type="html"><![CDATA[<h2 id="前言："><a href="#前言：" class="headerlink" title="前言："></a>前言：</h2><p>Spring Security是一个强大的和高度可定制的身份认证和访问控制框架。<br>一个能够为基于Spring的企业应用系统提供声明式的安全访问控制解决方案的安全框架。它提供了一组可以在Spring应用上下文中配置的Bean，充分利用了<strong>Spring IoC，DI和AOP</strong>功能，为应用系统提供声明式的安全访问控制功能，减少了为企业系统安全控制编写大量重复代码的工作。</p>
+<h2 id="原理："><a href="#原理：" class="headerlink" title="原理："></a>原理：</h2><p>Spring Security核心是他提供的<strong>过滤器</strong>，默认情况下用到了以下过滤器，及通过实例化一个虚拟过滤器链来对这些过滤器进行递归调用，源码如下图：<br><img src="http://7xqlat.com1.z0.glb.clouddn.com/SpringSecurity核心.png" alt="SpringSecurity核心"></p>
+<h2 id="代码："><a href="#代码：" class="headerlink" title="代码："></a>代码：</h2><p>集成代码已经托管到<strong><a href="https://github.com/linmuxi/SpringSecurity.git" target="_blank" rel="external">github</a></strong>上，Spring Security版本是<strong>3.2.0</strong>，项目结构是<strong>Maven</strong></p>
+]]></content>
+    
+    <summary type="html">
+    
+      集成SpringSecurity
+    
+    </summary>
+    
+      <category term="技术" scheme="http://www.linmuxi.com/categories/%E6%8A%80%E6%9C%AF/"/>
+    
+    
+      <category term="Spring" scheme="http://www.linmuxi.com/tags/Spring/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>读《深入理解Java虚拟机》-类文件结构</title>
+    <link href="http://www.linmuxi.com/2016/06/27/jvm-note-classfile/"/>
+    <id>http://www.linmuxi.com/2016/06/27/jvm-note-classfile/</id>
+    <published>2016-06-27T08:05:03.000Z</published>
+    <updated>2017-02-07T08:45:10.663Z</updated>
+    
+    <content type="html"><![CDATA[<p>读书笔记<br><a id="more"></a></p>
+<h2 id="JVM语言无关性"><a href="#JVM语言无关性" class="headerlink" title="JVM语言无关性"></a>JVM语言无关性</h2><p><img src="http://7xqlat.com1.z0.glb.clouddn.com/JVM-语言无关性.png" alt="JVM-语言无关性"></p>
+<p>Java虚拟机作为一个通用的、机器无关的执行平台，任何其他语言的实现者都可以将Java虚拟机作为语言的产品交付媒介，虚拟机只识别Class文件，并不关心Class的来源是何种语言</p>
+<h2 id="class类文件的结构"><a href="#class类文件的结构" class="headerlink" title="class类文件的结构"></a>class类文件的结构</h2><p><img src="http://7xqlat.com1.z0.glb.clouddn.com/Class文件格式.png" alt="Class文件格式"></p>
+<ul>
+<li>Class文件是一组以8位字节为基础单位的二进制流，各数据项目<strong>严格按照顺序</strong>紧凑排列在Class文件中，中间没有任何分隔符</li>
+<li>Class文件格式采用类似C语言结构体的伪结构来存储数据，这种伪结构只有两种<strong>数据类型</strong>：<strong>无符号数和表</strong></li>
+<li>无符号数<ul>
+<li>属于基本的数据类型</li>
+<li><strong>u1、u2、u4、u8</strong>来分别代表<strong>1、2、4、8个字节</strong>的无符号数</li>
+<li>可以用来描述<strong>数字、索引引用、数量值或者按照UTF-8编码构成的字符串值</strong></li>
+</ul>
+</li>
+<li>表<ul>
+<li>是由<strong>多个无符号数</strong>或者其他表作为数据项构成的<strong>复合数据</strong>类型</li>
+<li>以“_info”结尾</li>
+<li>整个class文件本质上就是一张表</li>
+</ul>
+</li>
+</ul>
+<p>下面来看下class文件格式中各个数据项的具体含义：</p>
+<ul>
+<li><h3 id="魔数与Class文件的版本"><a href="#魔数与Class文件的版本" class="headerlink" title="魔数与Class文件的版本"></a>魔数与Class文件的版本</h3><strong>magic</strong>：魔数（Magic Number），占用4个字节，作用是确定这个文件是否为一个能被虚拟机接受的class文件；值为：0xCAFEBABE<br><strong>minor_version</strong>：次版本号，占用2个字节<br><strong>major_version</strong>：主版本号，占用2个字节;Java的版本号是从45开始的，JDK1.1之后的每个JDK大版本发布，主版本号向上加1（JDK1.0-1.1使用了45.0-45.3的版本号）,例如JDK版本为1.7，可生成的Class文件主版本号最大值为51.0</li>
+</ul>
+<ul>
+<li><h3 id="常量池"><a href="#常量池" class="headerlink" title="常量池"></a>常量池</h3></li>
+</ul>
+<p>占用Class文件空间最大的数据项目之一</p>
+<p><strong>constant_pool_count</strong>：常量池容量计数值，<strong>从1开始</strong>；例如：常量池容量十六进制数为0x0016，即十进制为22，就表示常量池中有21项常量；Class文件结构中只有常量池的容量计数是从1开始，其他的集合类型，例如接口索引集合、字段表集合、方法表集合等的容量计数都是从0开始的。</p>
+<p><strong>constant_pool</strong>：主要存放两大类常量：字面量(Literal)和符号引用(Symbolic References)<br>字面量：文本字符串、声明为final的常量值等<br>符号引用：</p>
+<ul>
+<li>类和接口的全限定名</li>
+<li>字段的名称和描述符</li>
+<li>方法的名称和描述符</li>
+</ul>
+<p>常量池中每一项常量都是一个表，一共有<strong>14</strong>种：<br><img src="http://7xqlat.com1.z0.glb.clouddn.com/常量池的项目类型.png" alt="常量池的项目类型"></p>
+<p>这14种表都有一个共同的特点，就是表开始第一位是一个u1类型的<strong>标志位</strong>(tag)，代表当前这个常量属于哪种常量类型</p>
+<p><img src="http://7xqlat.com1.z0.glb.clouddn.com/常量池中的14中常量项的结构总表.png" alt="常量池中的14中常量项的结构总表"></p>
+<ul>
+<li><h3 id="访问标志"><a href="#访问标志" class="headerlink" title="访问标志"></a>访问标志</h3>access_flags：用于识别一些类或接口层次的访问信息，包括：这个Class是类还是接口；是否定义为public类型；是否定义为abstract类型；如果是类的话，是否被声明为final等</li>
+</ul>
+<p><img src="http://7xqlat.com1.z0.glb.clouddn.com/访问标志.png" alt="访问标志"></p>
+<p>access_flags中一共有16个标志位可以使用，当前只定义了其中8个，没有使用到的标志位要求一律为0</p>
+<ul>
+<li><h3 id="类索引、父类索引与接口索引集合"><a href="#类索引、父类索引与接口索引集合" class="headerlink" title="类索引、父类索引与接口索引集合"></a>类索引、父类索引与接口索引集合</h3>Class文件中通过类索引（this_class）和父类索引（super_class）和接口索引集合（interfaces）这三项数据来确定这个类的继承关系。</li>
+</ul>
+<p>下图显示类索引（this_class）查找全限定名的过程：<br><img src="http://7xqlat.com1.z0.glb.clouddn.com/类索引查找全限定名的过程.png" alt="类索引查找全限定名的过程"></p>
+<ul>
+<li><h3 id="字段表集合"><a href="#字段表集合" class="headerlink" title="字段表集合"></a>字段表集合</h3>用于描述接口或者类中声明的变量，字段包括类级变量和实例级变量，不包括方法内部声明的局部变量</li>
+</ul>
+<p><img src="http://7xqlat.com1.z0.glb.clouddn.com/字段表结构.png" alt="字段表结构"></p>
+<p>字段修饰符放在access_flags项目中，与类中的access_flags项目类似，都是一个u2的数据类型，含义如下：</p>
+<p><img src="http://7xqlat.com1.z0.glb.clouddn.com/字段访问标志.png" alt="字段访问标志"></p>
+<p>紧跟access_flags标志的是两项索引值：name_index和descriptor_index，都是对常量池的引用，分别代表字段的简单名称及字段和方法的描述符</p>
+<p><img src="http://7xqlat.com1.z0.glb.clouddn.com/描述符标识字符含义.png" alt="描述符标识字符含义"></p>
+<p>对于数组类型，每一维度将使用一个前置的“[”字符来描述，例如定义一个“java.lang.String[][]”类型的二维数组，将被记录为：”[[Ljava/lang/String;“，一个整型数组“int[]”将被记录为“[I”</p>
+<p>用描述符来描述方法时，按照先参数列表，后返回值的顺序描述，参数列表按照参数的严格顺序放在一组小括号“()”之内。例如方法 void inc()的描述符为“()V”,方法java.lang.String.toString()的描述符为“()Ljava/lang/String;”,方法int indexOf(char[]source,int sourceOffset,int sourceCount,char[]target,int targetOffset,int targetCount,int fromIndex)的描述符为“([CII[CIII)I”</p>
+<p>字段表集合不会列出从超类或父接口中继承而来的字段</p>
+<ul>
+<li><h3 id="方法表集合"><a href="#方法表集合" class="headerlink" title="方法表集合"></a>方法表集合</h3>Class文件存储格式对方法的描述与对字段的描述几乎采用了完全一致的方式</li>
+</ul>
+<p><img src="http://7xqlat.com1.z0.glb.clouddn.com/方法表结构.png" alt="方法表结构"></p>
+<p>与字段相比，除去了volatile关键字和transient关键字对应的标志，增加了synchronized、native、strictfp和abstract关键字对应的标志</p>
+<p><img src="http://7xqlat.com1.z0.glb.clouddn.com/方法访问标志.png" alt="方法访问标志"></p>
+<p>方法中的Java代码，经过编译器编译成字节码指令后，存放在方法属性表集合中一个名为“Code”的属性里面了</p>
+<ul>
+<li><h3 id="属性表集合"><a href="#属性表集合" class="headerlink" title="属性表集合"></a>属性表集合</h3>为了能正确解析Class文件，在《Java虚拟机规范（Java SE 7）》版中，预定义了21项属性。</li>
+</ul>
+<p><img src="http://7xqlat.com1.z0.glb.clouddn.com/虚拟机规范预定义属性.png" alt="虚拟机规范预定义的属性"></p>
+<p>每个属性的名称都需从常量池中引用一个CONSTANT_Utf8_info类型的常量来表示，而属性值的结构则是完全自定义的，只需要通过一个u4的长度属性去说明属性值所占用的位数即可。</p>
+<p>一个符合规则的属性表应该满足如下定义的结构：</p>
+<p><img src="http://7xqlat.com1.z0.glb.clouddn.com/属性表结构.png" alt="属性表结构"></p>
+<p><strong>Code属性</strong><br>Java程序方法体中的代码经过Javac编译器处理后，最终变成字节码指令存储在Code属性中。</p>
+<p><img src="http://7xqlat.com1.z0.glb.clouddn.com/Code属性表的结构.png" alt="Code属性表结构"></p>
+<p>attribute_name_index：指向CONSTANT_Utf8_info型常量的索引，常量固定值为<strong>Code</strong><br>attribute_length：属性值的长度，由于属性名称索引和属性长度一共为6字节，所以属性值的长度固定为整个属性表长度减去6个字节<br>max_stack：操作数栈深度的最大值，在方法执行的任意时刻，操作数栈都不会超过这个深度，虚拟机运行的时候需要根据这个值来分配栈帧中的操作栈深度<br>max_locals：局部变量所需的存储空间，单位是<strong>Slot</strong>，Slot是虚拟机为局部变量分配内存所使用的<strong>最小单位</strong>，对于长度不超过32位的数据类型，每个局部变量占用1个Slot，而double和long这两种64位的数据类型需要2个Slot来存放；局部变量表中的Slot是<strong>可以重用</strong>的，Javac编译器会根据变量的作用域来分配Slot给各个变量使用，然后计算出max_locals的大小<br>code：存储Java源程序编译后生成的字节码指令<br>code_length：字节码长度</p>
+<p><strong>LineNumberTable属性</strong><br>用于描述Java源码行号与字节码行号之间的对应关系；可以在javac中分别使用<strong>-g:none或-g:lines</strong>来选择取消或要求生成这项信息，如果不生成，对程序运行产生的最主要影响就是抛出异常时，堆栈中将不会显示出错的<strong>行号</strong>，并且在调试程序的时候，也无法按照源码行来设置<strong>断点</strong></p>
+<p><strong>LocalVariableTable属性</strong><br>用于描述栈帧中局部变量表中的变量与Java源码中定义的变量之间的关系；可以在javac中分别使用<strong>-g:none或-g:vars</strong>来选择取消或生成该信息，如果没有生成，最大的影响就是当其他人引用这个方法时，所有<strong>参数名都将丢失</strong>，IDE将会使用诸如<strong>arg0、arg1</strong>的占位符代替原有的参数名</p>
+<p><strong>SourceFile属性</strong><br>记录生成这个Class文件的源码文件名称；可以分别使用javac的-g:none或-g:source来关闭或生成，如果不生成这项属性，当抛出异常时，堆栈中将不会显示出错代码所属的<strong>文件名</strong></p>
+<p><strong>ConstantValue属性</strong><br>作用是通知虚拟机自动为静态变量赋值。只有被static关键字修饰的变量（类变量）才可以使用这项属性。</p>
+<p>对于非static类型的变量（<strong>实例变量</strong>）的赋值，虚拟机是在<strong>实例构造器<init></init></strong>方法中进行<br>对于类变量，在类构造器<clinit>方法中或使用ConstantValue属性。目前Sun Javac编译器的选择是：如果同时使用final和static来修饰一个变量（常量），并且这个变量的数据类型是基本类型或者java.lang.String的话，就生成ConstantValue属性来进行初始化，如果没有被final修饰或者并非基本类型及字符串，则将会选择在<clinit>方法中进行初始化</clinit></clinit></p>
+<h2 id="字节码指令简介"><a href="#字节码指令简介" class="headerlink" title="字节码指令简介"></a>字节码指令简介</h2><p>这里不详细记录了，具体字节码介绍可以<a href="https://en.wikipedia.org/wiki/Java_bytecode_instruction_listings" target="_blank" rel="external">参考WIKI</a></p>
+]]></content>
+    
+    <summary type="html">
+    
+      &lt;p&gt;读书笔记&lt;br&gt;
+    
+    </summary>
+    
+      <category term="技术" scheme="http://www.linmuxi.com/categories/%E6%8A%80%E6%9C%AF/"/>
+    
+    
+      <category term="JVM" scheme="http://www.linmuxi.com/tags/JVM/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>读《深入理解Java虚拟机》-垃圾收集器</title>
+    <link href="http://www.linmuxi.com/2016/06/23/jvm-note-gc/"/>
+    <id>http://www.linmuxi.com/2016/06/23/jvm-note-gc/</id>
+    <published>2016-06-23T08:17:17.000Z</published>
+    <updated>2017-02-07T08:45:10.664Z</updated>
+    
+    <content type="html"><![CDATA[<p>读书笔记<br><a id="more"></a></p>
+<h2 id="对象生死"><a href="#对象生死" class="headerlink" title="对象生死"></a>对象生死</h2><ul>
+<li><h3 id="引用计数算法"><a href="#引用计数算法" class="headerlink" title="引用计数算法"></a>引用计数算法</h3><ul>
+<li>优点：实现简单，判断效率也高</li>
+<li>缺点：很难解决对象之间互相循环引用的问题</li>
+<li>Java虚拟机里面没有选用引用计数算法来管理内存</li>
+</ul>
+</li>
+<li><h3 id="可达性分析算法"><a href="#可达性分析算法" class="headerlink" title="可达性分析算法"></a>可达性分析算法</h3><ul>
+<li><p>主流的商业程序语言（Java、C#）的主流实现中，都是通过可达性分析来判定对象是否存活的</p>
+</li>
+<li><p>基本思路：通过一系列的称为“GC Roots”的对象作为起始点，从这些节点开始向下搜索，搜索所走过的路径称为引用链（Reference Chain），当一个对象到GC Roots没有任何引用链相连时，则证明此对象是不可用的<br><img src="http://7xqlat.com1.z0.glb.clouddn.com/可达性分析算法判断对象是否可用.png" alt="可达性分析算法判断对象是否可用"><br>上图中，对象object 5、object 6、object 7 虽然互相有关联，但是他们到GC Roots是不可达的，所以他们将会被判定为是可回收的对象</p>
+</li>
+<li><p>在Java语言中，可作为GC Roots的对象包括下面几种：</p>
+<ul>
+<li>虚拟机栈（栈帧中的本地变量表）中引用的对象</li>
+<li>方法区中类静态属性引用的对象</li>
+<li>方法区中常量引用的对象</li>
+<li>本地方法栈中JNI引用的对象</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><h3 id="引用"><a href="#引用" class="headerlink" title="引用"></a>引用</h3><p>  分为强引用、软引用、弱引用、虚引用</p>
+<ul>
+<li><p>强引用：类似“Object obj = new Object()”这类的引用，只要强引用还存在，垃圾收集器永远不会回收掉被引用的对象</p>
+</li>
+<li><p>软引用：描述一些还有用但并非必须的对象。在系统将要发生内存溢出之前，将会把这些对象列进回收范围之中进行第二次回收。在JDK1.2之后，提供了<strong>SoftReference</strong>类来实现软引用</p>
+</li>
+<li><p>弱引用：描述非必须对象的，被弱引用关联的对象只能生存到下一次垃圾收集发生之前。当垃圾收集器工作时，无论当前内存是否足够，都会回收掉被弱引用关联的对象。在JDK1.2之后，提供了<strong>WeakReference</strong>类来实现弱引用</p>
+</li>
+<li><p>虚引用：也称为幽灵引用或幻影引用，是最弱的一种引用关系。无法通过虚引用来取得一个对象实例。为一个对象设置虚引用关联的唯一目的就是能在这个对象被收集器回收时收到一个系统通知。在JDK1.2之后，提供了PhantomReference类来实现虚引用</p>
+</li>
+</ul>
+</li>
+</ul>
+<h2 id="垃圾收集算法"><a href="#垃圾收集算法" class="headerlink" title="垃圾收集算法"></a>垃圾收集算法</h2><ul>
+<li><h3 id="标记-清除算法"><a href="#标记-清除算法" class="headerlink" title="标记-清除算法"></a>标记-清除算法</h3><p>  最基础的收集算法，分为“标记”和“清除”两个阶段：首先标记出所有需要回收的对象，在标记完成后统一回收所有被标记的对象；后续的收集算法都是基于该算法的不足而进行改进得到的，主要不足有两方面：</p>
+<ol>
+<li>效率问题：标记和清除两个过程的<strong>效率都不高</strong></li>
+<li><p>空间问题：标记清除后会产生大量不连续的<strong>内存碎片</strong>，空间碎片太多可能会导致以后在程序运行过程中需要分配较大对象时，无法找到足够的连续内存而不得不提前触发另一次GC操作</p>
+<p><img src="http://7xqlat.com1.z0.glb.clouddn.com/标记清除算法示意图.png" alt="标记清除算法示意图"></p>
+</li>
+</ol>
+</li>
+</ul>
+<ul>
+<li><h3 id="复制算法"><a href="#复制算法" class="headerlink" title="复制算法"></a>复制算法</h3><ul>
+<li><p>为了解决标记-清除算法的<strong>效率问题</strong>而出现</p>
+</li>
+<li><p>原理：将可用内存按容量划分为大小相等的两块，每次只使用其中的一块。当这块的内存使用完了，就将还存活的对象复制到另外一块上去，然后再把已使用过的内存空间一次清理掉。这样内存分配时就不用考虑内存碎片等复杂情况了。</p>
+</li>
+<li><p>商业虚拟机都采用这种收集算法来<strong>回收新生代</strong></p>
+<p><img src="http://7xqlat.com1.z0.glb.clouddn.com/复制算法示意图.png" alt="复制算法示意图"></p>
+</li>
+</ul>
+</li>
+<li><h3 id="标记-整理算法"><a href="#标记-整理算法" class="headerlink" title="标记-整理算法"></a>标记-整理算法</h3><ul>
+<li><p>针对<strong>老年代</strong>采用的收集算法</p>
+</li>
+<li><p>标记过程与“标记-清除”算法一样</p>
+</li>
+<li><p>原理：先标记所有待回收的对象，然后将所有存活的对象都向一端移动，然后直接清理掉端边界以外的内存</p>
+<p><img src="http://7xqlat.com1.z0.glb.clouddn.com/标记整理算法示意图.png" alt="标记整理算法示意图"></p>
+</li>
+</ul>
+</li>
+</ul>
+<ul>
+<li><h3 id="分代收集算法"><a href="#分代收集算法" class="headerlink" title="分代收集算法"></a>分代收集算法</h3><ul>
+<li><p>当前商业虚拟机的垃圾收集都采用这种算法</p>
+</li>
+<li><p>思路：根据对象存活周期的不同将内存划分为几块，把java堆分为新生代和老年代，然后针对各个年代的特点采用最合适的收集算法。在新生代，每次GC都有大批对象死去，只有少量存活，就选用复制算法。老年代对象存活率高、没有额外空间对他进行分配担保，就必须使用“标记-清除”或“标记-整理”算法来进行回收</p>
+</li>
+</ul>
+</li>
+</ul>
+<h2 id="垃圾收集器"><a href="#垃圾收集器" class="headerlink" title="垃圾收集器"></a>垃圾收集器</h2><p><img src="http://7xqlat.com1.z0.glb.clouddn.com/HotSpot虚拟机的垃圾收集器.png" alt="HotSpot虚拟机的垃圾收集器"><br>上图展示了7种作用不同分代的收集器，如果两个收集器之间存在连线，就说明他们可以搭配使用。虚拟机所处的区域，则表示它是属于新生代收集器还是老年代收集器</p>
+<ul>
+<li><h3 id="serial收集器"><a href="#serial收集器" class="headerlink" title="serial收集器"></a>serial收集器</h3><ul>
+<li><strong>单线程</strong>收集器</li>
+<li>在进行垃圾收集时，必须暂停其他所有的工作线程，直到它收集结束</li>
+<li>对于运行在Client模式下的虚拟机来说是一个很好的选择</li>
+</ul>
+</li>
+<li><h3 id="parnew收集器"><a href="#parnew收集器" class="headerlink" title="parnew收集器"></a>parnew收集器</h3><ul>
+<li>serial收集器的<strong>多线程</strong>版本</li>
+</ul>
+</li>
+</ul>
+<ul>
+<li><h3 id="parallel-scavenge收集器"><a href="#parallel-scavenge收集器" class="headerlink" title="parallel scavenge收集器"></a>parallel scavenge收集器</h3><ul>
+<li>使用<strong>复制算法</strong>的收集器，又是并行的<strong>多线程</strong>收集器</li>
+<li><strong>吞吐量优先</strong>收集器</li>
+</ul>
+</li>
+</ul>
+<ul>
+<li><h3 id="serial-old收集器"><a href="#serial-old收集器" class="headerlink" title="serial old收集器"></a>serial old收集器</h3><ul>
+<li>serial收集器的<strong>老年代</strong>版本</li>
+<li><strong>单线程</strong>收集器，使用<strong>标记-整理</strong>算法</li>
+</ul>
+</li>
+</ul>
+<ul>
+<li><h3 id="parallel-old收集器"><a href="#parallel-old收集器" class="headerlink" title="parallel old收集器"></a>parallel old收集器</h3><ul>
+<li>parallel scavenge收集器的<strong>老年代</strong>版本</li>
+<li><strong>多线程</strong>收集器，使用<strong>标记-整理</strong>算法</li>
+</ul>
+</li>
+</ul>
+<ul>
+<li><h3 id="cms收集器"><a href="#cms收集器" class="headerlink" title="cms收集器"></a>cms收集器</h3><ul>
+<li><p>CMS(Concurrent Mark Sweep)是一种以获取<strong>最短回收停顿时间</strong>为目标的收集器</p>
+</li>
+<li><p>整个过程分为4个步骤</p>
+<ol>
+<li><p>初始标记(CMS initial mark)<br> <strong>停掉所有工作线程</strong>，仅仅是标记下GC Roots能直接关联到的对象，<strong>速度很快</strong></p>
+</li>
+<li><p>并发标记(CMS concurrent mark)<br> 进行GC Roots Tracing的过程，耗时最长的过程之一</p>
+</li>
+<li><p>重新标记(CMS remark)<br> <strong>停掉所有工作线程</strong>，为了修正并发标记期间因用户程序继续运作而导致标记产生变动的那一部分对象的标记记录，这个阶段的停顿时间一般会比初始标记阶段稍长一些，但远比并发标记的时间短</p>
+</li>
+<li><p>并发清除(CMS concurrent sweep)<br> 耗时最长的过程之一</p>
+<p>由于整个过程中<strong>耗时最长</strong>的并发标记和并发清除过程收集器线程都可以与用户线程一起工作，所以总体上来说<strong>CMS收集器的内存回收过程是与用户线程一起并发执行的</strong></p>
+</li>
+</ol>
+</li>
+<li><p>cms是一款优秀的收集器，并发收集、低停顿；也有如下缺点：</p>
+<ol>
+<li>对CPU资源非常敏感</li>
+<li>无法处理浮动垃圾</li>
+<li>因为是基于<strong>标记-清除</strong>算法实现，所以会有大量空间碎片产生</li>
+</ol>
+</li>
+</ul>
+</li>
+<li><h3 id="G1收集器"><a href="#G1收集器" class="headerlink" title="G1收集器"></a>G1收集器</h3><ul>
+<li>当今收集器技术发展最前沿成果之一，面向<strong>服务端应用</strong>的垃圾收集器</li>
+<li><p>与其他GC收集器相比，G1具备如下特点：</p>
+<ul>
+<li><p>并行与并发<br>  G1能充分利用多CPU、多核环境下的硬件优势来缩短Stop-The-World停顿的时间，部分其他收集器原本需要停顿Java线程执行的GC动作，G1收集器仍然可以通过并发的方式让Java程序继续执行</p>
+</li>
+<li><p>分代收集</p>
+</li>
+<li><p>空间整合<br>  G1运作期间不会产生内存空间碎片，收集后能提供规整的可用内存</p>
+</li>
+<li><p>可预测的停顿</p>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<ul>
+<li><h3 id="理解gc日志"><a href="#理解gc日志" class="headerlink" title="理解gc日志"></a><a href="http://www.linmuxi.com/2016/03/03/jvm-note-gclog/">理解gc日志</a></h3></li>
+<li><h3 id="垃圾收集器参数总结"><a href="#垃圾收集器参数总结" class="headerlink" title="垃圾收集器参数总结"></a>垃圾收集器参数总结</h3><p>  <img src="http://7xqlat.com1.z0.glb.clouddn.com/垃圾收集器相关参数.png" alt="垃圾收集器相关参数"></p>
+</li>
+</ul>
+]]></content>
+    
+    <summary type="html">
+    
+      &lt;p&gt;读书笔记&lt;br&gt;
+    
+    </summary>
+    
+      <category term="技术" scheme="http://www.linmuxi.com/categories/%E6%8A%80%E6%9C%AF/"/>
+    
+    
+      <category term="JVM" scheme="http://www.linmuxi.com/tags/JVM/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>读《深入理解Java虚拟机》-Java内存区域</title>
+    <link href="http://www.linmuxi.com/2016/06/13/jvm-note-javamemoryarea/"/>
+    <id>http://www.linmuxi.com/2016/06/13/jvm-note-javamemoryarea/</id>
+    <published>2016-06-13T02:22:50.000Z</published>
+    <updated>2017-02-07T08:45:10.664Z</updated>
+    
+    <content type="html"><![CDATA[<p>读书笔记<br><a id="more"></a></p>
+<h2 id="运行时数据区域"><a href="#运行时数据区域" class="headerlink" title="运行时数据区域"></a>运行时数据区域</h2><p><img src="http://7xqlat.com1.z0.glb.clouddn.com/运行时数据区域.png" alt="运行时数据区域"></p>
+<ul>
+<li><h3 id="程序计数器"><a href="#程序计数器" class="headerlink" title="程序计数器"></a>程序计数器</h3><ul>
+<li>一块较小的内存空间，是当前线程所执行的字节码的<strong>行号指示器</strong>，字节码解释器工作室就是通过改变这个计数器的值来选取下一条需要执行的字节码指令，分支、循环、跳转、异常处理、线程恢复等基础功能都需要依赖这个计数器来完成</li>
+<li>这块内存区域为<strong>线程私有</strong>，每条线程都有一个独立的程序计数器，各线程之间计数器互不影响</li>
+<li>此内存区域是Java虚拟机规范中没有规定任何OutOfMemoryError情况的区域</li>
+</ul>
+</li>
+<li><h3 id="Java虚拟机栈"><a href="#Java虚拟机栈" class="headerlink" title="Java虚拟机栈"></a>Java虚拟机栈</h3><ul>
+<li><strong>线程私有</strong>，生命周期同线程相同</li>
+<li>每个方法从调用到执行完成的过程，对应着一个栈帧在虚拟机栈中入栈到出栈的过程</li>
+<li><strong>栈帧</strong>包含局部变量表、操作数栈、动态链接、方法出口等信息</li>
+<li>Java虚拟机规范中对这个区域规定了两种异常状况：<ul>
+<li><strong>StackOverflowError</strong>：如果线程请求的栈深度大于虚拟机所允许的深度，抛出此异常</li>
+<li><strong>OutOfMemoryError</strong>：如果虚拟机栈扩展时无法申请到足够的内存，抛出此异常</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><h3 id="本地方法栈"><a href="#本地方法栈" class="headerlink" title="本地方法栈"></a>本地方法栈</h3><ul>
+<li>作用与Java虚拟机栈类似，只是本地方法栈为虚拟机使用到的<strong>Native方法</strong>服务</li>
+<li>同样也会抛出<strong>StackOverflowError和OutOfMemoryError</strong>异常</li>
+</ul>
+</li>
+<li><h3 id="Java堆"><a href="#Java堆" class="headerlink" title="Java堆"></a>Java堆</h3><ul>
+<li>所有<strong>线程共享</strong>的区域</li>
+<li>所有对象实例和数组在堆上进行分配内存</li>
+<li>细分为：新生代、老年代；或Eden空间、From Survivor空间、To Survivor空间</li>
+<li>无法扩展堆大小时会抛出<strong>OutOfMemoryError</strong>异常</li>
+</ul>
+</li>
+<li><h3 id="方法区"><a href="#方法区" class="headerlink" title="方法区"></a>方法区</h3><ul>
+<li>所有<strong>线程共享</strong>的区域</li>
+<li>存储被虚拟机加载的类信息、常量、静态变量、即时编译器编译后的代码等数据</li>
+<li>Not-Heap(非堆)、永久代</li>
+<li>对于HotSpot虚拟机，有放弃永久代并逐步改为采用Native Memory来实现方法区的规划，在目前已经发布的JDK1.7的HotSpot中，已经把原本放在永久代的字符串常量池移出了。可以看<a href="http://www.linmuxi.com/2016/03/02/jvm-runtimeconstantpool-oom/">测试结果</a></li>
+<li>无法满足内存分配需求时，将抛出<strong>OutOfMemoryError</strong>异常</li>
+</ul>
+</li>
+<li><h3 id="运行时常量池"><a href="#运行时常量池" class="headerlink" title="运行时常量池"></a>运行时常量池</h3><ul>
+<li>JDK1.7以前是方法区的一部分，JDK1.7以后是Java堆的一部分</li>
+<li>存放字面量和符号引用</li>
+<li>可以通过String类的intern()方法动态生成新的常量并放入池中</li>
+<li>无法再申请到内存时会抛出OutOfMemoryError异常</li>
+</ul>
+</li>
+<li><h3 id="直接内存"><a href="#直接内存" class="headerlink" title="直接内存"></a>直接内存</h3><ul>
+<li>不是虚拟机运行时数据区的一部分，也不是Java虚拟机规范中定义的内存区域</li>
+<li><strong>NIO</strong>引入了一种基于通道（Channel）和缓冲区（Buffer）的I/O方式，可以使用Native函数库直接分配堆外内存，然后通过一个存储在Java堆中的DirectByteBuffer对象作为这块内存的引用进行操作。这样能在一些场景中显著提高性能，因为避免了在java堆和Native堆中来回复制数据</li>
+<li>受本机总内存（包括RAM以及SWAP区或者分页文件）大小以及处理器寻址空间的限制，会抛出OutOfMemoryError异常</li>
+</ul>
+</li>
+</ul>
+<h2 id="hotspot虚拟机对象探秘"><a href="#hotspot虚拟机对象探秘" class="headerlink" title="hotspot虚拟机对象探秘"></a>hotspot虚拟机对象探秘</h2><ul>
+<li><h3 id="对象的创建"><a href="#对象的创建" class="headerlink" title="对象的创建"></a>对象的创建</h3><p>  在语言层面上，创建对象通常仅仅是一个<strong>new</strong>关键字而已，而在虚拟机中，对象(普通java对象)的创建会经过如下步骤：</p>
+<ol>
+<li>虚拟机遇到一条new指令时，首先检查这个指令的参数能否在常量池中定位到一个类的符号引用</li>
+<li>检查这个符号引用代表的类是否已被加载、解析和初始化过。如果没有，那必须先执行相应的类加载过程</li>
+<li>类加载检查通过后，虚拟机将为新生对象分配内存（对象所需内存的大小在类加载完成后便可完全确定）</li>
+<li>修改内存指针，并发下会出现线程安全，虚拟机采用了CAS或TLAB(本地线程分配缓冲)来解决</li>
+<li>虚拟机对对象进行必要的设置，例如这个对象是哪个类的实例、如何找到类的元数据信息、对象的哈希码、对象的GC分代年龄、是否启用偏向锁等信息，这些信息都是存放在对象头中</li>
+<li>完成上面的工作，从虚拟机的视觉来看，一个新的对象已经产生了，但是从Java程序的视觉来看，还需要执行<init>方法来完成对象的初始化，这样一个真正可用的对象才算完全产生出来</init></li>
+</ol>
+</li>
+<li><h3 id="对象的内存布局"><a href="#对象的内存布局" class="headerlink" title="对象的内存布局"></a>对象的内存布局</h3><ul>
+<li><p>对象头（Header）</p>
+<ol>
+<li>存储自身的运行数据：如哈希码（HashCode）、GC分代年龄、锁状态标志、线程持有的锁、偏向线程ID、偏向时间戳等</li>
+<li>类型指针，即对象指向它的类元数据的指针</li>
+</ol>
+</li>
+<li><p>实例数据（Instance Data）</p>
+<ol>
+<li>对象真正存储的有效信息，也是在程序代码中定义的各种类型的字段内容</li>
+</ol>
+</li>
+<li><p>对齐填充（Padding）</p>
+<ol>
+<li>不是必然存在，也没有特别的含义，仅仅起着占位符的作用</li>
+<li>由于HotSpot VM的自动内存管理系统要求对象起始地址必须是8字节的整数倍，也就是对象的大小必须是8字节的整数倍，而对象头部分刚好是8字节的整数倍，因此，当对象实例数据部分没有对齐时，就需要通过对齐填充来补全</li>
+</ol>
+</li>
+</ul>
+</li>
+<li><h3 id="对象的访问定位"><a href="#对象的访问定位" class="headerlink" title="对象的访问定位"></a>对象的访问定位</h3><p>  Java程序是通过栈上的reference数据来操作堆上的具体对象，由于reference类型在Java虚拟机规范中只规定了一个指向对象的引用，并没有定义这个引用应该通过何种方式去定位、访问堆中的对象的具体位置，所以对象访问方式也是取决于虚拟机实现而定的。</p>
+<ul>
+<li><p>句柄访问<br><img src="http://7xqlat.com1.z0.glb.clouddn.com/通过句柄访问对象.png" alt="通过句柄访问对象"></p>
+</li>
+<li><p>直接指针<br><img src="http://7xqlat.com1.z0.glb.clouddn.com/通过直接内存访问对象.png" alt="通过直接内存访问对象"></p>
+<p>两种对象访问各有优缺点，虚拟机Sun HotSpot使用的是第二种方式进行对象访问的</p>
+</li>
+</ul>
+</li>
+</ul>
+]]></content>
+    
+    <summary type="html">
+    
+      &lt;p&gt;读书笔记&lt;br&gt;
+    
+    </summary>
+    
+      <category term="技术" scheme="http://www.linmuxi.com/categories/%E6%8A%80%E6%9C%AF/"/>
+    
+    
+      <category term="JVM" scheme="http://www.linmuxi.com/tags/JVM/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>读《深入理解Java虚拟机》-高效并发</title>
+    <link href="http://www.linmuxi.com/2016/06/02/jvm-note-concurrent/"/>
+    <id>http://www.linmuxi.com/2016/06/02/jvm-note-concurrent/</id>
+    <published>2016-06-02T01:44:41.000Z</published>
+    <updated>2017-02-07T08:45:10.663Z</updated>
+    
+    <content type="html"><![CDATA[<p>读书笔记<br><a id="more"></a></p>
+<h2 id="java内存模型与线程"><a href="#java内存模型与线程" class="headerlink" title="java内存模型与线程"></a>java内存模型与线程</h2><ul>
+<li><h3 id="硬件的效率与一致性"><a href="#硬件的效率与一致性" class="headerlink" title="硬件的效率与一致性"></a>硬件的效率与一致性</h3><p>  处理器为了更快速的读写内存，引入了高速缓存；为了缓存一致性问题，各处理器访问缓存时需要遵循一些协议（MSI、MESI、MOSI、Synapse、Firefly、Dragon Protocol）</p>
+<p>  <strong>内存模型</strong>：在特定的操作协议下，对特定的内存或高速缓存进行读写访问的过程抽象<br>  <img src="http://7xqlat.com1.z0.glb.clouddn.com/处理器、高速缓存、主内存间的交互关系.png" alt="处理器、高速缓存、主内存间的交互关系"></p>
+<p>  <strong>乱序执行优化</strong>：程序语句的计算先后顺序与输入代码的顺序可能不一致，但是结果是一致的。这样做是为了使得处理效率更高</p>
+</li>
+<li><h3 id="Java内存模型"><a href="#Java内存模型" class="headerlink" title="Java内存模型"></a>Java内存模型</h3><p>  <strong>JMM</strong>：(Java Memory Model)来屏蔽各种硬件和操作系统的内存访问差异，让java程序在各种平台下都能达到一致的内存访问效果。<br>  <img src="http://7xqlat.com1.z0.glb.clouddn.com/线程、工作内存、内存间的交互.png" alt="线程、主内存、工作内存的交互关系"><br>  1、线程对变量的所有操作都必须在工作内存中进行，不能直接读写主内存中的变量<br>  2、线程之间不能互相访问各自的工作内存，需要通过主内存来完成变量值的传递</p>
+<p>  <strong>内存间交互操作</strong>：关于主内存和工作内存之间具体的交互协议，JMM定义了8种操作（lock、unlock、read、load、use、assign、store、write）来完成，每一种操作都是原子的、不可再分的（对于double和long类型的变量来说，有例外，可以不用考虑例外）</p>
+<p>  <strong>volatile关键字：</strong></p>
+<ol>
+<li><p>具备<strong>可见性和一致性</strong>，但是基于volatile变量的运算在并发下可能存在不安全的问题，仍然需要通过加锁（synchronized或java.util.concurrent中的原子类）来保证原子性。</p>
+</li>
+<li><p><strong>禁止指令重排序优化</strong>，JVM默认会对指令进行重排序优化，但是指令重排序优化会对程序的并发执行造成干扰，使用volatile可以禁止指令重排序优化</p>
+</li>
+<li><p>与其他<strong>并发工具的比较</strong>:</p>
+<ul>
+<li><p>在某些情况下，volatile的同步机制的性能要优于锁（synchronized或java.util.concurrent包里面的锁），但是由于虚拟机对锁实现了许多的消除和优化，使得很难量化的认为volatile就会比synchronized快多少。</p>
+</li>
+<li><p>volatile变量的读操作的性能消耗与普通变量几乎没有什么差别，但是写操作可能会慢些，因为需要在本地代码中插入许多内存屏障指令来保证处理器不发生乱序执行。</p>
+</li>
+<li><p>volatile与锁之间选择的唯一依据是volatile的语义能否满足使用场景的需求</p>
+</li>
+</ul>
+</li>
+</ol>
+<p><strong> 原子性 </strong><br>  1、由Java内存模型来直接保证的原子性变量操作包括read、load、assign、use、store和write，我们大致可以认为基础数据类型的访问读写是具备原子性的（long和double的例外可以不用考虑）<br>  2、应用场景需要更大范围的原子性保证，可以使用synchronized关键字。</p>
+<p>  <strong>可见性</strong><br>  1、一个线程修改了共享变量的值，其他线程能立即得知这个修改。<br>  2、volatile、synchronized和final都可以保证共享变量的可见性</p>
+<p>  <strong>有序性</strong><br>  1、volatile、synchronized来保证线程之间操作的有序性</p>
+<p>  <strong>先行发生原则</strong></p>
+</li>
+<li><h3 id="Java与线程"><a href="#Java与线程" class="headerlink" title="Java与线程"></a>Java与线程</h3><p>  <strong>java线程调度</strong>：协同式线程调度、抢占式线程调度（Java线程默认）</p>
+<p>  <strong>状态转换</strong>：</p>
+<ol>
+<li><p>新建(<strong>New</strong>)：创建后未启动的线程</p>
+</li>
+<li><p>运行(<strong>Runable</strong>)：线程正在运行或可能正在等待CPU为它分配执行时间</p>
+</li>
+<li><p>无限期等待(<strong>Waiting</strong>)：不会被分配CPU执行时间，要等待被其他线程显式唤醒，以下方法会让线程处于无限期的等待状态：</p>
+<ul>
+<li>没有设置Timeout参数的Object.wait()方法。</li>
+<li>没有设置Timeout参数的Thread.join()方法</li>
+<li>LockSupport.park()方法</li>
+</ul>
+</li>
+<li><p>限期等待(<strong>Timed Waiting</strong>)：不会被分配CPU执行时间，不需要等待被其他线程显式唤醒，在一定时间之后它们会由系统自动唤醒，以下方法会让线程处于限期的等待状态：</p>
+<ul>
+<li>Thread.sleep()方法</li>
+<li>设置了Timeout参数的Object.wait()方法</li>
+<li>设置了Timeout参数的Thread.join()方法</li>
+<li>LockSupport.parkNanos()方法</li>
+<li>LockSupport.parkUntil()方法</li>
+</ul>
+</li>
+<li><p>阻塞(<strong>Blocked</strong>)：线程被阻塞了，在等待获取一个排它锁。例如线程A和B在执行同步方法C时，线程A先拿到排它锁，那么线程B的状态就是阻塞状态，等待线程B释放排它锁</p>
+</li>
+<li><p>结束(<strong>Terminated</strong>)：线程执行完毕</p>
+<p><img src="http://7xqlat.com1.z0.glb.clouddn.com/线程状态转换关系.png" alt="线程状态转换"></p>
+</li>
+</ol>
+</li>
+</ul>
+<h2 id="线程安全与锁优化"><a href="#线程安全与锁优化" class="headerlink" title="线程安全与锁优化"></a>线程安全与锁优化</h2><ul>
+<li><h3 id="线程安全"><a href="#线程安全" class="headerlink" title="线程安全"></a>线程安全</h3><ul>
+<li><p>Java语言中的线程安全:</p>
+<p>  <strong>不可变</strong>：final定义</p>
+<p>  <strong>绝对线程安全</strong>：例如Vector是一个线程安全的容器，他的add()、get()和size()方法都被synchronized修饰，但是在多线程环境下(两个线程同时分别调用add、get方法)，如果不在方法调用端做额外的同步措施的话，可以说使用还是会存在线程不安全。</p>
+<p>  <strong>相对线程安全</strong>：大部分线程安全类都属于这种类型，例如Vector、HashTable、Collections的synchronizedCollection()方法包装的集合</p>
+<p>  <strong>线程兼容</strong>：指对象本身并不是线程安全的，但是可以通过在调用端正确的使用同步手段来保证对象在并发环境中可以安全的使用，我们平常说一个类不是线程安全，绝大多数指这种情况</p>
+<p>  <strong>线程对立</strong>：指无论调用端是否采取同步措施，都无法在多线程环境中并发使用的代码</p>
+</li>
+<li><p>线程安全实现的方法:</p>
+<ol>
+<li><p><strong>互斥同步</strong>：临界区、互斥量和信号量都是主要的互斥实现方法；互斥是因，同步是果；互斥是方法，同步是目的；<br> <strong>synchronized</strong>：java中实现互斥同步的重要手段；是一个重量级的操作，会将用户态转换到核心态中，这种转换很耗费处理器时间。有可能状态转换消耗的时间比用户代码执行的时间还要长。虚拟机本身也进行了一些优化，例如在通知操作系统阻塞线程之前加入一段自旋等待过程，避免频繁的切入到核心态之中。</p>
+<p> <strong>ReentrantLock</strong>：同synchronized功能类似，相比前者，ReentrantLock增加了一些高级功能：等待可中断、可实现公平锁、锁可以绑定多个条件</p>
+</li>
+<li><p><strong>非阻塞同步</strong>：基于冲突检测的乐观并发策略-CAS<br> java.util.concurrent包里面的整数原子类，其中的compareAndSet()和getAndIncrement()等方法都使用了Unsafe类的CAS操作。</p>
+</li>
+</ol>
+</li>
+</ul>
+</li>
+<li><h3 id="锁优化"><a href="#锁优化" class="headerlink" title="锁优化"></a>锁优化</h3><ul>
+<li><p><strong>自旋锁与自适应自旋</strong>：避免用户态到内核态的切换</p>
+</li>
+<li><p><strong>锁消除</strong>：对代码上要求同步，但是被检测到不可能存在共享数据竞争的锁进行消除</p>
+</li>
+<li><p><strong>锁粗化</strong>：锁同步范围扩展。例如：如果在循环里对同一个对象加锁，虚拟机会默认将锁同步的范围扩展（粗化）至循环体外部，这样就只需要加锁一次。</p>
+</li>
+<li><p><strong>轻量级锁</strong>：在无竞争的情况下使用CAS操作去消除同步使用的互斥量</p>
+</li>
+<li><p><strong>偏向锁</strong>：在无竞争的情况下把整个同步都消除掉</p>
+</li>
+</ul>
+</li>
+</ul>
+]]></content>
+    
+    <summary type="html">
+    
+      &lt;p&gt;读书笔记&lt;br&gt;
+    
+    </summary>
+    
+      <category term="技术" scheme="http://www.linmuxi.com/categories/%E6%8A%80%E6%9C%AF/"/>
+    
+    
+      <category term="JVM" scheme="http://www.linmuxi.com/tags/JVM/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>Oracle之登录安全</title>
+    <link href="http://www.linmuxi.com/2016/05/31/oracle-login-security-01/"/>
+    <id>http://www.linmuxi.com/2016/05/31/oracle-login-security-01/</id>
+    <published>2016-05-31T07:01:05.000Z</published>
+    <updated>2017-02-07T08:45:10.671Z</updated>
+    
+    <content type="html"><![CDATA[<p>在安装完oracle数据库后，打开终端输入：sqlplus / as sysdba; 可以在不输入密码的情况下登录到sys用户。这种登录方式是采用操作系统认证；</p>
+<p>这样要是谁混进了我们的数据库服务器都可以这种方式登录。这种默认配置使得数据库存在安全隐患；</p>
+<p>可以通过修改如下配置使其必须通过密码验证方式登录<br>1、找到文件：%ORACLE_HOME%\NETWORK\ADMIN\sqlnet.ora<br>2、修改文件内容：SQLNET.AUTHENTICATION_SERVICES= (none)</p>
+<p>修改完成后要重启实例；<br>shutdown immediate;// shutdown abort;<br>startup;</p>
+<!-- 这样就无法通过 sqlplus / as sysdba 登录了。系统会提示：ORA-01031: insufficient privileges -->
+<!-- SQLNET.AUTHENTICATION_SERVICES = none|all|ntf(windows)
+none：表示关闭操作系统认证，只能采用密码认证
+all：用于linux或unix平台，关闭本机密码文件认证，采用操作系统认证，但远程可以使用密码文件认证。
+nts：用于window平台，采用操作系统认证 -->
+]]></content>
+    
+    <summary type="html">
+    
+      Oracle登录安全
+    
+    </summary>
+    
+      <category term="技术" scheme="http://www.linmuxi.com/categories/%E6%8A%80%E6%9C%AF/"/>
+    
+    
+      <category term="Oracle" scheme="http://www.linmuxi.com/tags/Oracle/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>修改Android Studio工程目录结构</title>
+    <link href="http://www.linmuxi.com/2016/05/16/androidstudio-modify-workstruct-01/"/>
+    <id>http://www.linmuxi.com/2016/05/16/androidstudio-modify-workstruct-01/</id>
+    <published>2016-05-16T00:35:28.000Z</published>
+    <updated>2017-02-07T08:45:10.650Z</updated>
+    
+    <content type="html"><![CDATA[<p>接上一篇，我们已将Eclipse中的Android项目导入到Android Studio2.0中，并能成功运行起来。</p>
+<p>细心的可以发现，Android Studio为我们添加了些新的文件和文件夹：settings.gradle、build.gradle、gradle、app …</p>
+<p>其中app中包含了Android项目源代码，这是AS将所有代码按照既定格式复制过去了，这样就存在两处源代码。这当然不是我们想要的结果，我们想要的是依旧使用Eclipse目录结构来进行开发。</p>
+<p>针对上面的问题，接下来，我们做下简单的配置，以便于在Eclipse和Android Studio中都能很好的进行协同开发。</p>
+<p>找到工程(TV)下面的build.gradle配置文件。</p>
+<p>步骤：<br>step1：将app目录下build.gradle内容复制到工程(TV)下的build.gradle里面。<br>step2：关键的一步，在Android闭包中增加如下代码</p>
+<pre><code class="groovy">sourceSets {
+    main {
+        manifest.srcFile &#39;AndroidManifest.xml&#39;
+        assets.srcDirs = [&#39;assets&#39;]
+        res.srcDirs = [&#39;res&#39;]
+        resources.srcDirs = [&#39;src&#39;]
+        java.srcDirs = [&#39;src&#39;]
+    }
+}
+</code></pre>
+<p>step3：Rebuild Project</p>
+<p>通过上面的步骤，就可以将AndroidStudio目录结构同Eclipse一样了。</p>
+<p>最后，可以将多余的文件进行删除：app</p>
+]]></content>
+    
+    <summary type="html">
+    
+      修改Android Studio工程目录结构
+    
+    </summary>
+    
+      <category term="技术" scheme="http://www.linmuxi.com/categories/%E6%8A%80%E6%9C%AF/"/>
+    
+    
+      <category term="AndroidStudio2.0" scheme="http://www.linmuxi.com/tags/AndroidStudio2-0/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>利用Android Studio2.0导入Eclipse项目</title>
+    <link href="http://www.linmuxi.com/2016/05/12/android-import-as2-01/"/>
+    <id>http://www.linmuxi.com/2016/05/12/android-import-as2-01/</id>
+    <published>2016-05-12T06:30:50.000Z</published>
+    <updated>2017-02-07T08:45:10.649Z</updated>
+    
+    <content type="html"><![CDATA[<p>Android Studio2.0以及能够很友好的支持Eclipse项目导入。<br>当选择Import Project，Android Studio2.0会自动添加Gradle相关支持，我们要做的是对相关的SDK、BuildTools、JDK版本做下适当配置即可。</p>
+<p>不过，如果选择Project from Version Control从版本控制中导入项目时，AS不会添加Gradle相关支持。所以这里可以先从版本库中将代码Check Out到本地，然后利用Import Project导入即可。</p>
+]]></content>
+    
+    <summary type="html">
+    
+      利用Android Studio2.0导入Eclipse项目
+    
+    </summary>
+    
+      <category term="技术" scheme="http://www.linmuxi.com/categories/%E6%8A%80%E6%9C%AF/"/>
+    
+    
+      <category term="AndroidStudio2.0" scheme="http://www.linmuxi.com/tags/AndroidStudio2-0/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>webpack入门教程</title>
+    <link href="http://www.linmuxi.com/2016/04/13/webpack-tutorials-01/"/>
+    <id>http://www.linmuxi.com/2016/04/13/webpack-tutorials-01/</id>
+    <published>2016-04-13T01:23:49.000Z</published>
+    <updated>2017-02-07T08:45:10.678Z</updated>
+    
+    <content type="html"><![CDATA[<p>本篇是webpack的入门教程，通过本教程来引导大家完成一些小例子。<br><a id="more"></a></p>
+<h2 id="目录"><a href="#目录" class="headerlink" title="目录"></a><strong>目录</strong></h2><ul>
+<li>安装webpack</li>
+<li>使用webpack</li>
+<li>使用loaders</li>
+<li>使用developement server</li>
+</ul>
+<h2 id="安装webpack"><a href="#安装webpack" class="headerlink" title="安装webpack"></a><strong>安装webpack</strong></h2><p>前提是需要已经安装了node.js</p>
+<pre><code class="js">npm install webpack -g
+</code></pre>
+<p>进行全局安装，这样webpack命令就可以正常使用了</p>
+<h2 id="使用webpack"><a href="#使用webpack" class="headerlink" title="使用webpack"></a><strong>使用webpack</strong></h2><p>先创建一个空目录<br>在目录下创建如下文件：<br>add entry.js</p>
+<pre><code class="js">document.write(&quot;hello world&quot;);
+</code></pre>
+<p>add index.html</p>
+<pre><code class="html">&lt;html&gt;
+    &lt;head&gt;
+        &lt;meta charset=&quot;utf-8&quot;&gt;
+    &lt;/head&gt;
+    &lt;body&gt;
+        &lt;script type=&quot;text/javascript&quot; src=&quot;bundle.js&quot; charset=&quot;utf-8&quot;&gt;&lt;/script&gt;
+    &lt;/body&gt;
+&lt;/html&gt;
+</code></pre>
+<p>接下来运行程序:</p>
+<pre><code>webpack ./entry.js bundle.js
+</code></pre><p>程序会完成编译并创建一个bundle.js文件.<br>如果程序运行成功你就能看到如下显示：</p>
+<pre><code>Hash: ac9248475027b987a559
+Version: webpack 1.12.15
+Time: 39ms
+    Asset     Size  Chunks             Chunk Names
+bundle.js  1.42 kB       0  [emitted]  main
+   [0] ./entry.js 30 bytes {0} [built]
+</code></pre><p>在浏览器中打开index.html，页面会显示</p>
+<blockquote>
+<p>hello world</p>
+</blockquote>
+<p>接下来，我们将一部分代码移到外部文件中.<br>add content.js</p>
+<pre><code class="js">module.exports = &quot;hello world from content.js&quot;;
+</code></pre>
+<p>update entry.js</p>
+<pre><code class="js">- document.write(&quot;hello world&quot;);
++ document.write(require(&quot;./content.js&quot;));
+</code></pre>
+<p>接着重新编译：</p>
+<pre><code class="js">webpack ./entry.js bundle.js
+</code></pre>
+<p>刷新浏览器你应该能看到：</p>
+<blockquote>
+<p>hello world from content.js</p>
+</blockquote>
+<h2 id="使用loaders"><a href="#使用loaders" class="headerlink" title="使用loaders"></a><strong>使用loaders</strong></h2><p>接下来我们想添加一个css文件到我们的程序中。</p>
+<p>webpack默认只能处理JavaScript文件，所以我们需要使用<code>css-loader</code>和<code>style-loader</code>来处理css文件。</p>
+<p>运行<code>npm install css-loader style-loader</code>进行安装加载器。</p>
+<p>接下来我们做如下操作：<br>add style.css</p>
+<pre><code class="css">body{
+    background:#FF0000;
+}
+</code></pre>
+<p>update entry.js</p>
+<pre><code class="js">+ require(&quot;!style!css!./style.css&quot;);
+  document.write(require(&quot;./content.js&quot;));
+</code></pre>
+<p>重新运行编译并刷新浏览器，你应该能看到浏览器输出<code>hello world from content.js</code>并且背景是红色;</p>
+<p>在上面entry.js文件中<code>require(&quot;!style!css!./style.css&quot;);</code>表示使用style和css加载器来加载style.css文件,如果我们不想在文件中指定加载器，可以这样做：</p>
+<p>update entry.js</p>
+<pre><code class="js">- require(&quot;!style!css!./style.css&quot;);
++ require(&quot;./style.css&quot;);
+  document.write(require(&quot;./content.js&quot;));
+</code></pre>
+<p>运行编译：</p>
+<pre><code class="js">webpack ./entry.js bundle.js --module-bind &quot;css=style!css&quot;
+</code></pre>
+<blockquote>
+<p>注意上面必须是双引号</p>
+</blockquote>
+<p>运行的结果和之前是一样的</p>
+<p>接下来我们将配置项移到一个配置文件中：<br>add webpack.config.js</p>
+<pre><code class="js">module.exports = {
+    entry: &quot;./entry.js&quot;,
+    output: {
+        path: __dirname,
+        filename: &quot;bundle.js&quot;
+    },
+    module: {
+        loaders: [
+            { test: /\.css$/, loader: &quot;style!css&quot; }
+        ]
+    }
+};
+</code></pre>
+<p>现在我们运行编译：</p>
+<pre><code class="js">webpack
+</code></pre>
+<p>编译输出：</p>
+<pre><code>Hash: ac9248475027b987a559
+Version: webpack 1.12.15
+Time: 39ms
+    Asset     Size  Chunks             Chunk Names
+bundle.js  1.42 kB       0  [emitted]  main
+   [0] ./entry.js 30 bytes {0} [built]
+   ...
+</code></pre><blockquote>
+<p>webpack命令会尝试在当前目录加载<strong>webpack.config.js</strong>文件</p>
+</blockquote>
+<h3 id="输出设置"><a href="#输出设置" class="headerlink" title="输出设置"></a>输出设置</h3><p>如果项目编译是时间比较长，我们想显示进度条，可以通过如下配置：</p>
+<pre><code class="js">webpack --progress --colors
+</code></pre>
+<h3 id="监视模式"><a href="#监视模式" class="headerlink" title="监视模式"></a>监视模式</h3><p>我们不想当文件发生改变每次都要重新进行编译。可以通过如下配置：</p>
+<pre><code class="js">webpack --progress --colors --watch
+</code></pre>
+<h2 id="使用developement-server"><a href="#使用developement-server" class="headerlink" title="使用developement server"></a><strong>使用developement server</strong></h2><p>先安装</p>
+<pre><code>npm install webpack-dev-server -g
+</code></pre><p>然后运行</p>
+<pre><code>webpack-dev-server --progress --colors
+</code></pre><p>通过<a href="http://localhost:8080/webpack-dev-server/bundle" target="_blank" rel="external">http://localhost:8080/webpack-dev-server/bundle</a> 来访问；</p>
+<blockquote>
+<p>服务以监控模式在运行。</p>
+</blockquote>
+<h3 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h3><p><a href="http://webpack.github.io/docs/tutorials/getting-started" target="_blank" rel="external">webpack.github.io</a></p>
+]]></content>
+    
+    <summary type="html">
+    
+      webpack入门
+    
+    </summary>
+    
+      <category term="技术" scheme="http://www.linmuxi.com/categories/%E6%8A%80%E6%9C%AF/"/>
+    
+    
+      <category term="webpack" scheme="http://www.linmuxi.com/tags/webpack/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>webpack 是什么？</title>
+    <link href="http://www.linmuxi.com/2016/04/13/webpack-what-01/"/>
+    <id>http://www.linmuxi.com/2016/04/13/webpack-what-01/</id>
+    <published>2016-04-13T01:15:32.000Z</published>
+    <updated>2017-02-07T08:45:10.678Z</updated>
+    
+    <content type="html"><![CDATA[<p>webpack是一个模块打包工具。<br><a id="more"></a><br><img src="http://webpack.github.io/assets/what-is-webpack.png" alt="webpack"></p>
+<h3 id="为什么"><a href="#为什么" class="headerlink" title="为什么"></a><strong>为什么</strong></h3><p>业界已经存在很多模块打包工具,为什么又要做一个出来？</p>
+<p>业界存在的模块打包工具都不适合于大型项目（大型单页面应用）. 急欲推出这个模块打包工具是因为它包含了Code Splitting(模块按需加载)和将所有静态资源整合的功能。</p>
+<p>作者尝试了去扩展已存在的模块打包工具，但是都不能实现所有目标。</p>
+<h3 id="目标"><a href="#目标" class="headerlink" title="目标"></a><strong>目标</strong></h3><ul>
+<li>将依赖树分割成按需加载</li>
+<li>保存较短的初始化加载时间</li>
+<li>所有的静态资源都是一个模块</li>
+<li>具备集成第三方库的能力</li>
+<li>具备可定制化的功能</li>
+<li>适合于大型项目</li>
+</ul>
+<h3 id="webpack有什么不同"><a href="#webpack有什么不同" class="headerlink" title="webpack有什么不同"></a><strong>webpack有什么不同</strong></h3><p><strong>Code Splitting</strong><br>webpack依赖有同步和异步两种模式，异步依赖会通过一个新chunk来作为分割点，然后循环chunk按需加载。</p>
+<p><strong>Loaders</strong><br>webpack默认只能处理JavaScript文件，但是它提供了很多加载器来将其他静态资源转换成JavaScript文件，通过这样做，每个静态资源都是一个模块。</p>
+<p><strong>Clever parsing</strong><br>webpack具有一个非常灵活的解析器，能处理差不多每一个第三方库.在依赖中它允许的表达式如：<code>require(&quot;./templates/&quot;+name+&quot;.jade&quot;)</code>.它能处理大部分公共模块样式：<strong>CommonJS</strong>和<strong>AMD</strong></p>
+<p><strong>Plugin system</strong><br>webpack具有丰富的插件系统，很多内部特性都是基于这个插件系统。允许自定义插件</p>
+<h3 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h3><p><a href="http://webpack.github.io/docs/what-is-webpack.html" target="_blank" rel="external">webpack.github.io</a></p>
+]]></content>
+    
+    <summary type="html">
+    
+      webpack是什么
+    
+    </summary>
+    
+      <category term="技术" scheme="http://www.linmuxi.com/categories/%E6%8A%80%E6%9C%AF/"/>
+    
+    
+      <category term="webpack" scheme="http://www.linmuxi.com/tags/webpack/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>使用gulp来压缩hexo中的静态资源文件</title>
+    <link href="http://www.linmuxi.com/2016/03/25/gulp-compress-hexo-01/"/>
+    <id>http://www.linmuxi.com/2016/03/25/gulp-compress-hexo-01/</id>
+    <published>2016-03-25T06:46:40.000Z</published>
+    <updated>2017-02-07T08:45:10.657Z</updated>
+    
+    <content type="html"><![CDATA[<p>标题取的有点模糊不清，主要是想说下如何通过gulp来压缩hexo生成的html、js、css、png内容<br><a id="more"></a></p>
+<h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>gulp：基于nodejs流的自动化构建工具<br>关于gulp的介绍与安装请自行参考官网描述，本章不做阐述</p>
+<h2 id="步骤"><a href="#步骤" class="headerlink" title="步骤"></a>步骤</h2><h3 id="Step1：hexo根目录新增gulpfile-js文件"><a href="#Step1：hexo根目录新增gulpfile-js文件" class="headerlink" title="Step1：hexo根目录新增gulpfile.js文件"></a>Step1：hexo根目录新增gulpfile.js文件</h3><pre><code class="js">var gulp = require(&#39;gulp&#39;);
+//html压缩
+var htmlmin = require(&#39;gulp-htmlmin&#39;);
+//js压缩
+var jsmin = require(&#39;gulp-jsmin&#39;);
+//文件重命名
+var rename = require(&#39;gulp-rename&#39;);
+//图片压缩png/jpg/gif
+var imagemin = require(&#39;gulp-imagemin&#39;);
+//png压缩
+var pngquant = require(&#39;imagemin-pngquant&#39;);
+//css压缩
+var csso = require(&#39;gulp-csso&#39;);
+
+var root = &quot;./public&quot;;
+var buildDir = root;
+var datas={
+    html:[root+&quot;/**/*.html&quot;],
+    image:[root+&quot;/**/*.png&quot;],
+    css:[root+&quot;/**/*.css&quot;],
+    js:[root+&quot;/**/*.js&quot;,&#39;!*min.js&#39;]
+}
+
+// 压缩html
+gulp.task(&quot;htmlmin&quot;,function(){
+    gulp.src(datas.html)
+    .pipe(htmlmin({collapseWhitespace:true,minifyJS:true,minifyCSS:true,removeComments:true}))
+    .pipe(gulp.dest(buildDir));
+});
+
+// png图片压缩
+gulp.task(&quot;imagemin&quot;,function(){
+    gulp.src(datas.image)
+    .pipe(imagemin({
+        progressive:true,
+        svgoPlugins:[{removeViewBox:false}],
+        use:[pngquant()] //压缩率64%
+    }))
+    .pipe(gulp.dest(buildDir));
+});
+
+// js压缩
+gulp.task(&quot;jsmin&quot;,function(){
+    gulp.src(datas.js)
+    .pipe(jsmin())
+    //.pipe(rename({suffix:&#39;.min&#39;}))
+    .pipe(gulp.dest(buildDir));
+});
+
+// css压缩
+gulp.task(&quot;cssmin&quot;,function(){
+    gulp.src(datas.css)
+    .pipe(csso())
+    .pipe(gulp.dest(buildDir));
+});
+
+gulp.task(&quot;default&quot;,[&quot;htmlmin&quot;,&quot;imagemin&quot;,&quot;jsmin&quot;,&quot;cssmin&quot;]);
+</code></pre>
+<h3 id="Step2：执行命令"><a href="#Step2：执行命令" class="headerlink" title="Step2：执行命令"></a>Step2：执行命令</h3><pre><code>hexo clean
+hexo ge
+gulp
+hexo d
+</code></pre><h2 id="最后"><a href="#最后" class="headerlink" title="最后"></a>最后</h2><p>gulp提供了相当多的插件，大家可以自行去了解使用，还是挺好使的</p>
+<h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><p><a href="http://gulpjs.com/" target="_blank" rel="external">gulp官网</a><br><a href="http://www.gulpjs.com.cn/" target="_blank" rel="external">gulp中文</a></p>
+]]></content>
+    
+    <summary type="html">
+    
+      使用gulp来对hexo生成的html、css、js、png进行压缩
+    
+    </summary>
+    
+      <category term="技术" scheme="http://www.linmuxi.com/categories/%E6%8A%80%E6%9C%AF/"/>
+    
+    
+      <category term="gulp" scheme="http://www.linmuxi.com/tags/gulp/"/>
+    
+      <category term="hexo" scheme="http://www.linmuxi.com/tags/hexo/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>系统集成项目管理相关的标准规范</title>
+    <link href="http://www.linmuxi.com/2016/03/18/si-pme-gb-01/"/>
+    <id>http://www.linmuxi.com/2016/03/18/si-pme-gb-01/</id>
+    <published>2016-03-18T08:07:40.000Z</published>
+    <updated>2017-02-07T08:45:10.675Z</updated>
+    
+    <content type="html"><![CDATA[<p>本篇记录基于《系统集成项目管理工程师教程》”第21.6.2 标准”章节。自己在网上把相关的标准搜罗了一番，该教程上面的部分标准已经废弃，本篇已经做了更新，截至目前下面所列的标准都是最新的并提供了下载。便于自己随时查阅也方便有需要的伙伴下载。</p>
+<a id="more"></a>
+<h2 id="基础标准"><a href="#基础标准" class="headerlink" title="基础标准"></a><strong>基础标准</strong></h2><p><strong>1、GB/T 11457-2006 软件工程术语</strong> <a href="http://7xqlat.com1.z0.glb.clouddn.com/GBT 11457-2006 信息技术 软件工程术语.rar" target="_blank" rel="external">下载</a><br>本标准定义软件工程领域中通用的术语，适用于软件开发、使用维护、科研、教学和出版</p>
+<p><strong>2、GB/T 1526-1989 信息处理数据流程图、程序流程图、系统流程图、程序网络图和系统资源图的文件编制符号及约定</strong> <a href="http://7xqlat.com1.z0.glb.clouddn.com/GBT 1526-1989 信息处理 数据流程图、程序流程图、系统流程图、程序网络图和系统资源图的文件编制符号及约定.rar" target="_blank" rel="external">下载</a><br>本标准规范了常用的图形符号的画法，增强了相关流程图的可读性，也方便人员之间的交流和对同一事务的共同理解。</p>
+<p><strong>3、GB/T 14085-1993 信息处理系统 计算机系统配置图符号及约定</strong> <a href="http://7xqlat.com1.z0.glb.clouddn.com/GBT 14085-1993 信息处理系统 计算机系统配置图符号及约定.rar" target="_blank" rel="external">下载</a><br>本标准规定了计算机系统配置图中所使用的图形符号及其约定。</p>
+<h2 id="开发标准"><a href="#开发标准" class="headerlink" title="开发标准"></a><strong>开发标准</strong></h2><p><strong>1、GB/T 8566-2007 软件生存周期过程</strong> <a href="http://7xqlat.com1.z0.glb.clouddn.com/GBT 8566-2007 信息技术 软件生存周期过程.rar" target="_blank" rel="external">下载</a><br>本标准给出了软件完整生存周期中所涉及的各个过程的一个完整集合，并可以根据自己项目的实际对这些过程进行裁剪</p>
+<p><strong>2、GB/T 15853-1995 软件支持环境</strong> <a href="http://7xqlat.com1.z0.glb.clouddn.com/GBT 15853-1995软件支持环境.pdf" target="_blank" rel="external">下载</a><br>本标准规定了软件支持环境的基本要求，软件开发支持环境的内容及实现方法，以及对软件生存期支持部门软件支持能力的具体要求。</p>
+<p><strong>3、GB/T 14079-1993 软件维护指南</strong> <a href="http://7xqlat.com1.z0.glb.clouddn.com/GBT 14079-1993 软件维护指南.rar" target="_blank" rel="external">下载</a><br>本标准描述软件维护的内容和类型、维护过程及维护的控制和改进</p>
+<h2 id="文档标准"><a href="#文档标准" class="headerlink" title="文档标准"></a><strong>文档标准</strong></h2><p><strong>1、GB/T 16680-1996 软件文档管理指南</strong> <a href="http://7xqlat.com1.z0.glb.clouddn.com/GBT 16680-1996 软件文档管理指南.rar" target="_blank" rel="external">下载</a><br>本标准描述了如何关于如何编制文档，文档编制有哪些编制和指南，如何制定文档编制计划，如何确定文档管理的各个过程，文档管理需要哪些资源</p>
+<!--
+本标准为那些对软件或基于软件的产品的开发负有责任的管理者提供软件文档的管理指南。本标准的目的在于协助管理者在他们的机构中产生有效的文档。
+本标准涉及策略、标准、规程、资源和计划，管理者必须关注这些内容，以便有效地管理软件文档。
+不论项目的大小，软件文档管理的原则是一致的。对于小项目，可以不采用本标准中规定的有关细节。管理者可裁剪这些内容以满足他们的特殊需要。
+-->
+<p><strong>2、GB/T 8567-2006 计算机软件文档编制规范</strong> <a href="http://7xqlat.com1.z0.glb.clouddn.com/GBT 8567-2006 计算机软件文档编制规范.rar" target="_blank" rel="external">下载</a><br>本标准给出了软件项目开发过程中相关的25种文件的编制指导。<br><!--
+本标准根据GB/T 8566-2001《信息技术 软件生存周期过程》的规定，主要对软件的开发过程和管理过程应编制的主要文档及其编制的内容、格式规定了基本要求。
+本标准原则上适用于所有类型的软件产品的开发过程和管理过程。
+使用者可根据实际情况对本标准进行适当裁剪。软件文档从使用的角度大致可分为软件的用户需要的用户文档和开发方在开发过程中使用的内部文档（开发文档）两类。供方应提供的文档的类型和规模，由软件的需方和供方在合同中规定。
+--></p>
+<p><strong>3、GB/T 9385-2008 计算机软件需求说明编制指南</strong> <a href="http://7xqlat.com1.z0.glb.clouddn.com/GBT 9385-2008 计算机软件需求规格说明规范.rar" target="_blank" rel="external">下载</a><br>本标准给出了软件项目开发过程中编制软件需求说明书的详细指导。</p>
+<h2 id="管理标准"><a href="#管理标准" class="headerlink" title="管理标准"></a><strong>管理标准</strong></h2><p><strong>1、GB/T 12505-1990 计算机软件配置管理计划规范</strong> <a href="http://7xqlat.com1.z0.glb.clouddn.com/GBT 12505-1990 计算机软件配置管理计划规范.rar" target="_blank" rel="external">下载</a><br>本标准规定了在制定软件配置管理计划时应该遵循的统一的基本要求。</p>
+<p><strong>2、GB/T 16260-2006 软件工程产品质量规范</strong> <a href="http://7xqlat.com1.z0.glb.clouddn.com/GBT 16260-2006 软件工程产品质量.rar" target="_blank" rel="external">下载</a><br>本标准描述了如何使用质量特性来评价软件质量，分4部分：质量模型、外部度量、内部度量、使用质量的度量</p>
+<p><strong>3、GB/T 12504-1990 计算机软件质量保证计划规范</strong> <a href="http://7xqlat.com1.z0.glb.clouddn.com/GBT 12504-1990 计算机软件质量保证计划规范.rar" target="_blank" rel="external">下载</a><br>本标准规定了在制定软件质量保证计划时应该遵循的统一的基本要求。</p>
+<p><strong>4、GB/T 14394-2008 计算机软件可靠性和可维护性管理</strong> <a href="http://7xqlat.com1.z0.glb.clouddn.com/GBT 14394-2008 计算机软件可靠性和可维护性管理.rar" target="_blank" rel="external">下载</a><br>本标准规定了软件产品在其生存周期内如何选择适当的软件可靠性和可维护性管理要素，并指导软件可靠性和可维护性大纲的制定与实施。</p>
+<h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a><strong>参考</strong></h2><ul>
+<li><a href="http://www.bzfxw.com/" target="_blank" rel="external">标准分享网</a></li>
+<li><a href="http://www.sac.gov.cn/SACSearch/search" target="_blank" rel="external">中国国家标准化管理委员会</a></li>
+</ul>
+]]></content>
+    
+    <summary type="html">
+    
+      系统集成项目管理相关的标准规范
+    
+    </summary>
+    
+      <category term="项目管理" scheme="http://www.linmuxi.com/categories/%E9%A1%B9%E7%9B%AE%E7%AE%A1%E7%90%86/"/>
+    
+    
+  </entry>
+  
+  <entry>
+    <title>记录-公司官网开发</title>
+    <link href="http://www.linmuxi.com/2016/03/17/jx-website/"/>
+    <id>http://www.linmuxi.com/2016/03/17/jx-website/</id>
+    <published>2016-03-17T03:07:15.000Z</published>
+    <updated>2017-02-07T08:45:10.666Z</updated>
+    
+    <content type="html"><![CDATA[<p>这段时间一直在协同美工对<a href="http://www.jxjust.com" target="_blank" rel="external">公司官网</a>做改版，应该说是重新设计开发。<br><a id="more"></a><br>忙活了一段时间，今天终于收工了。官网做的比较小，一些基本的信息展示和简单的表单提交，个人对美工给的这个效果图表示有点小失望，设计的没有想象中的高端大气。这个版本是针对pc端，没有做响应式设计，计划是后期单独为移动端做页面。前端使用了简单的html+css+js，后端使用的是asp.net mvc框架。下面发几张效果图特此记录该里程：</p>
+<h3 id="首页"><a href="#首页" class="headerlink" title="首页"></a><strong>首页</strong></h3><p><img src="http://7xqlat.com1.z0.glb.clouddn.com/jx_website_home.png-hunterblog" alt="首页"></p>
+<h3 id="产品服务"><a href="#产品服务" class="headerlink" title="产品服务"></a><strong>产品服务</strong></h3><p><img src="http://7xqlat.com1.z0.glb.clouddn.com/jx_website_product.png-hunterblog" alt="产品服务"></p>
+<h3 id="产品明细"><a href="#产品明细" class="headerlink" title="产品明细"></a><strong>产品明细</strong></h3><p><img src="http://7xqlat.com1.z0.glb.clouddn.com/jx_website_product_detail.png-hunterblog" alt="产品明细"></p>
+<h3 id="营业网点"><a href="#营业网点" class="headerlink" title="营业网点"></a><strong>营业网点</strong></h3><p><img src="http://7xqlat.com1.z0.glb.clouddn.com/jx_website_branch.png-hunterblog" alt="营业网点"></p>
+<h3 id="新闻中心"><a href="#新闻中心" class="headerlink" title="新闻中心"></a><strong>新闻中心</strong></h3><p><img src="http://7xqlat.com1.z0.glb.clouddn.com/jx_website_news.png-hunterblog" alt="新闻中心"></p>
+<h3 id="加入我们"><a href="#加入我们" class="headerlink" title="加入我们"></a><strong>加入我们</strong></h3><p><img src="http://7xqlat.com1.z0.glb.clouddn.com/jx_website_joinus.png-hunterblog" alt="加入我们"></p>
+]]></content>
+    
+    <summary type="html">
+    
+      记录-给公司做的官网
+    
+    </summary>
+    
+      <category term="技术" scheme="http://www.linmuxi.com/categories/%E6%8A%80%E6%9C%AF/"/>
+    
+      <category term="工作" scheme="http://www.linmuxi.com/categories/%E6%8A%80%E6%9C%AF/%E5%B7%A5%E4%BD%9C/"/>
+    
+    
+  </entry>
+  
+  <entry>
+    <title>从GitCafe迁移到Coding</title>
+    <link href="http://www.linmuxi.com/2016/03/07/gitcafe-to-coding-of-pages/"/>
+    <id>http://www.linmuxi.com/2016/03/07/gitcafe-to-coding-of-pages/</id>
+    <published>2016-03-07T08:42:45.000Z</published>
+    <updated>2017-02-07T08:45:10.655Z</updated>
+    
+    <content type="html"><![CDATA[<p>在上周，Coding宣布收购Gitcafe，且Gitcafe平台将在5月31日后关闭服务。因为我的博客是部署在Gitcafe上的，所以不得已需要将其迁移到Coding平台上去。整个修改步骤也比较容易。<br><a id="more"></a></p>
+<h3 id="项目迁移"><a href="#项目迁移" class="headerlink" title="项目迁移"></a><strong>项目迁移</strong></h3><p>我们可以直接将Gitcafe上面的库迁移到Coding上来，也可以重新在Coding上新建库都是可以的。<br>如果要迁移，官网也提供了一键迁移的操作页面，这里就不描述了。</p>
+<h3 id="Coding平台"><a href="#Coding平台" class="headerlink" title="Coding平台"></a><strong>Coding平台</strong></h3><p>新建一个分支：<strong>coding-pages</strong><br><img src="http://7xqlat.com1.z0.glb.clouddn.com/coding_branch.png-hunterblog" alt=""></p>
+<p>开启Pages服务并绑定自定义域名<br><img src="http://7xqlat.com1.z0.glb.clouddn.com/coding_pages.png-hunterblog" alt=""></p>
+<h3 id="config-yml"><a href="#config-yml" class="headerlink" title="_config.yml"></a><strong>_config.yml</strong></h3><p>在全局_config.yml中deploy新增coding节点</p>
+<pre><code>deploy:
+  type: git
+  repo:
+    coding: https://git.coding.net/hunterlin/hunterlin.git,coding-pages
+</code></pre>]]></content>
+    
+    <summary type="html">
+    
+      将Pages从GitCafe迁移到Coding
+    
+    </summary>
+    
+      <category term="技术" scheme="http://www.linmuxi.com/categories/%E6%8A%80%E6%9C%AF/"/>
+    
+    
+      <category term="Hexo" scheme="http://www.linmuxi.com/tags/Hexo/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>读《深入理解Java虚拟机》-内存分配</title>
+    <link href="http://www.linmuxi.com/2016/03/04/jvm-note-memory-allocation/"/>
+    <id>http://www.linmuxi.com/2016/03/04/jvm-note-memory-allocation/</id>
+    <published>2016-03-04T01:38:15.000Z</published>
+    <updated>2017-02-07T08:45:10.665Z</updated>
+    
+    <content type="html"><![CDATA[<p>读到第3.6节，跟着文中作者的介绍与描述做了相关内容的测试，特做此记录。<br><a id="more"></a></p>
+<h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a><strong>前言</strong></h2><p>本篇参考3.6节中的三小节分别来理解和测试相关内容：</p>
+<ul>
+<li>对象优先在Eden分配</li>
+<li>大对象直接进入老年代</li>
+<li>长期存活的对象将进入老年代</li>
+</ul>
+<h2 id="对象优先在Eden分配"><a href="#对象优先在Eden分配" class="headerlink" title="对象优先在Eden分配"></a><strong>对象优先在Eden分配</strong></h2><p>大多数情况，对象在新生代Eden区中分配内存，当Eden区没有足够的空间进行分配时，虚拟机将发起一次Minor GC。</p>
+<p>下面我们通过具体代码来分析对象在新生代中的分配情况：</p>
+<pre><code class="java">/**
+ * VM Args: 
+ * -Xms20M -Xmx20M -Xmn10M  #Java堆大小为20m，不可扩展，其中10m分配给年轻代，剩下10m分配给老年代
+ * -XX:SurvivorRatio=8 #设置为8,则两个Survivor区与一个Eden区的比值为2:8,一个Survivor区占整个年轻代的1/10，Eden区占8/10
+ * -XX:+PrintGCDetails #打印GC日志 
+ * -XX:+UseSerialGC #使用Serial+Serial Old的收集器组合进行内存回收
+ */
+public class TestMemoryAlloc {
+    private static final int _1MB = 1024*1024;
+    public static void main(String[] args) {
+        byte[] allocation1,allocation2,allocation3,allocation4;
+        allocation1 = new byte[2*_1MB];
+        allocation2 = new byte[2*_1MB];
+        allocation3 = new byte[2*_1MB];
+        allocation4 = new byte[4*_1MB];//发生第一次Minor GC
+    }
+}
+</code></pre>
+<p>根据虚拟机参数初始新生代的内存是这样：<br><img src="http://7xqlat.com1.z0.glb.clouddn.com/jvm_memory_alloc_01.png-hunterblog" alt=""></p>
+<p>main方法中分配了3个2MB大小和1个4MB大小的对象，当在进行allocation4分配的时候会触发第一次MinorGC操作。</p>
+<p>因为allocation4对象需要分配4MB的内存空间，此时Eden已经被前面3个2MB的对象占用了共6MB的大小，Eden还剩余2MB的大小(总Eden空间大小是8192K)，所以在进行allocation4分配的时候由于Eden空间不足会触发第一次MinorGC操作。</p>
+<p>MinorGC操作(采用“复制算法”)会将Eden区的3个2MB对象复制到Survivor区域，由于Survivor区域总大小只有1024K，分配不下3个2MB大小的对象，所以只好通过分配担保机制提前将3个2MB的对象转移到年老代中过去。</p>
+<p>最后MinorGC操作完成后，Eden分配着4MB的allocation4对象，Survivor区空闲，年老代分配了总共6MB(allocation1,allocation2,allocation3)的对象，下面我们通过GC日志来验证这点。</p>
+<pre><code>[GC[DefNew: 7146K-&gt;484K(9216K), 0.0047529 secs] 7146K-&gt;6628K(19456K), 0.0047906 secs] [Times: user=0.00 sys=0.00, real=0.01 secs] 
+Heap
+ def new generation   total 9216K, used 4746K [0x00000000f9a00000, 0x00000000fa400000, 0x00000000fa400000)
+  eden space 8192K,  52% used [0x00000000f9a00000, 0x00000000f9e297b0, 0x00000000fa200000)
+  from space 1024K,  47% used [0x00000000fa300000, 0x00000000fa3791a8, 0x00000000fa400000)
+  to   space 1024K,   0% used [0x00000000fa200000, 0x00000000fa200000, 0x00000000fa300000)
+ tenured generation   total 10240K, used 6144K [0x00000000fa400000, 0x00000000fae00000, 0x00000000fae00000)
+   the space 10240K,  60% used [0x00000000fa400000, 0x00000000faa00030, 0x00000000faa00200, 0x00000000fae00000)
+ compacting perm gen  total 21248K, used 2582K [0x00000000fae00000, 0x00000000fc2c0000, 0x0000000100000000)
+   the space 21248K,  12% used [0x00000000fae00000, 0x00000000fb085a70, 0x00000000fb085c00, 0x00000000fc2c0000)
+No shared spaces configured.
+</code></pre><p><code>[GC[DefNew: 7146K-&gt;484K(9216K), 0.0047529 secs] 7146K-&gt;6628K(19456K), 0.0047906 secs]</code><br>可以看到新生代总内存9216K，由GC前占用的7146K回收到了484K，Java堆内存从7146K到6628K几乎没有怎么变化，因为GC回收时四个对象仍然是可用的(存在Eden和老年代中)。</p>
+<p><code>def new generation   total 9216K, used 4746K</code><br>新生代总内存9216K，已经使用了4746K，被占用的区域就是Eden区</p>
+<p><code>eden space 8192K,  52% used</code><br>新生代中Eden的内存为8192K，已经被使用了52%，就是被allocation4对象占用着</p>
+<p><code>to   space 1024K,   0%</code><br>Survivor to区总大小1024k，空闲</p>
+<p><code>tenured generation   total 10240K, used 6144K</code><br>年老代总内存10240K，已经被allocation1,allocation2,allocation3三个对象占用了6144K。</p>
+<p>通过GC日志的分析已经证明了我们上面提到的内存分配规则。</p>
+<h2 id="大对象直接进入老年代"><a href="#大对象直接进入老年代" class="headerlink" title="大对象直接进入老年代"></a><strong>大对象直接进入老年代</strong></h2><p>大对象是指需要大量连续内存空间的Java对象，写程序的时候要尽量避免大对象，经常出现大对象容易导致内存还有不少空间时候就提前触发垃圾收集以获取足够的内存空间来安放这些大对象。</p>
+<p>下面我们还是通过代码来分析下，将上面代码中allocation4对象的大小改为8MB：</p>
+<pre><code class="java">/**
+ * VM Args: 
+ * -Xms20M -Xmx20M -Xmn10M  #Java堆大小为20m，不可扩展，其中10m分配给年轻代，剩下10m分配给老年代
+ * -XX:SurvivorRatio=8 #设置为8,则两个Survivor区与一个Eden区的比值为2:8,一个Survivor区占整个年轻代的1/10，Eden区占8/10
+ * -XX:+PrintGCDetails #打印GC日志 
+ * -XX:+UseSerialGC #使用Serial+Serial Old的收集器组合进行内存回收
+ */
+public class TestMemoryAlloc {
+    private static final int _1MB = 1024*1024;
+    public static void main(String[] args) {
+        byte[] allocation1,allocation2,allocation3,allocation4;
+        allocation1 = new byte[2*_1MB];
+        allocation2 = new byte[2*_1MB];
+        allocation3 = new byte[2*_1MB];
+        allocation4 = new byte[8*_1MB];
+    }
+}
+</code></pre>
+<p>我们看下运行之后的GC日志：</p>
+<pre><code>Heap
+ def new generation   total 9216K, used 7310K [0x00000000f9a00000, 0x00000000fa400000, 0x00000000fa400000)
+  eden space 8192K,  89% used [0x00000000f9a00000, 0x00000000fa123978, 0x00000000fa200000)
+  from space 1024K,   0% used [0x00000000fa200000, 0x00000000fa200000, 0x00000000fa300000)
+  to   space 1024K,   0% used [0x00000000fa300000, 0x00000000fa300000, 0x00000000fa400000)
+ tenured generation   total 10240K, used 8192K [0x00000000fa400000, 0x00000000fae00000, 0x00000000fae00000)
+   the space 10240K,  80% used [0x00000000fa400000, 0x00000000fac00010, 0x00000000fac00200, 0x00000000fae00000)
+ compacting perm gen  total 21248K, used 2582K [0x00000000fae00000, 0x00000000fc2c0000, 0x0000000100000000)
+   the space 21248K,  12% used [0x00000000fae00000, 0x00000000fb085a70, 0x00000000fb085c00, 0x00000000fc2c0000)
+No shared spaces configured.
+</code></pre><p>通过日志发现在分配allocation4对象内存的时候并没有触发GC操作，而是将allocation4对象直接分配到了老年代中。</p>
+<p>另外虚拟机提供了-XX:PretenureSizeThreshold参数(默认是0)，令大于这个设置值的对象直接在老年代分配。这样做的目的是避免在Eden区和两个Survior区之间发生大量的内存复制(复制算法收集内存)操作。</p>
+<p><strong>PS:PretenureSizeThreshold参数只对Serial和ParNew两款收集器有效</strong></p>
+<h2 id="长期存活的对象将进入老年代"><a href="#长期存活的对象将进入老年代" class="headerlink" title="长期存活的对象将进入老年代"></a><strong>长期存活的对象将进入老年代</strong></h2><p>虚拟机采用分代收集的思想来管理内存，那么内存回收时如何识别哪些对象应该在新生代，哪些对象应该在老年代中。为了做到这点，虚拟机给每个对象定义了一个对象年龄计数器。即对象在Eden中出生并经过第一次Minor GC后仍然存活的且能被Survivor容纳的，将被移动到Survivor空间中，并且对象年龄设为1。对象在Survivor空间每熬过一次Minor GC，年龄就增加1，当它的年龄增加到一定程度（默认是15），就将会被迁移到老年代中。对象迁移老年代的年龄阈值可以通过参数-XX:+MaxTenuringThreshold设置。</p>
+<p>下面我们分别通过参数-XX:+MaxTenuringThreshold=1和-XX:+MaxTenuringThreshold=15设置对象的年龄为1和15来验证下：</p>
+<p><strong>-XX:+MaxTenuringThreshold=1</strong></p>
+<pre><code>/**
+    VM Args: -Xms20m -Xmx20m -Xmn10m -XX:+PrintGCDetails -XX:SurvivorRatio=8 
+    -XX:MaxTenuringThreshold=1 -XX:+UseSerialGC -XX:+PrintTenuringDistribution
+**/
+public class TestMaxTenuringThreshold {
+    private static final int _1MB = 1024*1024;
+    public static void main(String[] args) {
+        //什么时候进入老年代取决于XX:MaxTenuringThreshold设置
+        byte[]allocation1,allocation2,allocation3;
+        allocation1 = new byte[_1MB / 4];
+        allocation2 = new byte[4 * _1MB];
+        allocation3 = new byte[4 * _1MB];// 第一次触发Minor GC
+        allocation3 = null;
+        allocation3 = new byte[4 * _1MB];// 第二次触发Minor GC
+    }
+}
+</code></pre><p>GC日志：</p>
+<pre><code>[GC[DefNew: 5190K-&gt;740K(9216K), 0.0029755 secs] 5190K-&gt;4836K(19456K), 0.0030150 secs] [Times: user=0.00 sys=0.00, real=0.00 secs] 
+[GC[DefNew: 4836K-&gt;0K(9216K), 0.0012083 secs] 8932K-&gt;4836K(19456K), 0.0012270 secs] [Times: user=0.00 sys=0.00, real=0.00 secs] 
+Heap
+ def new generation   total 9216K, used 4259K [0x00000000f9a00000, 0x00000000fa400000, 0x00000000fa400000)
+  eden space 8192K,  52% used [0x00000000f9a00000, 0x00000000f9e28fd0, 0x00000000fa200000)
+  from space 1024K,   0% used [0x00000000fa200000, 0x00000000fa200000, 0x00000000fa300000)
+  to   space 1024K,   0% used [0x00000000fa300000, 0x00000000fa300000, 0x00000000fa400000)
+ tenured generation   total 10240K, used 4836K [0x00000000fa400000, 0x00000000fae00000, 0x00000000fae00000)
+   the space 10240K,  47% used [0x00000000fa400000, 0x00000000fa8b9218, 0x00000000fa8b9400, 0x00000000fae00000)
+ compacting perm gen  total 21248K, used 2582K [0x00000000fae00000, 0x00000000fc2c0000, 0x0000000100000000)
+   the space 21248K,  12% used [0x00000000fae00000, 0x00000000fb085a60, 0x00000000fb085c00, 0x00000000fc2c0000)
+No shared spaces configured.
+</code></pre><p>通过日志可以看到一共触发了2次Minor GC操作，分别代码第11行和13行；下面我们具体分析下：</p>
+<p>在进行第一次GC的时候，Eden区域已经被allocation1和allocation2两个对象占用了4352K的内存空间，当再分配allocation3的内存空间的时候（由于Eden总空间只有8M）会触发第一次MinorGC操作，会将allocation1和allocation2两个对象迁移到Survivor区域，然后将allocation3对象分配在Eden区共占用4M内存大小。</p>
+<p><code>[DefNew: 5190K-&gt;740K(9216K), 0.0029755 secs] 5190K-&gt;4836K(19456K), 0.0030150 secs]</code><br>可以看到GC发生时，新生代由5190K回收到了740k；Java Heap几乎没有怎么变化；因为此时对象仍然可用。</p>
+<p>接下来将allocation3对象失效；然后再分配allocation3对象内存空间，由于Eden空间已经被之前的allocation3老对象占用着，剩余空间不足以分配新的allocation3对象内存，所以会触发第二次Minor GC操作；</p>
+<p>由于allocation3老对象已经被设置为失效(内存中的allocation3老对象已经没有引用指向它)，所以会在第二次GC的时候将其在Eden中占用的内存回收掉；<br>由于MaxTenuringThreshold参数设置为1，那么在Survivor区域的allocation1和allocation2两个对象会被迁移到老年代；<br>最后新的allocation3对象会被分配到Eden区域；</p>
+<p><code>[DefNew: 4836K-&gt;0K(9216K), 0.0012083 secs] 8932K-&gt;4836K(19456K), 0.0012270 secs]</code><br>可以看到新生代由4836K回收到了0k，Java Heap由8932K回收到了4836K，回收掉的就是allocation3老对象占用的内存</p>
+<p>最后通过日志可以看到<code>def new generation   total 9216K, used 4259K</code>,年轻代占用了4259k的内存（eden区的allocation3新对象），<code>tenured generation   total 10240K, used 4836K</code>老年代占用了4836K的内存(allocation1和allocation2两个对象)</p>
+<p><strong>-XX:+MaxTenuringThreshold=15</strong><br>GC日志：</p>
+<pre><code>[GC [DefNew
+Desired survivor size 524288 bytes, new threshold 15 (max 15)
+- age   1:     445680 bytes,     445680 total
+: 4703K-&gt;435K(9216K), 0.0025569 secs] 4703K-&gt;4531K(19456K), 0.0025839 secs] [Times: user=0.00 sys=0.00, real=0.00 secs] 
+[GC [DefNew
+Desired survivor size 524288 bytes, new threshold 15 (max 15)
+- age   2:     445680 bytes,     445680 total
+: 4531K-&gt;435K(9216K), 0.0004236 secs] 8627K-&gt;4531K(19456K), 0.0004367 secs] [Times: user=0.00 sys=0.00, real=0.00 secs] 
+Heap
+ def new generation   total 9216K, used 4859K [0x00000000f9a00000, 0x00000000fa400000, 0x00000000fa400000)
+  eden space 8192K,  54% used [0x00000000f9a00000, 0x00000000f9e51f98, 0x00000000fa200000)
+  from space 1024K,  42% used [0x00000000fa200000, 0x00000000fa26ccf0, 0x00000000fa300000)
+  to   space 1024K,   0% used [0x00000000fa300000, 0x00000000fa300000, 0x00000000fa400000)
+ tenured generation   total 10240K, used 4096K [0x00000000fa400000, 0x00000000fae00000, 0x00000000fae00000)
+   the space 10240K,  40% used [0x00000000fa400000, 0x00000000fa800010, 0x00000000fa800200, 0x00000000fae00000)
+ compacting perm gen  total 21248K, used 3045K [0x00000000fae00000, 0x00000000fc2c0000, 0x0000000100000000)
+   the space 21248K,  14% used [0x00000000fae00000, 0x00000000fb0f9740, 0x00000000fb0f9800, 0x00000000fc2c0000)
+No shared spaces configured.
+</code></pre><p>从GC日志可以分析：</p>
+<p>第一次GC操作之前：新生代Eden区有allocation1对象（256KB）和allocation2对象（4MB）。<br>GC操作之后：将Eden区域的两个对象进行迁移（采用复制算法），由于Survivor区(1024K)无法容纳allocation2对象(4MB)，所以将allocation1对象迁移到了老年代中，而allocation1对象（256K）则迁移到了Survivor区，所以此时新生代内存占有总容量只有Survivor区域的allocation1对象。这就是GC操作内存变换的缘由<code>4703K-&gt;435K(9216K)</code></p>
+<p>第二次GC之前：新生代Eden区域有老的allocation3对象(4MB),Survivor区域的allocation1对象(256KB)。<br>GC操作之后：由于老的allocation3对象已经是无效对象，所以其占用的内存会被清理掉；而Survivor区的allocation1对象则在Survivor区域来回倒腾下(to-from)还停留在Survivor区域，只是年龄加1(原因是我们配置了MaxTenuringThreshold=15)。所以此时新生代内存占有总容量还是只有Survivor区域的allocation1对象。这就是GC操作内存变换的缘由<code>4531K-&gt;435K(9216K)</code></p>
+<p>所以最后新生代占用内存4859K（eden区allocation3对象的4MB，Survivor区的allocation1对象）；老年代占用内存4096K（allocation2对象的4MB）</p>
+<p><strong>说明</strong><br>在测试MaxTenuringThreshold=15的过程中，发现在JDK1.7上运行该参数无效，设置与否都是1；切换到JDK1.6上运行该参数就有效；</p>
+<p>JDK1.6版本：</p>
+<pre><code>java version &quot;1.6.0_45&quot;
+Java(TM) SE Runtime Environment (build 1.6.0_45-b06)
+Java HotSpot(TM) 64-Bit Server VM (build 20.45-b01, mixed mode)
+</code></pre><p>JDK1.7版本：</p>
+<pre><code>java version &quot;1.7.0_79&quot;
+Java(TM) SE Runtime Environment (build 1.7.0_79-b15)
+Java HotSpot(TM) 64-Bit Server VM (build 24.79-b02, mixed mode)
+</code></pre><p>PS：大家可以留言分享下。</p>
+<!--
+分配担保机制：
+当出现大量对象在Minor GC后仍然存活的情况（最极端的情况就是内存回收后新生代中所有对象都存活），就需要老年代进行分配担保，把Survivor无法容纳的对象直接进入老年代。与生活中的贷款担保类似，老年代要进行这样的担保，前提是老年代本身还有容纳这些对象的剩余空间，一共有多少对象会活下来在实际完成内存回收之前是无法明确知道的，所以只好取之前每一次回收晋升到老年代对象容量的平均大小值作为经验值，与老年代的剩余空间进行比较，决定是否进行Full GC来让老年代腾出更多空间。
+
+-->]]></content>
+    
+    <summary type="html">
+    
+      本篇参考《深入理解Java虚拟机》第3.6节做的测试记录
+    
+    </summary>
+    
+      <category term="技术" scheme="http://www.linmuxi.com/categories/%E6%8A%80%E6%9C%AF/"/>
+    
+    
+      <category term="JVM" scheme="http://www.linmuxi.com/tags/JVM/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>读《深入理解Java虚拟机》-理解GC日志</title>
+    <link href="http://www.linmuxi.com/2016/03/03/jvm-note-gclog/"/>
+    <id>http://www.linmuxi.com/2016/03/03/jvm-note-gclog/</id>
+    <published>2016-03-03T08:54:57.000Z</published>
+    <updated>2017-02-07T08:45:10.664Z</updated>
+    
+    <content type="html"><![CDATA[<p>读到第3.5.8节，按照文章描述跟着作者的步伐一起测试了下，特做下日志分析记录。<br><a id="more"></a></p>
+<h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a><strong>前言</strong></h2><p>本篇以<strong>Serial+Serial Old</strong>组合收集器日志为例来分析下GC日志(-XX:+UseSerialGC)</p>
+<h2 id="GC日志"><a href="#GC日志" class="headerlink" title="GC日志"></a><strong>GC日志</strong></h2><pre><code>[GC[DefNew: 7146K-&gt;484K(9216K), 0.0034871 secs] 7146K-&gt;6628K(19456K), 0.0035216 secs] [Times: user=0.00 sys=0.00, 
+real=0.00 secs] 
+Heap
+ def new generation   total 9216K, used 4746K [0x00000000f9a00000, 0x00000000fa400000, 0x00000000fa400000)
+  eden space 8192K,  52% used [0x00000000f9a00000, 0x00000000f9e297b0, 0x00000000fa200000)
+  from space 1024K,  47% used [0x00000000fa300000, 0x00000000fa3791a8, 0x00000000fa400000)
+  to   space 1024K,   0% used [0x00000000fa200000, 0x00000000fa200000, 0x00000000fa300000)
+ tenured generation   total 10240K, used 6144K [0x00000000fa400000, 0x00000000fae00000, 0x00000000fae00000)
+   the space 10240K,  60% used [0x00000000fa400000, 0x00000000faa00030, 0x00000000faa00200, 0x00000000fae00000)
+ compacting perm gen  total 21248K, used 2582K [0x00000000fae00000, 0x00000000fc2c0000, 0x0000000100000000)
+   the space 21248K,  12% used [0x00000000fae00000, 0x00000000fb085a70, 0x00000000fb085c00, 0x00000000fc2c0000)
+No shared spaces configured.
+</code></pre><h2 id="GC日志说明"><a href="#GC日志说明" class="headerlink" title="GC日志说明"></a><strong>GC日志说明</strong></h2><p>1、“[GC”和“[Full GC”说明了这次垃圾收集的停顿类型，如果有“Full”则说明这次GC是发生了Stop-The-World的(就是在垃圾收集的时候停止了所有用户进程)。如果是调用System.gc()所触发的收集，那么就显示“[Full GC(System)”</p>
+<p>2、“[DefNew”、“[Tenured”、“[Perm”表示GC发生的区域，这里显示的区域名称和使用的GC收集器是有关系的。<br>例如：<br>Serial收集器：新生代名为“Default New Generation”，所以显示“[DefNew”<br>ParNew收集器，新生代名为“Parallel New Generation”，所以显示“[ParNew”<br>Parallel Scavenge收集器，新生代名为“PSYoungGen”<br>老年代和永久代同理，名称也是由收集器决定的。</p>
+<p>3、“7146K-&gt;484K(9216K)”表示“GC前该内存区域(新生代)已使用容量-&gt;GC后该内存区域已使用容量(该内存区域总容量)”</p>
+<p>4、“0.0034871 secs”表示该内存区域GC所占用的时间，单位是秒</p>
+<p>5、“7146K-&gt;6628K(19456K)”表示“GC前Java堆已使用容量-&gt;GC后Java堆已使用容量(Java堆总容量)”</p>
+<p>6、“Times: user=0.00 sys=0.00, real=0.00 secs”分别代表用户态消耗的CPU时间、内核态消耗的CPU时间和操作从开始到结束所经过的墙钟时间。（CPU时间与墙钟时间的区别是，墙钟时间包括各种非运算的等待耗时，例如等待磁盘I/O、等待线程阻塞，而CPU时间不包括这些耗时，但当系统有多CPU或者多核的话，多线程操作会叠加这些CPU时间，所以当看到user或sys时间超过real时间是完全正常的）</p>
+<h2 id="其他收集器日志"><a href="#其他收集器日志" class="headerlink" title="其他收集器日志"></a><strong>其他收集器日志</strong></h2><p>使用<strong>ParNew+Serial Old</strong>收集器组合日志(-XX:+UseParNewGC):</p>
+<pre><code>[GC[ParNew: 7146K-&gt;508K(9216K), 0.0023849 secs] 7146K-&gt;6652K(19456K), 0.0024203 secs] [Times: user=0.00 sys=0.00, 
+
+real=0.02 secs] 
+Heap
+ par new generation   total 9216K, used 4770K [0x00000000f9a00000, 0x00000000fa400000, 0x00000000fa400000)
+  eden space 8192K,  52% used [0x00000000f9a00000, 0x00000000f9e297b0, 0x00000000fa200000)
+  from space 1024K,  49% used [0x00000000fa300000, 0x00000000fa37f1b8, 0x00000000fa400000)
+  to   space 1024K,   0% used [0x00000000fa200000, 0x00000000fa200000, 0x00000000fa300000)
+ tenured generation   total 10240K, used 6144K [0x00000000fa400000, 0x00000000fae00000, 0x00000000fae00000)
+   the space 10240K,  60% used [0x00000000fa400000, 0x00000000faa00030, 0x00000000faa00200, 0x00000000fae00000)
+ compacting perm gen  total 21248K, used 2582K [0x00000000fae00000, 0x00000000fc2c0000, 0x0000000100000000)
+   the space 21248K,  12% used [0x00000000fae00000, 0x00000000fb085a70, 0x00000000fb085c00, 0x00000000fc2c0000)
+No shared spaces configured.
+</code></pre><p>使用<strong>Parallel Scavenge+Parallel Old</strong>收集器组合(-XX:+UseParallelOldGC):</p>
+<pre><code>Heap
+ PSYoungGen      total 9216K, used 7310K [0x00000000ff600000, 0x0000000100000000, 0x0000000100000000)
+  eden space 8192K, 89% used [0x00000000ff600000,0x00000000ffd23978,0x00000000ffe00000)
+  from space 1024K, 0% used [0x00000000fff00000,0x00000000fff00000,0x0000000100000000)
+  to   space 1024K, 0% used [0x00000000ffe00000,0x00000000ffe00000,0x00000000fff00000)
+ ParOldGen       total 10240K, used 4096K [0x00000000fec00000, 0x00000000ff600000, 0x00000000ff600000)
+  object space 10240K, 40% used [0x00000000fec00000,0x00000000ff000010,0x00000000ff600000)
+ PSPermGen       total 21504K, used 2582K [0x00000000f9a00000, 0x00000000faf00000, 0x00000000fec00000)
+  object space 21504K, 12% used [0x00000000f9a00000,0x00000000f9c85a70,0x00000000faf00000)
+</code></pre>]]></content>
+    
+    <summary type="html">
+    
+      本篇参考《深入理解Java虚拟机》第3.5.8章-理解GC日志做的测试分析日志
+    
+    </summary>
+    
+      <category term="技术" scheme="http://www.linmuxi.com/categories/%E6%8A%80%E6%9C%AF/"/>
+    
+    
+      <category term="JVM" scheme="http://www.linmuxi.com/tags/JVM/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>测试JVM运行时常量池溢出</title>
+    <link href="http://www.linmuxi.com/2016/03/02/jvm-runtimeconstantpool-oom/"/>
+    <id>http://www.linmuxi.com/2016/03/02/jvm-runtimeconstantpool-oom/</id>
+    <published>2016-03-02T02:26:28.000Z</published>
+    <updated>2017-02-07T08:45:10.665Z</updated>
+    
+    <content type="html"><![CDATA[<p>运行时常量池属于方法区(俗称永久代)，如果要使运行时常量池溢出其实就是使方法区溢出，可以通过调整方法区的大小并配合String.intern方法来实现。<br><a id="more"></a></p>
+<h2 id="Java代码"><a href="#Java代码" class="headerlink" title="Java代码"></a><strong>Java代码</strong></h2><pre><code class="java">/**
+ * VM Args: -XX:PermSize=10m -XX:MaxPermSize=10m
+ */
+public class RuntimeConstantPoolOOM {
+    public static void main(String[] args) {
+        List&lt;String&gt; list = new ArrayList&lt;String&gt;();
+        int i =1;
+        while(true){
+            list.add(String.valueOf(i++).intern());
+        }
+    }
+}
+</code></pre>
+<p>上面代码设置方法区的初始内存和最大内存为10m，并通过intern方法不停往方法区写入数据。</p>
+<p>最后运行的结果如自己所预料的那样，出现方法区溢出<br><img src="http://7xqlat.com1.z0.glb.clouddn.com/oom_permgen_space_01.png" alt="方法区溢出"></p>
+<p>不过，大家请仔细看，上面是基于jdk1.6运行的结果，我们切换到jdk1.7运行再看看，发现不会出现方法区溢出，这是为什么呢？</p>
+<p>查看jdk1.7发布<a href="http://www.oracle.com/technetwork/java/javase/jdk7-relnotes-418459.html" target="_blank" rel="external">notes</a>发现：</p>
+<blockquote>
+<p>Area: HotSpot<br>Synopsis: In JDK 7, interned strings are no longer allocated in the permanent generation of the Java heap, but are instead allocated in the main part of the Java heap (known as the young and old generations), along with the other objects created by the application. This change will result in more data residing in the main Java heap, and less data in the permanent generation, and thus may require heap sizes to be adjusted. Most applications will see only relatively small differences in heap usage due to this change, but larger applications that load many classes or make heavy use of the String.intern() method will see more significant differences.<br>RFE: 6962931</p>
+</blockquote>
+<p>在JDK7中，常量池已经从方法区中迁移到了java堆中。</p>
+<p>为了验证这个问题，我们调整VM的堆内存大小<code>-Xms10m -Xmx10m</code>再运行，结果如下<br><img src="http://7xqlat.com1.z0.glb.clouddn.com/oom_jav_heap_space_01.png" alt="java堆溢出"></p>
+]]></content>
+    
+    <summary type="html">
+    
+      &lt;p&gt;运行时常量池属于方法区(俗称永久代)，如果要使运行时常量池溢出其实就是使方法区溢出，可以通过调整方法区的大小并配合String.intern方法来实现。&lt;br&gt;
+    
+    </summary>
+    
+      <category term="技术" scheme="http://www.linmuxi.com/categories/%E6%8A%80%E6%9C%AF/"/>
+    
+    
+      <category term="JVM" scheme="http://www.linmuxi.com/tags/JVM/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>关于String.intern方法在JDK1.6、1.7中的表现</title>
+    <link href="http://www.linmuxi.com/2016/03/02/string-intern-jdk6-jdk7-01/"/>
+    <id>http://www.linmuxi.com/2016/03/02/string-intern-jdk6-jdk7-01/</id>
+    <published>2016-03-02T01:24:44.000Z</published>
+    <updated>2017-02-07T08:45:10.676Z</updated>
+    
+    <content type="html"><![CDATA[<p>在读《深入理解Java虚拟机》第2.4.3节的时候，作者讨论了String.intern方法在jdk6、7中的不同表现，当时看到觉得挺有意思，自己也下来实验了一把，确实如同作者提到的那样，在JDK1.6、1.7中intern方法执行的结果不一样。<br><a id="more"></a></p>
+<h2 id="实例代码"><a href="#实例代码" class="headerlink" title="实例代码"></a><strong>实例代码</strong></h2><pre><code class="java">public class RuntimeConstantPoolOOM {
+    public static void main(String[] args) {
+        String str1 = new StringBuffer(&quot;计算机&quot;).append(&quot;软件&quot;).toString();
+        System.out.println(str1.intern() == str1);
+    }
+}
+</code></pre>
+<p>以上代码在JDK1.6中运行结果是false，在JDK1.7中运行结果是true。作者的解释是在JDK1.6中intern方法会把首次遇到的字符串实例复制到永久代中，返回的也是永久代中的这个字符串实例的引用，而JDK1.7中intern方法实现不会再复制实例，只是在常量池中记录首次出现的实例引用。</p>
+<p>我们再看下官网api关于intern方法的介绍<br><img src="http://7xqlat.com1.z0.glb.clouddn.com/jdk1.6_string_intern.png" alt="JDK1.6">;<br><img src="http://7xqlat.com1.z0.glb.clouddn.com/jdk1.7_string_intern.png" alt="JDK1.7">;</p>
+<p>两个版本关于intern的描述居然都是一样的：</p>
+<blockquote>
+<p>当intern方法被执行后，如果常量池中存在该字符串(通过equals判断)，那么就将该字符串从常量池中返回，否则，将该字符串对象添加到常量池中并将指向该对象的引用返回。</p>
+</blockquote>
+<p>明明intern方法在这两个版本中的表现不一样，文档这里为什么没有一点点体现呢？</p>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a><strong>总结</strong></h2><p>JDK1.6<br>调用intern方法如果常量池中包含该字符串则返回该字符串引用地址，如果不包括则将该字符串添加到常量池中再返回新的引用地址。所以当调用str1.intern方法时，”计算机软件”在常量池中是不存在的，所以会将该字符串添加到常量池中并返回新的引用地址，所以结果为false。</p>
+<p>JDK1.7<br>调用intern方法只是在常量池中记录该字符串的实例引用地址，如果该字符串在常量池中存在，则返回该实例引用地址，不存在则记录实例引用后返回地址。所以当调用str1.intern方法时，“计算机软件”在常量池中不存在，所以常量池中会记录该字符串实例引用并返回引用地址，所以返回的引用地址和str1是同一个实例引用，最后结果为true。</p>
+<h2 id="说明"><a href="#说明" class="headerlink" title="说明"></a><strong>说明</strong></h2><p>最后需要说明一点的是，常量池中会有一些已经存在的字符串常量，看下面的例子：</p>
+<pre><code class="java">public class RuntimeConstantPoolOOM {
+    public static void main(String[] args) {
+        String str1 = new StringBuffer(&quot;ma&quot;).append(&quot;in&quot;).toString();
+        System.out.println(str1.intern() == str1);
+    }
+}
+</code></pre>
+<p>上面代码在JDK7中执行的结果为false，因为在调用intern方法的时候，常量池中已经存在main，所以返回的是main的引用地址，和str1是不同的实例对象，所以结果为false。</p>
+]]></content>
+    
+    <summary type="html">
+    
+      关于String.intern方法在JDK1.6、1.7中的表现
+    
+    </summary>
+    
+      <category term="技术" scheme="http://www.linmuxi.com/categories/%E6%8A%80%E6%9C%AF/"/>
+    
+    
+      <category term="Java" scheme="http://www.linmuxi.com/tags/Java/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>JVM字节码之简单解读01</title>
+    <link href="http://www.linmuxi.com/2016/02/26/jvm-class-read-01/"/>
+    <id>http://www.linmuxi.com/2016/02/26/jvm-class-read-01/</id>
+    <published>2016-02-26T02:41:39.000Z</published>
+    <updated>2017-02-07T08:45:10.660Z</updated>
+    
+    <content type="html"><![CDATA[<p>本篇通过一段简单的代码来分析下字节码的执行，认识认识几个常见的字节码指令<br><a id="more"></a></p>
+<h2 id="Java源代码"><a href="#Java源代码" class="headerlink" title="Java源代码"></a><strong>Java源代码</strong></h2><pre><code class="java">public static void main(String[] args) {
+    int i = 100;
+    int j = 200 + i - 100;
+    int z = j++;
+    System.out.println(z+i);
+}
+</code></pre>
+<p>上面源码执行之后的结果是300，下面我们就通过分析class来看看结果是怎么得来的。</p>
+<h2 id="Class字节码"><a href="#Class字节码" class="headerlink" title="Class字节码"></a><strong>Class字节码</strong></h2><pre><code class="java">public static void main(java.lang.String[]);
+  Code:
+   Stack=3, Locals=4, Args_size=1
+   0:   bipush  100
+   2:   istore_1
+   3:   sipush  200
+   6:   iload_1
+   7:   iadd
+   8:   bipush  100
+   10:  isub
+   11:  istore_2
+   12:  iload_2
+   13:  iinc    2, 1
+   16:  istore_3
+   17:  getstatic       #2; //Field java/lang/System.out:Ljava/io/PrintStream;
+   20:  iload_3
+   21:  iload_1
+   22:  iadd
+   23:  invokevirtual   #3; //Method java/io/PrintStream.println:(I)V
+   26:  return
+}
+</code></pre>
+<p>下面我们就来分析下字节码的执行：<br><strong>Stack=3, Locals=4, Args_size=1</strong>,这段说明栈中元素有3个，局部变量表中有元素4个，参数1个</p>
+<p><strong>0:   bipush  100</strong>      # 将常量100压入栈中<br><strong>2:   istore_1</strong>          # 从栈中取出常量100存储到局部变量表中，下标索引为1<br><img src="http://7xqlat.com1.z0.glb.clouddn.com/jvm_read_class_stack_01.png-hunterblog" alt=""></p>
+<p><strong>3:   sipush  200</strong>      # 将常量200压入栈中<br><strong>6:   iload_1</strong>          # 将下标索引为1的常量从局部变量表中压入栈中。<br><img src="http://7xqlat.com1.z0.glb.clouddn.com/jvm_read_class_stack_02.png-hunterblog" alt=""></p>
+<p><strong>7:   iadd      </strong>       # 从栈中取出两个整型常量相加并将结果存储到栈中<br><img src="http://7xqlat.com1.z0.glb.clouddn.com/jvm_read_class_stack_03.png-hunterblog" alt=""></p>
+<p><strong>8:   bipush  100  </strong>    # 将常量100压入栈中<br><img src="http://7xqlat.com1.z0.glb.clouddn.com/jvm_read_class_stack_04.png-hunterblog" alt=""></p>
+<p><strong>10:  isub      </strong>       # 从栈中取出两个整型常量做相减并将结果存储到栈中<br><img src="http://7xqlat.com1.z0.glb.clouddn.com/jvm_read_class_stack_05.png-hunterblog" alt=""></p>
+<p><strong>11:  istore_2    </strong>      # 从栈中取出常量存储到局部变量表中，下标索引为2<br><img src="http://7xqlat.com1.z0.glb.clouddn.com/jvm_read_class_stack_06.png-hunterblog" alt=""></p>
+<p><strong>12:  iload_2     </strong>     # 将下标索引为2的常量从局部变量表中压入栈中<br><strong>13:  iinc    2, 1 </strong>    # 将局部变量表中下标索引为2的变量自增。<br><img src="http://7xqlat.com1.z0.glb.clouddn.com/jvm_read_class_stack_07.png-hunterblog" alt=""></p>
+<p><strong>16:  istore_3   </strong>      # 从栈中取出常量存储到局部变量表中，下标索引为3<br><img src="http://7xqlat.com1.z0.glb.clouddn.com/jvm_read_class_stack_08.png-hunterblog" alt=""></p>
+<p><strong>17:  getstatic </strong>      #2; //Field java/lang/System.out:Ljava/io/PrintStream;<br><strong>20:  iload_3  </strong>        # 将下标索引为3的常量从局部变量表中压入栈中<br><strong>21:  iload_1  </strong>        # 将下标索引为1的常量从局部变量表中压入栈中<br><img src="http://7xqlat.com1.z0.glb.clouddn.com/jvm_read_class_stack_09.png-hunterblog" alt=""></p>
+<p><strong>22:  iadd    </strong>         # 从栈中取出两个整型常量相加并将结果存储到栈中<br><img src="http://7xqlat.com1.z0.glb.clouddn.com/jvm_read_class_stack_10.png-hunterblog" alt=""></p>
+<p><strong>23:  invokevirtual </strong>  #3; //Method java/io/PrintStream.println:(I)V<br><strong>26:  return</strong></p>
+<p>所以最后执行结果是300</p>
+<p>大家可能注意到了，在字节码第三行<strong>Stack=3, Locals=4, Args_size=1</strong>，显示的是栈中有3个元素，为什么我们这里只有两个？其实栈中还有一个this元素，由于this不在本篇介绍范围之类，所以例图就省略了，特此说明下。大家可能疑惑这个this是什么时候入栈的，通过下面的代码相信大家就明白了</p>
+<pre><code class="java">public test.Test();
+  Code:
+   Stack=1, Locals=1, Args_size=1
+   0:   aload_0
+   1:   invokespecial   #1; //Method java/lang/Object.&quot;&lt;init&gt;&quot;:()V
+   4:   return
+  LineNumberTable:
+   line 3: 0
+</code></pre>
+<!-- PS：由于认识较肤浅，如文中有不适当或有误的地方还望大家不吝指出。 -->
+<h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a><strong>参考</strong></h2><p><a href="https://en.wikipedia.org/wiki/Java_bytecode_instruction_listings" target="_blank" rel="external">Java字节码指令列表</a></p>
+<!--
+查看字节码
+javap -c Test
+javap -v Test
+javap -v Test > E:/Test.dc
+-->]]></content>
+    
+    <summary type="html">
+    
+      本篇通过一段简单的代码来分析下字节码的执行，认识认识几个常见的字节码指令
+    
+    </summary>
+    
+      <category term="技术" scheme="http://www.linmuxi.com/categories/%E6%8A%80%E6%9C%AF/"/>
+    
+    
+      <category term="JVM" scheme="http://www.linmuxi.com/tags/JVM/"/>
+    
+      <category term="Java" scheme="http://www.linmuxi.com/tags/Java/"/>
+    
+  </entry>
+  
+</feed>

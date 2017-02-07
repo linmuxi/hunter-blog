@@ -1,0 +1,624 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>Oracle单向高级流复制的使用 | Hunter的博客</title>
+  <meta name="author" content="Hunter Lin">
+  
+  <meta name="description" content="Oracle单向高级流复制的使用">
+  
+  <meta name="keywords" content="Oracle,流">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  <meta property="og:title" content="Oracle单向高级流复制的使用"/>
+  <meta property="og:site_name" content="Hunter的博客"/>
+
+  
+  <meta property="og:image" content="undefined"/>
+  
+  
+  <!-- 百度验证 -->
+  
+  <meta name="baidu-site-verification" content="xyDHnOQvLc" />
+  
+
+  <!-- google验证 -->
+  
+  <meta name="google-site-verification" content="XetGPCVQcMEMmGykIpHKZTAIQzRX1uLgL5FrmjoMXSE" />
+  
+
+  <!-- sogou验证 -->
+  
+  <meta name="sogou_site_verification" content="xA7xdyVjJV" />
+  
+
+  <link href="/favicon.png" rel="icon">
+  <link rel="alternate" href="/atom.xml" title="Hunter的博客" type="application/atom+xml">
+  <link rel="stylesheet" href="/css/style.css" media="screen" type="text/css">
+  <!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+
+  <!-- 使用google代码高亮 -->
+  
+  <!--
+  <link rel="stylesheet" href="/plugins/google-code-prettify/prettify.css" type="text/css">
+  -->
+  <!--
+  <link rel="stylesheet" href="/plugins/google-code-prettify/vibrant-ink.css" type="text/css">
+  -->
+  <link rel="stylesheet" href="/plugins/google-code-prettify/tomorrow-night.css" type="text/css"> 
+  
+
+  
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+  
+
+  <style type="text/css">
+  pre{
+    word-wrap:break-word;
+    word-break:break-all;
+  }
+  ol.linenums{
+    /*代码行数颜色*/
+    color:#CCC !important;
+    font-size:14px !important;
+  }
+  </style>
+</head>
+
+
+<body>
+  <header id="header" class="inner"><div class="alignleft">
+  <h1><a href="/">Hunter的博客</a></h1>
+  <h2><a href="/">努力工作，幸福生活</a></h2>
+</div>
+<nav id="main-nav" class="alignright">
+  <ul>
+    
+      <li><a href="/">Home</a></li>
+    
+      <li><a href="/archives">Archives</a></li>
+    
+      <li><a href="/atom.xml">RSS</a></li>
+    
+      <li><a href="/Book">Book</a></li>
+    
+  </ul>
+  <div class="clearfix"></div>
+</nav>
+<div class="clearfix"></div>
+</header>
+  <div id="content" class="inner">
+    <div id="main-col" class="alignleft"><div id="wrapper"><article class="post">
+  
+  <div class="post-content">
+    <header>
+      
+        <div class="icon"></div>
+        <time datetime="2016-02-22T09:15:10.000Z"><a href="/2016/02/22/oracle-stream-01/">2016-02-22</a></time>
+      
+      
+  
+    <h1 class="title">Oracle单向高级流复制的使用</h1>
+  
+
+    </header>
+    <div class="entry">
+      
+        <p>本篇分享下Oracle中流复制的使用。<br><a id="more"></a></p>
+<h2 id="场景"><a href="#场景" class="headerlink" title="场景"></a>场景</h2><p>需求：需要将A地采集到的数据发送到B地数据库中。<br>环境：网络环境是A到B是单项通讯</p>
+<p>暂且称A为主库，B为从库</p>
+<h2 id="A"><a href="#A" class="headerlink" title="A"></a>A</h2><p>一、在主库配置到从库的tns连接<br>~ tnsping boyuupq_10_19</p>
+<p>二、修改数据库域名(注意修改完后要重启数据库)<br>查看数据库域名<br><code>select * from global_name;</code> //boyuupq.REGRESS.RDBMS.DEV.US.ORACLE.COM</p>
+<p>修改数据库域名<br><code>alter database rename global_name to boyuupq_10_18;</code></p>
+<p>执行完这步之后，查询发现数据库域名还是上面的结果，新建dblink名称后面也会自动拼接上这后缀。<br>这时可以执行：<code>update global_name set global_name = boyuupq_10_18;</code></p>
+<p>三、新建流管理员strmadmin(使用sysdba帐号)</p>
+<pre><code class="sql">SQL&gt;conn /as sysdba
+SQL&gt; create user strmadmin identified by strmadmin default tablespace users temporary tablespace temp;
+SQL&gt; execute dbms_defer_sys.register_propagator(&#39;strmadmin&#39;);
+SQL&gt; grant execute any procedure to strmadmin;
+SQL&gt; execute dbms_repcat_admin.grant_admin_any_repgroup(&#39;strmadmin&#39;);
+SQL&gt; execute dbms_repcat_admin.grant_admin_any_schema(username =&gt; &#39;strmadmin&#39;);
+SQL&gt; grant comment any table to strmadmin;
+SQL&gt; grant lock any table to strmadmin;
+SQL&gt; grant select any dictionary to strmadmin;
+</code></pre>
+<p>四、用流管理员strmadmin新增到从库的dblink</p>
+<pre><code class="sql">SQL&gt; conn strmadmin/strmadmin
+SQL&gt; create database link &quot;boyuupq_10_19&quot; connect to strmadmin identified by strmadmin using &#39;boyuupq_10_19&#39;;
+</code></pre>
+<p>五、查询dblink</p>
+<pre><code class="sql">SQL&gt; select owner,db_link,host from all_db_links;
+OWNER         DB_LINK                                 HOST   
+STRMADMIN  boyuupq_10_19    boyuupq_10_19
+</code></pre>
+<h2 id="B"><a href="#B" class="headerlink" title="B"></a>B</h2><p>一、修改数据库域名(注意修改完后要重启数据库)<br>查看数据库域名<br><code>select * from global_name;</code> //boyuupq.REGRESS.RDBMS.DEV.US.ORACLE.COM</p>
+<p>修改数据库域名<br><code>alter database rename global_name to boyuupq_10_19;</code></p>
+<p>执行完这步之后，查询发现数据库域名还是上面的结果，新建dblink名称后面也会自动拼接上这后缀。<br>这时可以执行：<code>update global_name set global_name = boyuupq_10_19;</code></p>
+<p>二、新建流管理员strmadmin(使用sysdba帐号)</p>
+<pre><code class="sql">SQL&gt;conn /as sysdba
+SQL&gt; create user strmadmin identified by strmadmin default tablespace users temporary tablespace temp;
+SQL&gt; execute dbms_defer_sys.register_propagator(&#39;strmadmin&#39;);
+SQL&gt; grant execute any procedure to strmadmin;
+SQL&gt; execute dbms_repcat_admin.grant_admin_any_repgroup(&#39;strmadmin&#39;);
+SQL&gt; execute dbms_repcat_admin.grant_admin_any_schema(username =&gt; &#39;strmadmin&#39;);
+SQL&gt; grant comment any table to strmadmin;
+SQL&gt; grant lock any table to strmadmin;
+SQL&gt; grant select any dictionary to strmadmin;
+</code></pre>
+<blockquote>
+<p>上面的操作主要是配置数据库名称、流管理员、dblink，下面将要进行流队列、捕获进程、传播进程、应用进程的配置</p>
+</blockquote>
+<h3 id="创建流队列"><a href="#创建流队列" class="headerlink" title="创建流队列"></a>创建流队列</h3><p>主库：</p>
+<pre><code class="sql">connect strmadmin/strmadmin;
+begin 
+    dbms_streams_adm.set_up_queue( 
+        queue_table =&gt; &#39;boyuupq_10_18_queue_table&#39;, 
+        queue_name =&gt; &#39;boyuupq_10_18_queue&#39;); 
+end; 
+/
+</code></pre>
+<p>从库：</p>
+<pre><code class="sql">connect strmadmin/strmadmin;
+begin 
+    dbms_streams_adm.set_up_queue( 
+        queue_table =&gt; &#39;boyuupq_10_19_queue_table&#39;, 
+        queue_name =&gt; &#39;boyuupq_10_19_queue&#39;); 
+end; 
+/
+</code></pre>
+<h3 id="创建捕获进程-主库"><a href="#创建捕获进程-主库" class="headerlink" title="创建捕获进程(主库)"></a>创建捕获进程(主库)</h3><pre><code class="sql">connect strmadmin/strmadmin;
+begin 
+    dbms_streams_adm.add_schema_rules( 
+        schema_name =&gt; &#39;sa&#39;, 
+        streams_type =&gt; &#39;capture&#39;, 
+        streams_name =&gt; &#39;capture_boyuupq_10_18&#39;, 
+        queue_name =&gt; &#39;strmadmin.boyuupq_10_18_queue&#39;, 
+        include_dml =&gt; true, 
+        include_ddl =&gt; true, 
+        include_tagged_lcr =&gt; false, 
+        source_database =&gt; null, 
+        inclusion_rule =&gt; true); 
+end; 
+/
+</code></pre>
+<h3 id="创建传播进程-主库"><a href="#创建传播进程-主库" class="headerlink" title="创建传播进程(主库)"></a>创建传播进程(主库)</h3><pre><code class="sql">connect strmadmin/strmadmin;
+begin 
+    dbms_streams_adm.add_schema_propagation_rules( 
+        schema_name =&gt; &#39;sa&#39;, 
+        streams_name =&gt; &#39;boyuupq18_to_boyuupq19&#39;, 
+        source_queue_name =&gt; &#39;strmadmin.boyuupq_10_18_queue&#39;, 
+        destination_queue_name =&gt; &#39;strmadmin.boyuupq_10_19_queue@book&#39;, 
+        include_dml =&gt; true, 
+        include_ddl =&gt; true, 
+        include_tagged_lcr =&gt; false, 
+        source_database =&gt; &#39;boyuupq_10_18&#39;, //主库数据库名称，注意这里的配置是否正确
+        inclusion_rule =&gt; true); 
+end; 
+/
+</code></pre>
+<h3 id="修改propagation休眠时间为0，表示实时传播LCR"><a href="#修改propagation休眠时间为0，表示实时传播LCR" class="headerlink" title="修改propagation休眠时间为0，表示实时传播LCR"></a>修改propagation休眠时间为0，表示实时传播LCR</h3><pre><code class="sql">begin 
+    dbms_aqadm.alter_propagation_schedule( 
+        queue_name =&gt; &#39;boyuupq_10_18_queue&#39;, 
+        destination =&gt; &#39;boyuupq_10_19&#39;, //到从库的dblink名称
+        latency =&gt; 0); 
+end; 
+/
+</code></pre>
+<h3 id="创建应用进程-从库"><a href="#创建应用进程-从库" class="headerlink" title="创建应用进程(从库)"></a>创建应用进程(从库)</h3><pre><code class="sql">connect strmadmin/strmadmin;
+begin 
+    dbms_streams_adm.add_schema_rules( 
+        schema_name =&gt; &#39;sa&#39;, 
+        streams_type =&gt; &#39;apply&#39;, 
+        streams_name =&gt; &#39;apply_boyuupq_10_19&#39;, 
+        queue_name =&gt; &#39;strmadmin.boyuupq_10_19_queue&#39;, 
+        include_dml =&gt; true, 
+        include_ddl =&gt; true, 
+        include_tagged_lcr =&gt; false, 
+        source_database =&gt; &#39;boyuupq_10_18&#39;, //主库数据库名称
+        inclusion_rule =&gt; true); 
+end; 
+/
+</code></pre>
+<h3 id="启动应用进程-从库-先应用、后捕获，传播自动启动"><a href="#启动应用进程-从库-先应用、后捕获，传播自动启动" class="headerlink" title="启动应用进程(从库,先应用、后捕获，传播自动启动)"></a>启动应用进程(从库,先应用、后捕获，传播自动启动)</h3><pre><code class="sql">connect strmadmin/strmadmin;
+#启动Apply进程 
+begin 
+    dbms_apply_adm.start_apply( 
+        apply_name =&gt; &#39;apply_boyuupq_10_19&#39;); 
+end; 
+/
+</code></pre>
+<h3 id="启动捕获进程-主库"><a href="#启动捕获进程-主库" class="headerlink" title="启动捕获进程(主库)"></a>启动捕获进程(主库)</h3><pre><code class="sql">connect strmadmin/strmadmin;
+#启动Capture进程 
+begin 
+    dbms_capture_adm.start_capture( 
+        capture_name =&gt; &#39;capture_boyuupq_10_18&#39;); 
+end; 
+/
+</code></pre>
+<blockquote>
+<p>到这里流配置就完成了，可以通过下面的sql语句进行运行状况的查询</p>
+</blockquote>
+<h3 id="查询stream运行状况"><a href="#查询stream运行状况" class="headerlink" title="查询stream运行状况"></a>查询stream运行状况</h3><p>主库：</p>
+<pre><code class="sql">--捕获进程信息
+SELECT * FROM dba_capture;
+--传播进程信息
+SELECT * FROM dba_propagation;
+--已经捕获到的表对象
+SELECT * FROM DBA_CAPTURE_PREPARED_TABLES order by SCN;
+--已经捕获到的schema对象
+SELECT * from dba_capture_prepared_schemas;
+</code></pre>
+<p>从库：</p>
+<pre><code class="sql">--应用进程信息
+select * from dba_apply;
+--应用进程错误详细信息
+select * from dba_apply_error;
+--当前已经实例化的schema对象
+select * from dba_apply_instantiated_schemas;
+--当前已经实例化并同步过来的对象(表)
+select * from dba_apply_instantiated_objects;
+</code></pre>
+<blockquote>
+<p>下面提供了停止相应流进程的操作</p>
+</blockquote>
+<h3 id="停止捕获进程-主库"><a href="#停止捕获进程-主库" class="headerlink" title="停止捕获进程(主库)"></a>停止捕获进程(主库)</h3><pre><code class="sql">connect strmadmin/strmadmin;
+#停止Capture进程 
+begin 
+    dbms_capture_adm.stop_capture( 
+        capture_name =&gt; &#39;capture_boyuupq_10_18&#39;); 
+end; 
+/
+</code></pre>
+<h3 id="停止应用进程-从库"><a href="#停止应用进程-从库" class="headerlink" title="停止应用进程(从库)"></a>停止应用进程(从库)</h3><pre><code class="sql">connect strmadmin/strmadmin;
+#停止Apply进程 
+begin 
+    dbms_apply_adm.stop_apply( 
+        apply_name =&gt; &#39;apply_boyuupq_10_19&#39;); 
+end; 
+/
+</code></pre>
+<h3 id="删除传播进程、应用进程"><a href="#删除传播进程、应用进程" class="headerlink" title="删除传播进程、应用进程"></a>删除传播进程、应用进程</h3><pre><code class="sql">exec dbms_capture_adm.drop_capture(&quot;capture_boyuupq_10_18&quot;);
+exec dbms_apply_adm.drop_apply(&#39;apply_boyuupq_10_19&#39;);
+</code></pre>
+<h3 id="删除所有流配置信息"><a href="#删除所有流配置信息" class="headerlink" title="删除所有流配置信息"></a>删除所有流配置信息</h3><pre><code>exec dbms_streams_adm.remove_streams_configuration();
+</code></pre>
+      
+    </div>
+    <footer>
+      
+        
+  
+  <div class="categories">
+    <a href="/categories/技术/">技术</a>
+  </div>
+
+        
+  
+  <div class="tags">
+    <a href="/tags/Oracle/">Oracle</a>
+  </div>
+
+        
+  <div class="addthis addthis_toolbox addthis_default_style">
+    
+    
+    
+    
+    <!--
+    <a class="addthis_counter addthis_pill_style"></a>
+    -->
+
+    <!-- 加入多说分享 -->
+    
+      <div class="ds-share flat" data-thread-key="2016/02/22/oracle-stream-01/" data-title="Hunter的博客-Oracle单向高级流复制的使用" data-images="此处请替换为分享时显示的图片的链接地址" data-content="" data-url="http://www.linmuxi.com/2016/02/22/oracle-stream-01/">
+  <div class="ds-share-inline">
+    <ul  class="ds-share-icons-16">
+      <li data-toggle="ds-share-icons-more"><a class="ds-more" href="javascript:void(0);">分享到：</a></li>
+      <li><a class="ds-weibo" href="javascript:void(0);" data-service="weibo">微博</a></li>
+      <li><a class="ds-qzone" href="javascript:void(0);" data-service="qzone">QQ空间</a></li>
+      <li><a class="ds-qqt" href="javascript:void(0);" data-service="qqt">腾讯微博</a></li>
+      <li><a class="ds-wechat" href="javascript:void(0);" data-service="wechat">微信</a></li>
+    </ul>
+    <div class="ds-share-icons-more">
+    </div>
+  </div>
+</div>
+    
+    <!-- end 加入多说分享 -->
+    
+  </div>
+  <script type="text/javascript" src="//s7.addthis.com/js/300/addthis_widget.js"></script>
+
+      
+      <div class="clearfix"></div>
+    </footer>
+  </div>
+</article>
+
+
+<section id="comment">
+  <h1 class="title">留言</h1>
+
+  <!-- 加入多说评论 -->
+  
+        
+  <!-- 多说评论框 start -->
+  <div class="ds-thread" data-thread-key="2016/02/22/oracle-stream-01/" data-title="Oracle单向高级流复制的使用" data-url="http://www.linmuxi.com/2016/02/22/oracle-stream-01/"></div>
+  <!-- 多说评论框 end -->
+
+  <!-- 多说公共JS代码 start (一个网页只需插入一次) -->
+  <script type="text/javascript">
+  var duoshuoQuery = {short_name:"hunterlin"};
+    (function() {
+      var ds = document.createElement('script');
+      ds.type = 'text/javascript';ds.async = true;
+      ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+      ds.charset = 'UTF-8';
+      (document.getElementsByTagName('head')[0] 
+       || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+    </script>
+  <!-- 多说公共JS代码 end -->
+
+      
+  
+  <!-- end加入多说评论 -->
+
+  
+
+</section>
+
+</div></div>
+    <aside id="sidebar" class="alignright">
+  <div class="search">
+<!--
+  <form action="//google.com/search" method="get" accept-charset="utf-8">
+    <input type="search" name="q" results="0" placeholder="搜索">
+    <input type="hidden" name="q" value="site:www.linmuxi.com">
+  </form>
+-->
+	<form>
+		<input type="search" id="hunter-blog-search" placeholder="搜索">
+	</form>
+</div>
+
+  
+<div class="widget tag">
+  <h3 class="title">分类</h3>
+  <ul class="entry">
+  
+    <li><a href="/categories/技术/工作/">工作</a><small>4</small></li>
+  
+    <li><a href="/categories/技术/">技术</a><small>64</small></li>
+  
+    <li><a href="/categories/生活/">生活</a><small>0</small></li>
+  
+    <li><a href="/categories/项目管理/">项目管理</a><small>1</small></li>
+  
+  </ul>
+</div>
+
+
+  
+<div class="widget tag">
+  <h3 class="title">标签</h3>
+  <ul class="entry">
+  
+    <li><a href="/tags/Android/">Android</a><small>2</small></li>
+  
+    <li><a href="/tags/AndroidStudio2-0/">AndroidStudio2.0</a><small>2</small></li>
+  
+    <li><a href="/tags/Bat/">Bat</a><small>1</small></li>
+  
+    <li><a href="/tags/Echarts/">Echarts</a><small>1</small></li>
+  
+    <li><a href="/tags/Flex4/">Flex4</a><small>2</small></li>
+  
+    <li><a href="/tags/Fusionchart/">Fusionchart</a><small>1</small></li>
+  
+    <li><a href="/tags/Git/">Git</a><small>4</small></li>
+  
+    <li><a href="/tags/HTML5/">HTML5</a><small>1</small></li>
+  
+    <li><a href="/tags/Hexo/">Hexo</a><small>9</small></li>
+  
+    <li><a href="/tags/JVM/">JVM</a><small>9</small></li>
+  
+    <li><a href="/tags/Java/">Java</a><small>4</small></li>
+  
+    <li><a href="/tags/JavaScript/">JavaScript</a><small>1</small></li>
+  
+    <li><a href="/tags/Linux/">Linux</a><small>1</small></li>
+  
+    <li><a href="/tags/NPM/">NPM</a><small>1</small></li>
+  
+    <li><a href="/tags/Nginx/">Nginx</a><small>1</small></li>
+  
+    <li><a href="/tags/Node-js/">Node.js</a><small>7</small></li>
+  
+    <li><a href="/tags/Oracle/">Oracle</a><small>13</small></li>
+  
+    <li><a href="/tags/PowerDesigner/">PowerDesigner</a><small>1</small></li>
+  
+    <li><a href="/tags/Red5/">Red5</a><small>2</small></li>
+  
+    <li><a href="/tags/Spring/">Spring</a><small>1</small></li>
+  
+    <li><a href="/tags/Tomcat/">Tomcat</a><small>1</small></li>
+  
+    <li><a href="/tags/UML/">UML</a><small>1</small></li>
+  
+    <li><a href="/tags/WebApp/">WebApp</a><small>1</small></li>
+  
+    <li><a href="/tags/gulp/">gulp</a><small>1</small></li>
+  
+    <li><a href="/tags/hexo/">hexo</a><small>1</small></li>
+  
+    <li><a href="/tags/iReport/">iReport</a><small>1</small></li>
+  
+    <li><a href="/tags/webpack/">webpack</a><small>2</small></li>
+  
+    <li><a href="/tags/图形报表/">图形报表</a><small>3</small></li>
+  
+    <li><a href="/tags/推荐/">推荐</a><small>1</small></li>
+  
+    <li><a href="/tags/设计模式/">设计模式</a><small>1</small></li>
+  
+  </ul>
+</div>
+
+
+  
+<div class="widget tag">
+  <h3 class="title">最新文章</h3>
+  <ul class="entry">
+    
+      <li>
+        <a href="/2016/07/18/design-pattern-builder-01/">设计模式の构造器</a>
+      </li>
+    
+      <li>
+        <a href="/2016/07/04/spring-security-integration/">集成Spring Security</a>
+      </li>
+    
+      <li>
+        <a href="/2016/06/27/jvm-note-classfile/">读《深入理解Java虚拟机》-类文件结构</a>
+      </li>
+    
+      <li>
+        <a href="/2016/06/23/jvm-note-gc/">读《深入理解Java虚拟机》-垃圾收集器</a>
+      </li>
+    
+      <li>
+        <a href="/2016/06/13/jvm-note-javamemoryarea/">读《深入理解Java虚拟机》-Java内存区域</a>
+      </li>
+    
+  </ul>
+</div>
+
+
+  
+<div class="widget tag">
+  <h3 class="title">标签云</h3>
+  <div class="entry">
+    <a href="/tags/Android/" style="font-size: 11.67px;">Android</a> <a href="/tags/AndroidStudio2-0/" style="font-size: 11.67px;">AndroidStudio2.0</a> <a href="/tags/Bat/" style="font-size: 10px;">Bat</a> <a href="/tags/Echarts/" style="font-size: 10px;">Echarts</a> <a href="/tags/Flex4/" style="font-size: 11.67px;">Flex4</a> <a href="/tags/Fusionchart/" style="font-size: 10px;">Fusionchart</a> <a href="/tags/Git/" style="font-size: 15px;">Git</a> <a href="/tags/HTML5/" style="font-size: 10px;">HTML5</a> <a href="/tags/Hexo/" style="font-size: 18.33px;">Hexo</a> <a href="/tags/JVM/" style="font-size: 18.33px;">JVM</a> <a href="/tags/Java/" style="font-size: 15px;">Java</a> <a href="/tags/JavaScript/" style="font-size: 10px;">JavaScript</a> <a href="/tags/Linux/" style="font-size: 10px;">Linux</a> <a href="/tags/NPM/" style="font-size: 10px;">NPM</a> <a href="/tags/Nginx/" style="font-size: 10px;">Nginx</a> <a href="/tags/Node-js/" style="font-size: 16.67px;">Node.js</a> <a href="/tags/Oracle/" style="font-size: 20px;">Oracle</a> <a href="/tags/PowerDesigner/" style="font-size: 10px;">PowerDesigner</a> <a href="/tags/Red5/" style="font-size: 11.67px;">Red5</a> <a href="/tags/Spring/" style="font-size: 10px;">Spring</a> <a href="/tags/Tomcat/" style="font-size: 10px;">Tomcat</a> <a href="/tags/UML/" style="font-size: 10px;">UML</a> <a href="/tags/WebApp/" style="font-size: 10px;">WebApp</a> <a href="/tags/gulp/" style="font-size: 10px;">gulp</a> <a href="/tags/hexo/" style="font-size: 10px;">hexo</a> <a href="/tags/iReport/" style="font-size: 10px;">iReport</a> <a href="/tags/webpack/" style="font-size: 11.67px;">webpack</a> <a href="/tags/图形报表/" style="font-size: 13.33px;">图形报表</a> <a href="/tags/推荐/" style="font-size: 10px;">推荐</a> <a href="/tags/设计模式/" style="font-size: 10px;">设计模式</a>
+  </div>
+</div>
+
+
+  <div class="widget tag">
+  <h3 class="title">最新评论</h3>
+  <ul class="entry">
+	
+		<li>
+			<div class="ds-recent-comments" data-num-items="5" data-show-avatars="1" data-show-time="1" data-show-title="1" data-show-admin="1" data-excerpt-length="70"></div>
+		</li>
+	
+  </ul>
+</div>
+
+</aside>
+    <div class="clearfix"></div>
+  </div>
+  <footer id="footer" class="inner"><div class="alignleft">
+  
+  &copy; 2017 Hunter Lin
+  
+
+  <!-- 不蒜子统计 -->
+  
+
+<script type="text/javascript">var cnzz_protocol = (("https:" == document.location.protocol) ? " https://" : " http://");document.write(unescape("%3Cspan id='cnzz_stat_icon_1259167020'%3E%3C/span%3E%3Cscript src='" + cnzz_protocol + "s4.cnzz.com/z_stat.php%3Fid%3D1259167020%26show%3Dpic' type='text/javascript'%3E%3C/script%3E"));</script>
+
+</div>
+<div class="clearfix"></div></footer>
+  <!-- <script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script> -->
+<script src="/js/jquery-2.0.3.min.js"></script>
+<script src="/js/jquery.imagesloaded.min.js"></script>
+<script src="/js/gallery.js"></script>
+
+
+
+<!-- fancybox -->
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+(function($){
+  $('.fancybox').fancybox();
+})(jQuery);
+</script>
+
+
+<!-- 站内搜索 -->
+
+<script type="text/javascript">
+  (function(w,d,t,u,n,s,e){w['SwiftypeObject']=n;w[n]=w[n]||function(){
+  (w[n].q=w[n].q||[]).push(arguments);};s=d.createElement(t);
+  e=d.getElementsByTagName(t)[0];s.async=1;s.src=u;e.parentNode.insertBefore(s,e);
+  })(window,document,'script','//s.swiftypecdn.com/install/v2/st.js','_st');
+  
+  _st('install','fjox-txyzMTBRyd8dwrn','2.0.0');
+</script>
+
+
+<!-- google分析 -->
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-74187619-1', 'auto');
+  ga('send', 'pageview');
+</script>
+
+
+<!-- 添加baidu统计 -->
+
+<script>
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "//hm.baidu.com/hm.js?a4f074d0c4eecf056150ecbd92e46f89";
+  var s = document.getElementsByTagName("script")[0]; 
+  s.parentNode.insertBefore(hm, s);
+})();
+</script>
+
+
+<!-- 代码高亮 -->
+
+<script src="/plugins/google-code-prettify/prettify.js"></script>
+<script>
+  $(window).load(function(){
+    $('pre').addClass('prettyprint linenums').attr('style', 'overflow:auto;');
+    prettyPrint();
+  })
+</script>
+
+
+<!-- 不蒜子统计 -->
+
+
+<!-- baidu自动推送 -->
+
+
+
+<script type="text/javascript">
+var duoshuoQuery = {short_name:"hunterlin"};
+  (function() {
+    var ds = document.createElement('script');
+    ds.type = 'text/javascript';ds.async = true;
+    ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+    ds.charset = 'UTF-8';
+    (document.getElementsByTagName('head')[0] 
+     || document.getElementsByTagName('body')[0]).appendChild(ds);
+  })();
+  </script>
+
+</body>
+
+</html>

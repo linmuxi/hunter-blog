@@ -1,0 +1,549 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>你真的了解try{ return }finally{}中的return？ | Hunter的博客</title>
+  <meta name="author" content="Hunter Lin">
+  
+  <meta name="description" content="你真的了解try{ return }finally{}中的return?">
+  
+  <meta name="keywords" content="java,return,finally">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  <meta property="og:title" content="你真的了解try{ return }finally{}中的return？"/>
+  <meta property="og:site_name" content="Hunter的博客"/>
+
+  
+  <meta property="og:image" content="undefined"/>
+  
+  
+  <!-- 百度验证 -->
+  
+  <meta name="baidu-site-verification" content="xyDHnOQvLc" />
+  
+
+  <!-- google验证 -->
+  
+  <meta name="google-site-verification" content="XetGPCVQcMEMmGykIpHKZTAIQzRX1uLgL5FrmjoMXSE" />
+  
+
+  <!-- sogou验证 -->
+  
+  <meta name="sogou_site_verification" content="xA7xdyVjJV" />
+  
+
+  <link href="/favicon.png" rel="icon">
+  <link rel="alternate" href="/atom.xml" title="Hunter的博客" type="application/atom+xml">
+  <link rel="stylesheet" href="/css/style.css" media="screen" type="text/css">
+  <!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+
+  <!-- 使用google代码高亮 -->
+  
+  <!--
+  <link rel="stylesheet" href="/plugins/google-code-prettify/prettify.css" type="text/css">
+  -->
+  <!--
+  <link rel="stylesheet" href="/plugins/google-code-prettify/vibrant-ink.css" type="text/css">
+  -->
+  <link rel="stylesheet" href="/plugins/google-code-prettify/tomorrow-night.css" type="text/css"> 
+  
+
+  
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+  
+
+  <style type="text/css">
+  pre{
+    word-wrap:break-word;
+    word-break:break-all;
+  }
+  ol.linenums{
+    /*代码行数颜色*/
+    color:#CCC !important;
+    font-size:14px !important;
+  }
+  </style>
+</head>
+
+
+<body>
+  <header id="header" class="inner"><div class="alignleft">
+  <h1><a href="/">Hunter的博客</a></h1>
+  <h2><a href="/">努力工作，幸福生活</a></h2>
+</div>
+<nav id="main-nav" class="alignright">
+  <ul>
+    
+      <li><a href="/">Home</a></li>
+    
+      <li><a href="/archives">Archives</a></li>
+    
+      <li><a href="/atom.xml">RSS</a></li>
+    
+      <li><a href="/Book">Book</a></li>
+    
+  </ul>
+  <div class="clearfix"></div>
+</nav>
+<div class="clearfix"></div>
+</header>
+  <div id="content" class="inner">
+    <div id="main-col" class="alignleft"><div id="wrapper"><article class="post">
+  
+  <div class="post-content">
+    <header>
+      
+        <div class="icon"></div>
+        <time datetime="2016-02-23T07:22:07.000Z"><a href="/2016/02/23/java-try-finally-return-01/">2016-02-23</a></time>
+      
+      
+  
+    <h1 class="title">你真的了解try{ return }finally{}中的return？</h1>
+  
+
+    </header>
+    <div class="entry">
+      
+        <p>你真的了解try{ return }finally{}中的return？不妨点进来看看，说不定会有一定的小收获呢。<br><a id="more"></a><br>今天去逛论坛 时发现了一个很有趣的<a href="http://bbs.csdn.net/topics/391005556" target="_blank" rel="external">问题</a>：</p>
+<blockquote>
+<p>谁能给我我解释一下这段程序的结果为什么是：2.而不是：3</p>
+</blockquote>
+<p>代码如下：</p>
+<pre><code class="java">class Test {
+    public int aaa() {
+        int x = 1;
+
+        try {
+            return ++x;
+        } catch (Exception e) {
+
+        } finally {
+            ++x;
+        }
+        return x;
+    }
+
+    public static void main(String[] args) {
+        Test t = new Test();
+        int y = t.aaa();
+        System.out.println(y);
+    }
+}
+</code></pre>
+<p>看了问题后，得出了以下几个问题：</p>
+<ul>
+<li>如果在 try 语句块里使用 return 语句，那么 finally 语句块还会执行吗？（如果你的答案是不会执行，请务必要看下去 ^_^）</li>
+<li>如果执行，那么是怎样实现既执行 return 又执行 finally 的呢？（如果你的答案是不知道，请继续看下去！！）</li>
+<li>上面的程序输出为什么是2？（ 如果不知道，继续看下去~~）</li>
+<li>在网上看到还有人还问“是先执行return还是先执行finally？”的<br>（个人觉得，如果知道finally会执行就可以得出是，先执行finally再执行return的。因为，如果先执行return，那么整个函数都跳出了，那么还怎么执行finally？^_^）</li>
+</ul>
+<p>刚看到这个问题后。突然发现基础不够扎实，居然来第一个都答不出来。。。（不知道还有木有和我也一样也回答不出以上的问题的？ 如果有请在评论里告诉我一声，让我知道，我并不孤独~~）</p>
+<p>根据已有的知识知道：</p>
+<blockquote>
+<p>return 是可以当作终止语句来用的，我们经常用它来跳出当前方法，并返回一个值给调用方法。然后该方法就结束了，不会执行return下面的语句。<br>finally ：无论try语句发生了什么，无论抛出异常还是正常执行。finally语句都会执行。<br>那么问题来了。。。。在try语句里使用return后，finally是否还会执行？finally一定会执行的说法是否还成立？如果成立，那么先执行return还是先执行finally？</p>
+</blockquote>
+<h3 id="验证-finally-语句是否会执行，以及-return-和-finally的执行顺序"><a href="#验证-finally-语句是否会执行，以及-return-和-finally的执行顺序" class="headerlink" title="验证 finally 语句是否会执行，以及 return 和 finally的执行顺序"></a><strong>验证 finally 语句是否会执行，以及 return 和 finally的执行顺序</strong></h3><p>在求知欲的驱动下，我继续进行更深的探索，果断打开了Oracle的主页，翻阅了<a href="http://docs.oracle.com/javase/tutorial/essential/exceptions/finally.html" target="_blank" rel="external">java 官方教程的finally语句</a>。发现了官方教程对这个特殊情况有说明：</p>
+<blockquote>
+<p>The finally block always executes when the try block exits. This ensures that the finally block is executed even if an unexpected exception occurs. But finally is useful for more than just exception handling — it allows the programmer to avoid having cleanup code accidentally bypassed by a return, continue, or break. Putting cleanup code in a finally block is always a good practice, even when no exceptions are anticipated.</p>
+<blockquote>
+<p>Note: If the JVM exits while the try or catch code is being executed, then the finally block may not execute. Likewise, if the thread executing the try or catch code is interrupted or killed, the finally block may not execute even though the application as a whole continues.</p>
+</blockquote>
+</blockquote>
+<p>个人简单翻译：</p>
+<blockquote>
+<p>当try语句退出时肯定会执行finally语句。这确保了即使发了一个意想不到的异常也会执行finally语句块。但是finally的用处不仅是用来处理异常——它可以让程序员不会因为return、continue、或者break语句而忽略了清理代码。把清理代码放在finally语句块里是一个很好的做法，即便可能不会有异常发生也要这样做。</p>
+<blockquote>
+<p>注意，当try或者catch的代码在运行的时候，JVM退出了。那么finally语句块就不会执行。同样，如果线程在运行try或者catch的代码时被中断了或者被杀死了(killed)，那么finally语句可能也不会执行了，即使整个运用还会继续执行。</p>
+</blockquote>
+</blockquote>
+<p>从上面的官方说明，我们知道<strong>无论try里执行了return语句、break语句、还是continue语句，finally语句块还会继续执行</strong>。同时，在<a href="http://stackoverflow.com/questions/65035/does-finally-always-execute-in-java/65185#65185" target="_blank" rel="external">stackoverflow</a>里也找到了一个答案，我们可以调用System.exit()来终止它：</p>
+<blockquote>
+<p>finally will be called.<br>The only time finally won’t be called is: if you call System.exit(), another thread interrupts current one, or if the JVM crashes first</p>
+</blockquote>
+<p>另外，在<a href="http://docs.oracle.com/javase/specs/jls/se7/html/jls-14.html#jls-14.17" target="_blank" rel="external">java的语言规范</a>有讲到，如果在try语句里有return语句，finally语句还是会执行。它会在把控制权转移到该方法的调用者或者构造器前执行finally语句。也就是说，使用return语句把控制权转移给其他的方法前会执行finally语句。</p>
+<h3 id="个人验证"><a href="#个人验证" class="headerlink" title="个人验证"></a><strong>个人验证</strong></h3><p>我们依然使用上面的代码作为例子。首先，分别在以下三行代码前加上断点：</p>
+<ul>
+<li>int x = 1;</li>
+<li>return ++x;</li>
+<li>++x;</li>
+</ul>
+<p>然后以debug模式运行代码。</p>
+<p>刚开始时，效果如下图：<br><img src="http://7xqlat.com1.z0.glb.clouddn.com/java_try_finally_return_01.png-hunterblog" alt="">;<br>按一下F6，我们可以发现，程序已经执行到 return ++x;,但还没执行该语句，此刻x=1<br><img src="http://7xqlat.com1.z0.glb.clouddn.com/java_try_finally_return_02.png-hunterblog" alt="">;<br>继续按一下F6，程序执行到 ++x;,但还没执行该语句，因此此时的x=2（刚执行完return ++x语句的++x，但没执行return）<br><img src="http://7xqlat.com1.z0.glb.clouddn.com/java_try_finally_return_03.png-hunterblog" alt="">;<br>继续按一下F6，此时，我们发现程序又跳回到 return +xx 这一行，此刻x=3(执行了finally语句里的++x)<br><img src="http://7xqlat.com1.z0.glb.clouddn.com/java_try_finally_return_04.png-hunterblog" alt="">;</p>
+<p>从上面过程中可以看到，</p>
+<ul>
+<li>在 <strong>try</strong> 里 使用 <strong>return</strong> 还是会执行finally语句的（我们用debug的模式看到了程序会条件 finally语句里执行）</li>
+<li>执行完finally语句才执行 return。为什么?从上面的图可以合理推理出return ++x是分开来执行的，先执行++x，再执行finally，最后才执行return跳出函数。因为程序调两次跳到了 return +xx; 语句上。（其实要验证 return ++x 是分开两部分执行的方法很简单，把变量x变成static变量并在main函数里输出，会发现x的值还是3，即使两次跳到 return ++x 也只是第一次执行了加1操作，第二次只是执行了return而没有执行++x。这里是合理推理，后面有真凭实据~~）</li>
+</ul>
+<p>看到这，我们可能会再次纠结起来了。从上面的验证可以看出，finally语句执行了，而且x的值也确实加到3了，那么为什么y是2呢？</p>
+<h3 id="验证为什么是2不是3"><a href="#验证为什么是2不是3" class="headerlink" title="验证为什么是2不是3"></a><strong>验证为什么是2不是3</strong></h3><p>翻看<a href="http://docs.oracle.com/javase/specs/jvms/se7/html/jvms-4.html#jvms-4.10.2.5" target="_blank" rel="external">官方的jvm规范</a>就会把一切的谜团解开了：</p>
+<blockquote>
+<p>If the try clause executes a return, the compiled code does the following:</p>
+<ol>
+<li>Saves the return value (if any) in a local variable.</li>
+<li>Executes a jsr to the code for the finally clause.</li>
+<li>Upon return from the finally clause, returns the value saved in the local variable.</li>
+</ol>
+</blockquote>
+<p>简单翻译下：</p>
+<blockquote>
+<p>如果try语句里有return，那么代码的行为如下：</p>
+<ol>
+<li>如果有返回值，就把返回值保存到局部变量中</li>
+<li>执行jsr指令跳到finally语句里执行</li>
+<li>执行完finally语句后，返回之前保存在局部变量表里的值</li>
+</ol>
+</blockquote>
+<p>根据上面的说明就可以轻易地解释为什么是2了。<br>当执行到return ++x;时，jvm在执行完++x后会在局部变量表里另外分配一个空间来保存当前x的值。<br>注意，现在还没把值返回给y，而是继续执行finally语句里的语句。等执行完后再把之前保存的值（是2不是x）返回给y。<br>所以就有了y是2不是3的情况。</p>
+<p>其实这里还有一点要注意的是，如果你在finally里也用了return语句，比如return +xx。那么y会是3。因为规范规定了，当try和finally里都有return时，会忽略try的return，而使用finally的return。</p>
+<p>查看Test.class的字节码我们同样也可以很轻松地知道为什么是2而不是3：<br><img src="http://7xqlat.com1.z0.glb.clouddn.com/java_try_finally_return_05.png-hunterblog" alt="">;</p>
+<p>大概讲讲指令操作顺序：<br>iconst_1： 把常数1进栈 —&gt; istore_1： 栈顶元素出栈并把元素保存在本地变量表的第二个位置里（下标为1的位置里） —&gt; iinc 1, 1 ： 本地变量表的第二个元素自增1 —&gt;iload_1：第二个元素进栈 —&gt; istore_2：栈顶元素出栈并把元素保存在本地变量表的第2个位置里 —&gt; iinc 1, 1 ： 本地变量表的第二个元素自增1 —&gt; iload_2：第二个元素进栈 （注意，此时栈顶元素为2）—&gt; ireturn：返回栈顶元素。</p>
+<p>后面的指令是要在2-7行出现异常时在跳到12行的，这个例子没出现异常，不用关注。</p>
+<p>上面流程栈和本地变量表的情况如下图：<br><img src="http://7xqlat.com1.z0.glb.clouddn.com/java_try_finally_return_06.png-hunterblog" alt="">;</p>
+<h3 id="总结"><a href="#总结" class="headerlink" title="总结"></a><strong>总结</strong></h3><ul>
+<li>再次发现帮助别人解决问题的好处，不仅能帮人还能完善自己</li>
+<li>字节码的知识还是挺实用的，有空要深入研究下</li>
+<li>再次证明官方教程和资料真的很有用</li>
+</ul>
+<p>参考资料：<br><a href="http://docs.oracle.com/javase/specs/jvms/se7/html/jvms-4.html#jvms-4.10.2.5" target="_blank" rel="external">Java虚拟机规范</a><br><a href="http://docs.oracle.com/javase/tutorial/essential/exceptions/finally.html" target="_blank" rel="external">java 官方教程的finally语句</a><br><a href="http://www.ibm.com/developerworks/library/it-haggar_bytecode/" target="_blank" rel="external">IBM的Java字节码教程</a><br><a href="http://book.douban.com/subject/24722612/" target="_blank" rel="external">深入理解Java虚拟机（第2版）</a></p>
+<p><strong>本文转摘自：<a href="http://www.cnblogs.com/averey/p/4379646.html" target="_blank" rel="external">http://www.cnblogs.com/averey/p/4379646.html</a></strong></p>
+
+      
+    </div>
+    <footer>
+      
+        
+  
+  <div class="categories">
+    <a href="/categories/技术/">技术</a>
+  </div>
+
+        
+  
+  <div class="tags">
+    <a href="/tags/Java/">Java</a>
+  </div>
+
+        
+  <div class="addthis addthis_toolbox addthis_default_style">
+    
+    
+    
+    
+    <!--
+    <a class="addthis_counter addthis_pill_style"></a>
+    -->
+
+    <!-- 加入多说分享 -->
+    
+      <div class="ds-share flat" data-thread-key="2016/02/23/java-try-finally-return-01/" data-title="Hunter的博客-你真的了解try{ return }finally{}中的return？" data-images="此处请替换为分享时显示的图片的链接地址" data-content="" data-url="http://www.linmuxi.com/2016/02/23/java-try-finally-return-01/">
+  <div class="ds-share-inline">
+    <ul  class="ds-share-icons-16">
+      <li data-toggle="ds-share-icons-more"><a class="ds-more" href="javascript:void(0);">分享到：</a></li>
+      <li><a class="ds-weibo" href="javascript:void(0);" data-service="weibo">微博</a></li>
+      <li><a class="ds-qzone" href="javascript:void(0);" data-service="qzone">QQ空间</a></li>
+      <li><a class="ds-qqt" href="javascript:void(0);" data-service="qqt">腾讯微博</a></li>
+      <li><a class="ds-wechat" href="javascript:void(0);" data-service="wechat">微信</a></li>
+    </ul>
+    <div class="ds-share-icons-more">
+    </div>
+  </div>
+</div>
+    
+    <!-- end 加入多说分享 -->
+    
+  </div>
+  <script type="text/javascript" src="//s7.addthis.com/js/300/addthis_widget.js"></script>
+
+      
+      <div class="clearfix"></div>
+    </footer>
+  </div>
+</article>
+
+
+<section id="comment">
+  <h1 class="title">留言</h1>
+
+  <!-- 加入多说评论 -->
+  
+        
+  <!-- 多说评论框 start -->
+  <div class="ds-thread" data-thread-key="2016/02/23/java-try-finally-return-01/" data-title="你真的了解try{ return }finally{}中的return？" data-url="http://www.linmuxi.com/2016/02/23/java-try-finally-return-01/"></div>
+  <!-- 多说评论框 end -->
+
+  <!-- 多说公共JS代码 start (一个网页只需插入一次) -->
+  <script type="text/javascript">
+  var duoshuoQuery = {short_name:"hunterlin"};
+    (function() {
+      var ds = document.createElement('script');
+      ds.type = 'text/javascript';ds.async = true;
+      ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+      ds.charset = 'UTF-8';
+      (document.getElementsByTagName('head')[0] 
+       || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+    </script>
+  <!-- 多说公共JS代码 end -->
+
+      
+  
+  <!-- end加入多说评论 -->
+
+  
+
+</section>
+
+</div></div>
+    <aside id="sidebar" class="alignright">
+  <div class="search">
+<!--
+  <form action="//google.com/search" method="get" accept-charset="utf-8">
+    <input type="search" name="q" results="0" placeholder="搜索">
+    <input type="hidden" name="q" value="site:www.linmuxi.com">
+  </form>
+-->
+	<form>
+		<input type="search" id="hunter-blog-search" placeholder="搜索">
+	</form>
+</div>
+
+  
+<div class="widget tag">
+  <h3 class="title">分类</h3>
+  <ul class="entry">
+  
+    <li><a href="/categories/技术/工作/">工作</a><small>4</small></li>
+  
+    <li><a href="/categories/技术/">技术</a><small>64</small></li>
+  
+    <li><a href="/categories/生活/">生活</a><small>0</small></li>
+  
+    <li><a href="/categories/项目管理/">项目管理</a><small>1</small></li>
+  
+  </ul>
+</div>
+
+
+  
+<div class="widget tag">
+  <h3 class="title">标签</h3>
+  <ul class="entry">
+  
+    <li><a href="/tags/Android/">Android</a><small>2</small></li>
+  
+    <li><a href="/tags/AndroidStudio2-0/">AndroidStudio2.0</a><small>2</small></li>
+  
+    <li><a href="/tags/Bat/">Bat</a><small>1</small></li>
+  
+    <li><a href="/tags/Echarts/">Echarts</a><small>1</small></li>
+  
+    <li><a href="/tags/Flex4/">Flex4</a><small>2</small></li>
+  
+    <li><a href="/tags/Fusionchart/">Fusionchart</a><small>1</small></li>
+  
+    <li><a href="/tags/Git/">Git</a><small>4</small></li>
+  
+    <li><a href="/tags/HTML5/">HTML5</a><small>1</small></li>
+  
+    <li><a href="/tags/Hexo/">Hexo</a><small>9</small></li>
+  
+    <li><a href="/tags/JVM/">JVM</a><small>9</small></li>
+  
+    <li><a href="/tags/Java/">Java</a><small>4</small></li>
+  
+    <li><a href="/tags/JavaScript/">JavaScript</a><small>1</small></li>
+  
+    <li><a href="/tags/Linux/">Linux</a><small>1</small></li>
+  
+    <li><a href="/tags/NPM/">NPM</a><small>1</small></li>
+  
+    <li><a href="/tags/Nginx/">Nginx</a><small>1</small></li>
+  
+    <li><a href="/tags/Node-js/">Node.js</a><small>7</small></li>
+  
+    <li><a href="/tags/Oracle/">Oracle</a><small>13</small></li>
+  
+    <li><a href="/tags/PowerDesigner/">PowerDesigner</a><small>1</small></li>
+  
+    <li><a href="/tags/Red5/">Red5</a><small>2</small></li>
+  
+    <li><a href="/tags/Spring/">Spring</a><small>1</small></li>
+  
+    <li><a href="/tags/Tomcat/">Tomcat</a><small>1</small></li>
+  
+    <li><a href="/tags/UML/">UML</a><small>1</small></li>
+  
+    <li><a href="/tags/WebApp/">WebApp</a><small>1</small></li>
+  
+    <li><a href="/tags/gulp/">gulp</a><small>1</small></li>
+  
+    <li><a href="/tags/hexo/">hexo</a><small>1</small></li>
+  
+    <li><a href="/tags/iReport/">iReport</a><small>1</small></li>
+  
+    <li><a href="/tags/webpack/">webpack</a><small>2</small></li>
+  
+    <li><a href="/tags/图形报表/">图形报表</a><small>3</small></li>
+  
+    <li><a href="/tags/推荐/">推荐</a><small>1</small></li>
+  
+    <li><a href="/tags/设计模式/">设计模式</a><small>1</small></li>
+  
+  </ul>
+</div>
+
+
+  
+<div class="widget tag">
+  <h3 class="title">最新文章</h3>
+  <ul class="entry">
+    
+      <li>
+        <a href="/2016/07/18/design-pattern-builder-01/">设计模式の构造器</a>
+      </li>
+    
+      <li>
+        <a href="/2016/07/04/spring-security-integration/">集成Spring Security</a>
+      </li>
+    
+      <li>
+        <a href="/2016/06/27/jvm-note-classfile/">读《深入理解Java虚拟机》-类文件结构</a>
+      </li>
+    
+      <li>
+        <a href="/2016/06/23/jvm-note-gc/">读《深入理解Java虚拟机》-垃圾收集器</a>
+      </li>
+    
+      <li>
+        <a href="/2016/06/13/jvm-note-javamemoryarea/">读《深入理解Java虚拟机》-Java内存区域</a>
+      </li>
+    
+  </ul>
+</div>
+
+
+  
+<div class="widget tag">
+  <h3 class="title">标签云</h3>
+  <div class="entry">
+    <a href="/tags/Android/" style="font-size: 11.67px;">Android</a> <a href="/tags/AndroidStudio2-0/" style="font-size: 11.67px;">AndroidStudio2.0</a> <a href="/tags/Bat/" style="font-size: 10px;">Bat</a> <a href="/tags/Echarts/" style="font-size: 10px;">Echarts</a> <a href="/tags/Flex4/" style="font-size: 11.67px;">Flex4</a> <a href="/tags/Fusionchart/" style="font-size: 10px;">Fusionchart</a> <a href="/tags/Git/" style="font-size: 15px;">Git</a> <a href="/tags/HTML5/" style="font-size: 10px;">HTML5</a> <a href="/tags/Hexo/" style="font-size: 18.33px;">Hexo</a> <a href="/tags/JVM/" style="font-size: 18.33px;">JVM</a> <a href="/tags/Java/" style="font-size: 15px;">Java</a> <a href="/tags/JavaScript/" style="font-size: 10px;">JavaScript</a> <a href="/tags/Linux/" style="font-size: 10px;">Linux</a> <a href="/tags/NPM/" style="font-size: 10px;">NPM</a> <a href="/tags/Nginx/" style="font-size: 10px;">Nginx</a> <a href="/tags/Node-js/" style="font-size: 16.67px;">Node.js</a> <a href="/tags/Oracle/" style="font-size: 20px;">Oracle</a> <a href="/tags/PowerDesigner/" style="font-size: 10px;">PowerDesigner</a> <a href="/tags/Red5/" style="font-size: 11.67px;">Red5</a> <a href="/tags/Spring/" style="font-size: 10px;">Spring</a> <a href="/tags/Tomcat/" style="font-size: 10px;">Tomcat</a> <a href="/tags/UML/" style="font-size: 10px;">UML</a> <a href="/tags/WebApp/" style="font-size: 10px;">WebApp</a> <a href="/tags/gulp/" style="font-size: 10px;">gulp</a> <a href="/tags/hexo/" style="font-size: 10px;">hexo</a> <a href="/tags/iReport/" style="font-size: 10px;">iReport</a> <a href="/tags/webpack/" style="font-size: 11.67px;">webpack</a> <a href="/tags/图形报表/" style="font-size: 13.33px;">图形报表</a> <a href="/tags/推荐/" style="font-size: 10px;">推荐</a> <a href="/tags/设计模式/" style="font-size: 10px;">设计模式</a>
+  </div>
+</div>
+
+
+  <div class="widget tag">
+  <h3 class="title">最新评论</h3>
+  <ul class="entry">
+	
+		<li>
+			<div class="ds-recent-comments" data-num-items="5" data-show-avatars="1" data-show-time="1" data-show-title="1" data-show-admin="1" data-excerpt-length="70"></div>
+		</li>
+	
+  </ul>
+</div>
+
+</aside>
+    <div class="clearfix"></div>
+  </div>
+  <footer id="footer" class="inner"><div class="alignleft">
+  
+  &copy; 2017 Hunter Lin
+  
+
+  <!-- 不蒜子统计 -->
+  
+
+<script type="text/javascript">var cnzz_protocol = (("https:" == document.location.protocol) ? " https://" : " http://");document.write(unescape("%3Cspan id='cnzz_stat_icon_1259167020'%3E%3C/span%3E%3Cscript src='" + cnzz_protocol + "s4.cnzz.com/z_stat.php%3Fid%3D1259167020%26show%3Dpic' type='text/javascript'%3E%3C/script%3E"));</script>
+
+</div>
+<div class="clearfix"></div></footer>
+  <!-- <script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script> -->
+<script src="/js/jquery-2.0.3.min.js"></script>
+<script src="/js/jquery.imagesloaded.min.js"></script>
+<script src="/js/gallery.js"></script>
+
+
+
+<!-- fancybox -->
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+(function($){
+  $('.fancybox').fancybox();
+})(jQuery);
+</script>
+
+
+<!-- 站内搜索 -->
+
+<script type="text/javascript">
+  (function(w,d,t,u,n,s,e){w['SwiftypeObject']=n;w[n]=w[n]||function(){
+  (w[n].q=w[n].q||[]).push(arguments);};s=d.createElement(t);
+  e=d.getElementsByTagName(t)[0];s.async=1;s.src=u;e.parentNode.insertBefore(s,e);
+  })(window,document,'script','//s.swiftypecdn.com/install/v2/st.js','_st');
+  
+  _st('install','fjox-txyzMTBRyd8dwrn','2.0.0');
+</script>
+
+
+<!-- google分析 -->
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-74187619-1', 'auto');
+  ga('send', 'pageview');
+</script>
+
+
+<!-- 添加baidu统计 -->
+
+<script>
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "//hm.baidu.com/hm.js?a4f074d0c4eecf056150ecbd92e46f89";
+  var s = document.getElementsByTagName("script")[0]; 
+  s.parentNode.insertBefore(hm, s);
+})();
+</script>
+
+
+<!-- 代码高亮 -->
+
+<script src="/plugins/google-code-prettify/prettify.js"></script>
+<script>
+  $(window).load(function(){
+    $('pre').addClass('prettyprint linenums').attr('style', 'overflow:auto;');
+    prettyPrint();
+  })
+</script>
+
+
+<!-- 不蒜子统计 -->
+
+
+<!-- baidu自动推送 -->
+
+
+
+<script type="text/javascript">
+var duoshuoQuery = {short_name:"hunterlin"};
+  (function() {
+    var ds = document.createElement('script');
+    ds.type = 'text/javascript';ds.async = true;
+    ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+    ds.charset = 'UTF-8';
+    (document.getElementsByTagName('head')[0] 
+     || document.getElementsByTagName('body')[0]).appendChild(ds);
+  })();
+  </script>
+
+</body>
+
+</html>

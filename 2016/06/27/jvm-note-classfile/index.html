@@ -1,0 +1,528 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>读《深入理解Java虚拟机》-类文件结构 | Hunter的博客</title>
+  <meta name="author" content="Hunter Lin">
+  
+  <meta name="description" content="Hunter的博客-努力工作，幸福生活">
+  
+  <meta name="keywords" content="jvm,class">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  <meta property="og:title" content="读《深入理解Java虚拟机》-类文件结构"/>
+  <meta property="og:site_name" content="Hunter的博客"/>
+
+  
+  <meta property="og:image" content="undefined"/>
+  
+  
+  <!-- 百度验证 -->
+  
+  <meta name="baidu-site-verification" content="xyDHnOQvLc" />
+  
+
+  <!-- google验证 -->
+  
+  <meta name="google-site-verification" content="XetGPCVQcMEMmGykIpHKZTAIQzRX1uLgL5FrmjoMXSE" />
+  
+
+  <!-- sogou验证 -->
+  
+  <meta name="sogou_site_verification" content="xA7xdyVjJV" />
+  
+
+  <link href="/favicon.png" rel="icon">
+  <link rel="alternate" href="/atom.xml" title="Hunter的博客" type="application/atom+xml">
+  <link rel="stylesheet" href="/css/style.css" media="screen" type="text/css">
+  <!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+
+  <!-- 使用google代码高亮 -->
+  
+  <!--
+  <link rel="stylesheet" href="/plugins/google-code-prettify/prettify.css" type="text/css">
+  -->
+  <!--
+  <link rel="stylesheet" href="/plugins/google-code-prettify/vibrant-ink.css" type="text/css">
+  -->
+  <link rel="stylesheet" href="/plugins/google-code-prettify/tomorrow-night.css" type="text/css"> 
+  
+
+  
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+  
+
+  <style type="text/css">
+  pre{
+    word-wrap:break-word;
+    word-break:break-all;
+  }
+  ol.linenums{
+    /*代码行数颜色*/
+    color:#CCC !important;
+    font-size:14px !important;
+  }
+  </style>
+</head>
+
+
+<body>
+  <header id="header" class="inner"><div class="alignleft">
+  <h1><a href="/">Hunter的博客</a></h1>
+  <h2><a href="/">努力工作，幸福生活</a></h2>
+</div>
+<nav id="main-nav" class="alignright">
+  <ul>
+    
+      <li><a href="/">Home</a></li>
+    
+      <li><a href="/archives">Archives</a></li>
+    
+      <li><a href="/atom.xml">RSS</a></li>
+    
+      <li><a href="/Book">Book</a></li>
+    
+  </ul>
+  <div class="clearfix"></div>
+</nav>
+<div class="clearfix"></div>
+</header>
+  <div id="content" class="inner">
+    <div id="main-col" class="alignleft"><div id="wrapper"><article class="post">
+  
+  <div class="post-content">
+    <header>
+      
+        <div class="icon"></div>
+        <time datetime="2016-06-27T08:05:03.000Z"><a href="/2016/06/27/jvm-note-classfile/">2016-06-27</a></time>
+      
+      
+  
+    <h1 class="title">读《深入理解Java虚拟机》-类文件结构</h1>
+  
+
+    </header>
+    <div class="entry">
+      
+        <p>读书笔记<br><a id="more"></a></p>
+<h2 id="JVM语言无关性"><a href="#JVM语言无关性" class="headerlink" title="JVM语言无关性"></a>JVM语言无关性</h2><p><img src="http://7xqlat.com1.z0.glb.clouddn.com/JVM-语言无关性.png" alt="JVM-语言无关性"></p>
+<p>Java虚拟机作为一个通用的、机器无关的执行平台，任何其他语言的实现者都可以将Java虚拟机作为语言的产品交付媒介，虚拟机只识别Class文件，并不关心Class的来源是何种语言</p>
+<h2 id="class类文件的结构"><a href="#class类文件的结构" class="headerlink" title="class类文件的结构"></a>class类文件的结构</h2><p><img src="http://7xqlat.com1.z0.glb.clouddn.com/Class文件格式.png" alt="Class文件格式"></p>
+<ul>
+<li>Class文件是一组以8位字节为基础单位的二进制流，各数据项目<strong>严格按照顺序</strong>紧凑排列在Class文件中，中间没有任何分隔符</li>
+<li>Class文件格式采用类似C语言结构体的伪结构来存储数据，这种伪结构只有两种<strong>数据类型</strong>：<strong>无符号数和表</strong></li>
+<li>无符号数<ul>
+<li>属于基本的数据类型</li>
+<li><strong>u1、u2、u4、u8</strong>来分别代表<strong>1、2、4、8个字节</strong>的无符号数</li>
+<li>可以用来描述<strong>数字、索引引用、数量值或者按照UTF-8编码构成的字符串值</strong></li>
+</ul>
+</li>
+<li>表<ul>
+<li>是由<strong>多个无符号数</strong>或者其他表作为数据项构成的<strong>复合数据</strong>类型</li>
+<li>以“_info”结尾</li>
+<li>整个class文件本质上就是一张表</li>
+</ul>
+</li>
+</ul>
+<p>下面来看下class文件格式中各个数据项的具体含义：</p>
+<ul>
+<li><h3 id="魔数与Class文件的版本"><a href="#魔数与Class文件的版本" class="headerlink" title="魔数与Class文件的版本"></a>魔数与Class文件的版本</h3><strong>magic</strong>：魔数（Magic Number），占用4个字节，作用是确定这个文件是否为一个能被虚拟机接受的class文件；值为：0xCAFEBABE<br><strong>minor_version</strong>：次版本号，占用2个字节<br><strong>major_version</strong>：主版本号，占用2个字节;Java的版本号是从45开始的，JDK1.1之后的每个JDK大版本发布，主版本号向上加1（JDK1.0-1.1使用了45.0-45.3的版本号）,例如JDK版本为1.7，可生成的Class文件主版本号最大值为51.0</li>
+</ul>
+<ul>
+<li><h3 id="常量池"><a href="#常量池" class="headerlink" title="常量池"></a>常量池</h3></li>
+</ul>
+<p>占用Class文件空间最大的数据项目之一</p>
+<p><strong>constant_pool_count</strong>：常量池容量计数值，<strong>从1开始</strong>；例如：常量池容量十六进制数为0x0016，即十进制为22，就表示常量池中有21项常量；Class文件结构中只有常量池的容量计数是从1开始，其他的集合类型，例如接口索引集合、字段表集合、方法表集合等的容量计数都是从0开始的。</p>
+<p><strong>constant_pool</strong>：主要存放两大类常量：字面量(Literal)和符号引用(Symbolic References)<br>字面量：文本字符串、声明为final的常量值等<br>符号引用：</p>
+<ul>
+<li>类和接口的全限定名</li>
+<li>字段的名称和描述符</li>
+<li>方法的名称和描述符</li>
+</ul>
+<p>常量池中每一项常量都是一个表，一共有<strong>14</strong>种：<br><img src="http://7xqlat.com1.z0.glb.clouddn.com/常量池的项目类型.png" alt="常量池的项目类型"></p>
+<p>这14种表都有一个共同的特点，就是表开始第一位是一个u1类型的<strong>标志位</strong>(tag)，代表当前这个常量属于哪种常量类型</p>
+<p><img src="http://7xqlat.com1.z0.glb.clouddn.com/常量池中的14中常量项的结构总表.png" alt="常量池中的14中常量项的结构总表"></p>
+<ul>
+<li><h3 id="访问标志"><a href="#访问标志" class="headerlink" title="访问标志"></a>访问标志</h3>access_flags：用于识别一些类或接口层次的访问信息，包括：这个Class是类还是接口；是否定义为public类型；是否定义为abstract类型；如果是类的话，是否被声明为final等</li>
+</ul>
+<p><img src="http://7xqlat.com1.z0.glb.clouddn.com/访问标志.png" alt="访问标志"></p>
+<p>access_flags中一共有16个标志位可以使用，当前只定义了其中8个，没有使用到的标志位要求一律为0</p>
+<ul>
+<li><h3 id="类索引、父类索引与接口索引集合"><a href="#类索引、父类索引与接口索引集合" class="headerlink" title="类索引、父类索引与接口索引集合"></a>类索引、父类索引与接口索引集合</h3>Class文件中通过类索引（this_class）和父类索引（super_class）和接口索引集合（interfaces）这三项数据来确定这个类的继承关系。</li>
+</ul>
+<p>下图显示类索引（this_class）查找全限定名的过程：<br><img src="http://7xqlat.com1.z0.glb.clouddn.com/类索引查找全限定名的过程.png" alt="类索引查找全限定名的过程"></p>
+<ul>
+<li><h3 id="字段表集合"><a href="#字段表集合" class="headerlink" title="字段表集合"></a>字段表集合</h3>用于描述接口或者类中声明的变量，字段包括类级变量和实例级变量，不包括方法内部声明的局部变量</li>
+</ul>
+<p><img src="http://7xqlat.com1.z0.glb.clouddn.com/字段表结构.png" alt="字段表结构"></p>
+<p>字段修饰符放在access_flags项目中，与类中的access_flags项目类似，都是一个u2的数据类型，含义如下：</p>
+<p><img src="http://7xqlat.com1.z0.glb.clouddn.com/字段访问标志.png" alt="字段访问标志"></p>
+<p>紧跟access_flags标志的是两项索引值：name_index和descriptor_index，都是对常量池的引用，分别代表字段的简单名称及字段和方法的描述符</p>
+<p><img src="http://7xqlat.com1.z0.glb.clouddn.com/描述符标识字符含义.png" alt="描述符标识字符含义"></p>
+<p>对于数组类型，每一维度将使用一个前置的“[”字符来描述，例如定义一个“java.lang.String[][]”类型的二维数组，将被记录为：”[[Ljava/lang/String;“，一个整型数组“int[]”将被记录为“[I”</p>
+<p>用描述符来描述方法时，按照先参数列表，后返回值的顺序描述，参数列表按照参数的严格顺序放在一组小括号“()”之内。例如方法 void inc()的描述符为“()V”,方法java.lang.String.toString()的描述符为“()Ljava/lang/String;”,方法int indexOf(char[]source,int sourceOffset,int sourceCount,char[]target,int targetOffset,int targetCount,int fromIndex)的描述符为“([CII[CIII)I”</p>
+<p>字段表集合不会列出从超类或父接口中继承而来的字段</p>
+<ul>
+<li><h3 id="方法表集合"><a href="#方法表集合" class="headerlink" title="方法表集合"></a>方法表集合</h3>Class文件存储格式对方法的描述与对字段的描述几乎采用了完全一致的方式</li>
+</ul>
+<p><img src="http://7xqlat.com1.z0.glb.clouddn.com/方法表结构.png" alt="方法表结构"></p>
+<p>与字段相比，除去了volatile关键字和transient关键字对应的标志，增加了synchronized、native、strictfp和abstract关键字对应的标志</p>
+<p><img src="http://7xqlat.com1.z0.glb.clouddn.com/方法访问标志.png" alt="方法访问标志"></p>
+<p>方法中的Java代码，经过编译器编译成字节码指令后，存放在方法属性表集合中一个名为“Code”的属性里面了</p>
+<ul>
+<li><h3 id="属性表集合"><a href="#属性表集合" class="headerlink" title="属性表集合"></a>属性表集合</h3>为了能正确解析Class文件，在《Java虚拟机规范（Java SE 7）》版中，预定义了21项属性。</li>
+</ul>
+<p><img src="http://7xqlat.com1.z0.glb.clouddn.com/虚拟机规范预定义属性.png" alt="虚拟机规范预定义的属性"></p>
+<p>每个属性的名称都需从常量池中引用一个CONSTANT_Utf8_info类型的常量来表示，而属性值的结构则是完全自定义的，只需要通过一个u4的长度属性去说明属性值所占用的位数即可。</p>
+<p>一个符合规则的属性表应该满足如下定义的结构：</p>
+<p><img src="http://7xqlat.com1.z0.glb.clouddn.com/属性表结构.png" alt="属性表结构"></p>
+<p><strong>Code属性</strong><br>Java程序方法体中的代码经过Javac编译器处理后，最终变成字节码指令存储在Code属性中。</p>
+<p><img src="http://7xqlat.com1.z0.glb.clouddn.com/Code属性表的结构.png" alt="Code属性表结构"></p>
+<p>attribute_name_index：指向CONSTANT_Utf8_info型常量的索引，常量固定值为<strong>Code</strong><br>attribute_length：属性值的长度，由于属性名称索引和属性长度一共为6字节，所以属性值的长度固定为整个属性表长度减去6个字节<br>max_stack：操作数栈深度的最大值，在方法执行的任意时刻，操作数栈都不会超过这个深度，虚拟机运行的时候需要根据这个值来分配栈帧中的操作栈深度<br>max_locals：局部变量所需的存储空间，单位是<strong>Slot</strong>，Slot是虚拟机为局部变量分配内存所使用的<strong>最小单位</strong>，对于长度不超过32位的数据类型，每个局部变量占用1个Slot，而double和long这两种64位的数据类型需要2个Slot来存放；局部变量表中的Slot是<strong>可以重用</strong>的，Javac编译器会根据变量的作用域来分配Slot给各个变量使用，然后计算出max_locals的大小<br>code：存储Java源程序编译后生成的字节码指令<br>code_length：字节码长度</p>
+<p><strong>LineNumberTable属性</strong><br>用于描述Java源码行号与字节码行号之间的对应关系；可以在javac中分别使用<strong>-g:none或-g:lines</strong>来选择取消或要求生成这项信息，如果不生成，对程序运行产生的最主要影响就是抛出异常时，堆栈中将不会显示出错的<strong>行号</strong>，并且在调试程序的时候，也无法按照源码行来设置<strong>断点</strong></p>
+<p><strong>LocalVariableTable属性</strong><br>用于描述栈帧中局部变量表中的变量与Java源码中定义的变量之间的关系；可以在javac中分别使用<strong>-g:none或-g:vars</strong>来选择取消或生成该信息，如果没有生成，最大的影响就是当其他人引用这个方法时，所有<strong>参数名都将丢失</strong>，IDE将会使用诸如<strong>arg0、arg1</strong>的占位符代替原有的参数名</p>
+<p><strong>SourceFile属性</strong><br>记录生成这个Class文件的源码文件名称；可以分别使用javac的-g:none或-g:source来关闭或生成，如果不生成这项属性，当抛出异常时，堆栈中将不会显示出错代码所属的<strong>文件名</strong></p>
+<p><strong>ConstantValue属性</strong><br>作用是通知虚拟机自动为静态变量赋值。只有被static关键字修饰的变量（类变量）才可以使用这项属性。</p>
+<p>对于非static类型的变量（<strong>实例变量</strong>）的赋值，虚拟机是在<strong>实例构造器<init></init></strong>方法中进行<br>对于类变量，在类构造器<clinit>方法中或使用ConstantValue属性。目前Sun Javac编译器的选择是：如果同时使用final和static来修饰一个变量（常量），并且这个变量的数据类型是基本类型或者java.lang.String的话，就生成ConstantValue属性来进行初始化，如果没有被final修饰或者并非基本类型及字符串，则将会选择在<clinit>方法中进行初始化</clinit></clinit></p>
+<h2 id="字节码指令简介"><a href="#字节码指令简介" class="headerlink" title="字节码指令简介"></a>字节码指令简介</h2><p>这里不详细记录了，具体字节码介绍可以<a href="https://en.wikipedia.org/wiki/Java_bytecode_instruction_listings" target="_blank" rel="external">参考WIKI</a></p>
+
+      
+    </div>
+    <footer>
+      
+        
+  
+  <div class="categories">
+    <a href="/categories/技术/">技术</a>
+  </div>
+
+        
+  
+  <div class="tags">
+    <a href="/tags/JVM/">JVM</a>
+  </div>
+
+        
+  <div class="addthis addthis_toolbox addthis_default_style">
+    
+    
+    
+    
+    <!--
+    <a class="addthis_counter addthis_pill_style"></a>
+    -->
+
+    <!-- 加入多说分享 -->
+    
+      <div class="ds-share flat" data-thread-key="2016/06/27/jvm-note-classfile/" data-title="Hunter的博客-读《深入理解Java虚拟机》-类文件结构" data-images="此处请替换为分享时显示的图片的链接地址" data-content="" data-url="http://www.linmuxi.com/2016/06/27/jvm-note-classfile/">
+  <div class="ds-share-inline">
+    <ul  class="ds-share-icons-16">
+      <li data-toggle="ds-share-icons-more"><a class="ds-more" href="javascript:void(0);">分享到：</a></li>
+      <li><a class="ds-weibo" href="javascript:void(0);" data-service="weibo">微博</a></li>
+      <li><a class="ds-qzone" href="javascript:void(0);" data-service="qzone">QQ空间</a></li>
+      <li><a class="ds-qqt" href="javascript:void(0);" data-service="qqt">腾讯微博</a></li>
+      <li><a class="ds-wechat" href="javascript:void(0);" data-service="wechat">微信</a></li>
+    </ul>
+    <div class="ds-share-icons-more">
+    </div>
+  </div>
+</div>
+    
+    <!-- end 加入多说分享 -->
+    
+  </div>
+  <script type="text/javascript" src="//s7.addthis.com/js/300/addthis_widget.js"></script>
+
+      
+      <div class="clearfix"></div>
+    </footer>
+  </div>
+</article>
+
+
+<section id="comment">
+  <h1 class="title">留言</h1>
+
+  <!-- 加入多说评论 -->
+  
+        
+  <!-- 多说评论框 start -->
+  <div class="ds-thread" data-thread-key="2016/06/27/jvm-note-classfile/" data-title="读《深入理解Java虚拟机》-类文件结构" data-url="http://www.linmuxi.com/2016/06/27/jvm-note-classfile/"></div>
+  <!-- 多说评论框 end -->
+
+  <!-- 多说公共JS代码 start (一个网页只需插入一次) -->
+  <script type="text/javascript">
+  var duoshuoQuery = {short_name:"hunterlin"};
+    (function() {
+      var ds = document.createElement('script');
+      ds.type = 'text/javascript';ds.async = true;
+      ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+      ds.charset = 'UTF-8';
+      (document.getElementsByTagName('head')[0] 
+       || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+    </script>
+  <!-- 多说公共JS代码 end -->
+
+      
+  
+  <!-- end加入多说评论 -->
+
+  
+
+</section>
+
+</div></div>
+    <aside id="sidebar" class="alignright">
+  <div class="search">
+<!--
+  <form action="//google.com/search" method="get" accept-charset="utf-8">
+    <input type="search" name="q" results="0" placeholder="搜索">
+    <input type="hidden" name="q" value="site:www.linmuxi.com">
+  </form>
+-->
+	<form>
+		<input type="search" id="hunter-blog-search" placeholder="搜索">
+	</form>
+</div>
+
+  
+<div class="widget tag">
+  <h3 class="title">分类</h3>
+  <ul class="entry">
+  
+    <li><a href="/categories/技术/工作/">工作</a><small>4</small></li>
+  
+    <li><a href="/categories/技术/">技术</a><small>64</small></li>
+  
+    <li><a href="/categories/生活/">生活</a><small>0</small></li>
+  
+    <li><a href="/categories/项目管理/">项目管理</a><small>1</small></li>
+  
+  </ul>
+</div>
+
+
+  
+<div class="widget tag">
+  <h3 class="title">标签</h3>
+  <ul class="entry">
+  
+    <li><a href="/tags/Android/">Android</a><small>2</small></li>
+  
+    <li><a href="/tags/AndroidStudio2-0/">AndroidStudio2.0</a><small>2</small></li>
+  
+    <li><a href="/tags/Bat/">Bat</a><small>1</small></li>
+  
+    <li><a href="/tags/Echarts/">Echarts</a><small>1</small></li>
+  
+    <li><a href="/tags/Flex4/">Flex4</a><small>2</small></li>
+  
+    <li><a href="/tags/Fusionchart/">Fusionchart</a><small>1</small></li>
+  
+    <li><a href="/tags/Git/">Git</a><small>4</small></li>
+  
+    <li><a href="/tags/HTML5/">HTML5</a><small>1</small></li>
+  
+    <li><a href="/tags/Hexo/">Hexo</a><small>9</small></li>
+  
+    <li><a href="/tags/JVM/">JVM</a><small>9</small></li>
+  
+    <li><a href="/tags/Java/">Java</a><small>4</small></li>
+  
+    <li><a href="/tags/JavaScript/">JavaScript</a><small>1</small></li>
+  
+    <li><a href="/tags/Linux/">Linux</a><small>1</small></li>
+  
+    <li><a href="/tags/NPM/">NPM</a><small>1</small></li>
+  
+    <li><a href="/tags/Nginx/">Nginx</a><small>1</small></li>
+  
+    <li><a href="/tags/Node-js/">Node.js</a><small>7</small></li>
+  
+    <li><a href="/tags/Oracle/">Oracle</a><small>13</small></li>
+  
+    <li><a href="/tags/PowerDesigner/">PowerDesigner</a><small>1</small></li>
+  
+    <li><a href="/tags/Red5/">Red5</a><small>2</small></li>
+  
+    <li><a href="/tags/Spring/">Spring</a><small>1</small></li>
+  
+    <li><a href="/tags/Tomcat/">Tomcat</a><small>1</small></li>
+  
+    <li><a href="/tags/UML/">UML</a><small>1</small></li>
+  
+    <li><a href="/tags/WebApp/">WebApp</a><small>1</small></li>
+  
+    <li><a href="/tags/gulp/">gulp</a><small>1</small></li>
+  
+    <li><a href="/tags/hexo/">hexo</a><small>1</small></li>
+  
+    <li><a href="/tags/iReport/">iReport</a><small>1</small></li>
+  
+    <li><a href="/tags/webpack/">webpack</a><small>2</small></li>
+  
+    <li><a href="/tags/图形报表/">图形报表</a><small>3</small></li>
+  
+    <li><a href="/tags/推荐/">推荐</a><small>1</small></li>
+  
+    <li><a href="/tags/设计模式/">设计模式</a><small>1</small></li>
+  
+  </ul>
+</div>
+
+
+  
+<div class="widget tag">
+  <h3 class="title">最新文章</h3>
+  <ul class="entry">
+    
+      <li>
+        <a href="/2016/07/18/design-pattern-builder-01/">设计模式の构造器</a>
+      </li>
+    
+      <li>
+        <a href="/2016/07/04/spring-security-integration/">集成Spring Security</a>
+      </li>
+    
+      <li>
+        <a href="/2016/06/27/jvm-note-classfile/">读《深入理解Java虚拟机》-类文件结构</a>
+      </li>
+    
+      <li>
+        <a href="/2016/06/23/jvm-note-gc/">读《深入理解Java虚拟机》-垃圾收集器</a>
+      </li>
+    
+      <li>
+        <a href="/2016/06/13/jvm-note-javamemoryarea/">读《深入理解Java虚拟机》-Java内存区域</a>
+      </li>
+    
+  </ul>
+</div>
+
+
+  
+<div class="widget tag">
+  <h3 class="title">标签云</h3>
+  <div class="entry">
+    <a href="/tags/Android/" style="font-size: 11.67px;">Android</a> <a href="/tags/AndroidStudio2-0/" style="font-size: 11.67px;">AndroidStudio2.0</a> <a href="/tags/Bat/" style="font-size: 10px;">Bat</a> <a href="/tags/Echarts/" style="font-size: 10px;">Echarts</a> <a href="/tags/Flex4/" style="font-size: 11.67px;">Flex4</a> <a href="/tags/Fusionchart/" style="font-size: 10px;">Fusionchart</a> <a href="/tags/Git/" style="font-size: 15px;">Git</a> <a href="/tags/HTML5/" style="font-size: 10px;">HTML5</a> <a href="/tags/Hexo/" style="font-size: 18.33px;">Hexo</a> <a href="/tags/JVM/" style="font-size: 18.33px;">JVM</a> <a href="/tags/Java/" style="font-size: 15px;">Java</a> <a href="/tags/JavaScript/" style="font-size: 10px;">JavaScript</a> <a href="/tags/Linux/" style="font-size: 10px;">Linux</a> <a href="/tags/NPM/" style="font-size: 10px;">NPM</a> <a href="/tags/Nginx/" style="font-size: 10px;">Nginx</a> <a href="/tags/Node-js/" style="font-size: 16.67px;">Node.js</a> <a href="/tags/Oracle/" style="font-size: 20px;">Oracle</a> <a href="/tags/PowerDesigner/" style="font-size: 10px;">PowerDesigner</a> <a href="/tags/Red5/" style="font-size: 11.67px;">Red5</a> <a href="/tags/Spring/" style="font-size: 10px;">Spring</a> <a href="/tags/Tomcat/" style="font-size: 10px;">Tomcat</a> <a href="/tags/UML/" style="font-size: 10px;">UML</a> <a href="/tags/WebApp/" style="font-size: 10px;">WebApp</a> <a href="/tags/gulp/" style="font-size: 10px;">gulp</a> <a href="/tags/hexo/" style="font-size: 10px;">hexo</a> <a href="/tags/iReport/" style="font-size: 10px;">iReport</a> <a href="/tags/webpack/" style="font-size: 11.67px;">webpack</a> <a href="/tags/图形报表/" style="font-size: 13.33px;">图形报表</a> <a href="/tags/推荐/" style="font-size: 10px;">推荐</a> <a href="/tags/设计模式/" style="font-size: 10px;">设计模式</a>
+  </div>
+</div>
+
+
+  <div class="widget tag">
+  <h3 class="title">最新评论</h3>
+  <ul class="entry">
+	
+		<li>
+			<div class="ds-recent-comments" data-num-items="5" data-show-avatars="1" data-show-time="1" data-show-title="1" data-show-admin="1" data-excerpt-length="70"></div>
+		</li>
+	
+  </ul>
+</div>
+
+</aside>
+    <div class="clearfix"></div>
+  </div>
+  <footer id="footer" class="inner"><div class="alignleft">
+  
+  &copy; 2017 Hunter Lin
+  
+
+  <!-- 不蒜子统计 -->
+  
+
+<script type="text/javascript">var cnzz_protocol = (("https:" == document.location.protocol) ? " https://" : " http://");document.write(unescape("%3Cspan id='cnzz_stat_icon_1259167020'%3E%3C/span%3E%3Cscript src='" + cnzz_protocol + "s4.cnzz.com/z_stat.php%3Fid%3D1259167020%26show%3Dpic' type='text/javascript'%3E%3C/script%3E"));</script>
+
+</div>
+<div class="clearfix"></div></footer>
+  <!-- <script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script> -->
+<script src="/js/jquery-2.0.3.min.js"></script>
+<script src="/js/jquery.imagesloaded.min.js"></script>
+<script src="/js/gallery.js"></script>
+
+
+
+<!-- fancybox -->
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+(function($){
+  $('.fancybox').fancybox();
+})(jQuery);
+</script>
+
+
+<!-- 站内搜索 -->
+
+<script type="text/javascript">
+  (function(w,d,t,u,n,s,e){w['SwiftypeObject']=n;w[n]=w[n]||function(){
+  (w[n].q=w[n].q||[]).push(arguments);};s=d.createElement(t);
+  e=d.getElementsByTagName(t)[0];s.async=1;s.src=u;e.parentNode.insertBefore(s,e);
+  })(window,document,'script','//s.swiftypecdn.com/install/v2/st.js','_st');
+  
+  _st('install','fjox-txyzMTBRyd8dwrn','2.0.0');
+</script>
+
+
+<!-- google分析 -->
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-74187619-1', 'auto');
+  ga('send', 'pageview');
+</script>
+
+
+<!-- 添加baidu统计 -->
+
+<script>
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "//hm.baidu.com/hm.js?a4f074d0c4eecf056150ecbd92e46f89";
+  var s = document.getElementsByTagName("script")[0]; 
+  s.parentNode.insertBefore(hm, s);
+})();
+</script>
+
+
+<!-- 代码高亮 -->
+
+<script src="/plugins/google-code-prettify/prettify.js"></script>
+<script>
+  $(window).load(function(){
+    $('pre').addClass('prettyprint linenums').attr('style', 'overflow:auto;');
+    prettyPrint();
+  })
+</script>
+
+
+<!-- 不蒜子统计 -->
+
+
+<!-- baidu自动推送 -->
+
+
+
+<script type="text/javascript">
+var duoshuoQuery = {short_name:"hunterlin"};
+  (function() {
+    var ds = document.createElement('script');
+    ds.type = 'text/javascript';ds.async = true;
+    ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+    ds.charset = 'UTF-8';
+    (document.getElementsByTagName('head')[0] 
+     || document.getElementsByTagName('body')[0]).appendChild(ds);
+  })();
+  </script>
+
+</body>
+
+</html>

@@ -1,0 +1,467 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>Git分支的基础使用 | Hunter的博客</title>
+  <meta name="author" content="Hunter Lin">
+  
+  <meta name="description" content="Git分支的基础使用">
+  
+  <meta name="keywords" content="Git,Git分支">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  <meta property="og:title" content="Git分支的基础使用"/>
+  <meta property="og:site_name" content="Hunter的博客"/>
+
+  
+  <meta property="og:image" content="undefined"/>
+  
+  
+  <!-- 百度验证 -->
+  
+  <meta name="baidu-site-verification" content="xyDHnOQvLc" />
+  
+
+  <!-- google验证 -->
+  
+  <meta name="google-site-verification" content="XetGPCVQcMEMmGykIpHKZTAIQzRX1uLgL5FrmjoMXSE" />
+  
+
+  <!-- sogou验证 -->
+  
+  <meta name="sogou_site_verification" content="xA7xdyVjJV" />
+  
+
+  <link href="/favicon.png" rel="icon">
+  <link rel="alternate" href="/atom.xml" title="Hunter的博客" type="application/atom+xml">
+  <link rel="stylesheet" href="/css/style.css" media="screen" type="text/css">
+  <!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+
+  <!-- 使用google代码高亮 -->
+  
+  <!--
+  <link rel="stylesheet" href="/plugins/google-code-prettify/prettify.css" type="text/css">
+  -->
+  <!--
+  <link rel="stylesheet" href="/plugins/google-code-prettify/vibrant-ink.css" type="text/css">
+  -->
+  <link rel="stylesheet" href="/plugins/google-code-prettify/tomorrow-night.css" type="text/css"> 
+  
+
+  
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+  
+
+  <style type="text/css">
+  pre{
+    word-wrap:break-word;
+    word-break:break-all;
+  }
+  ol.linenums{
+    /*代码行数颜色*/
+    color:#CCC !important;
+    font-size:14px !important;
+  }
+  </style>
+</head>
+
+
+<body>
+  <header id="header" class="inner"><div class="alignleft">
+  <h1><a href="/">Hunter的博客</a></h1>
+  <h2><a href="/">努力工作，幸福生活</a></h2>
+</div>
+<nav id="main-nav" class="alignright">
+  <ul>
+    
+      <li><a href="/">Home</a></li>
+    
+      <li><a href="/archives">Archives</a></li>
+    
+      <li><a href="/atom.xml">RSS</a></li>
+    
+      <li><a href="/Book">Book</a></li>
+    
+  </ul>
+  <div class="clearfix"></div>
+</nav>
+<div class="clearfix"></div>
+</header>
+  <div id="content" class="inner">
+    <div id="main-col" class="alignleft"><div id="wrapper"><article class="post">
+  
+  <div class="post-content">
+    <header>
+      
+        <div class="icon"></div>
+        <time datetime="2016-02-14T02:22:02.000Z"><a href="/2016/02/14/git-branch-basic-intro/">2016-02-14</a></time>
+      
+      
+  
+    <h1 class="title">Git分支的基础使用</h1>
+  
+
+    </header>
+    <div class="entry">
+      
+        <p>这篇主要分享下Git分支的基本操作，关于具体的概念大家可以去百度搜索了解，本篇不做介绍<br><a id="more"></a><br>目录</p>
+<ul>
+<li>查看分支</li>
+<li>创建分支</li>
+<li>切换分支</li>
+<li>修改分支名称</li>
+<li>分支合并</li>
+<li>删除分支</li>
+</ul>
+<p><strong> 前提 </strong><br>在上一篇<a href="2016/01/29/git-basic-cmd-intro">Git最最最基础命令入门</a>中，我已经创建了一个版本库：<a href="https://github.com/linmuxi/test-git.git" target="_blank" rel="external">https://github.com/linmuxi/test-git.git</a><br>下面的演示就基于这个版本库来操作。</p>
+<p>第一步先将版本库clone到本地，具体操作步骤可以参考<a href="2016/01/29/git-basic-cmd-intro">上一篇文章</a> ，这里就不做具体介绍</p>
+<p><strong> 查看分支 </strong><br>查看远程分支：<code>git branch -r</code><br>查看本地分支：<code>git branch -l</code> 或 <code>git branch</code><br>查看所有分支：<code>git branch -a</code><br><img src="http://7xqlat.com1.z0.glb.clouddn.com/git_branch_01.png" alt=""><br>可以看到目前只有一个master主分支，这个master分支也是git默认的分支</p>
+<p><strong> 创建分支 </strong><br>输入命令：<code>git branch myBranch01</code><br>再次查看分支，输入命令：<code>git branch -l</code><br><img src="http://7xqlat.com1.z0.glb.clouddn.com/git_branch_02.png" alt=""><br>可以看到myBranch01分支已经创建成功<br>注意：该分支只是在本地创建了，在远程库中并不存在，大家可以登录到Github上去确认下，也可以通过命令：<code>git branch -r</code>来确认</p>
+<p>接下来就是将刚才创建的myBranch01分支同步到远程库中去<br>输入命令：<code>git push origin myBranch01</code><br><img src="http://7xqlat.com1.z0.glb.clouddn.com/git_branch_03.png" alt=""><br>在输入账户和密码之后，创建的分支就已经同步到远程库中去了，可以登录Github进行确认，也可以通过命令：<code>git branch -r</code>来确认</p>
+<p><strong> 切换分支 </strong><br>输入命令：<code>git checkout myBranch01</code><br>接着查看所有分支：<code>git branch -l</code><br><img src="http://7xqlat.com1.z0.glb.clouddn.com/git_branch_04.png" alt=""><br>可以看到当前分支已经切换到myBranch01上面去了</p>
+<p><strong> 修改分支名称 </strong><br>输入命令：<code>git branch -m myBranch01 myBranch001</code><br>接着查看分支名称修改情况：<br><img src="http://7xqlat.com1.z0.glb.clouddn.com/git_branch_06.png" alt=""><br>本地的已经修改过来，远程的还未同步修改<br>执行同步修改命令：<code>git push origin myBranch001</code><br><img src="http://7xqlat.com1.z0.glb.clouddn.com/git_branch_07.png" alt=""><br>最后删除修改前的myBranch01分支：<code>git push origin :myBranch01</code><br><img src="http://7xqlat.com1.z0.glb.clouddn.com/git_branch_08.png" alt=""><br>到这里分支名称就修改完成，觉得这样的操作很麻烦。</p>
+<p><strong> 分支合并 </strong><br>合并操作前先查看master和myBranch001分支下面文件的内容<br><img src="http://7xqlat.com1.z0.glb.clouddn.com/git_branch_09.png" alt=""></p>
+<p>接下来切换当前分支到想要合并到的分支下（本例中要将myBranch001分支合并到master分支中，则切换当前分支到master下面），然后执行分支合并命令：<code>git merge myBranch001</code><br><img src="http://7xqlat.com1.z0.glb.clouddn.com/git_branch_10.png" alt=""></p>
+<p><strong> 删除分支 </strong><br>输入命令：<code>git branch -d myBranch01</code><br>注意：假如当前分支是myBranch01，则这里是不允许删除的，需要切换到别的分支才能将其删除<br><img src="http://7xqlat.com1.z0.glb.clouddn.com/git_branch_05.png" alt=""></p>
+<p>到这里，本地的分支已经被删除了，但是远程库中的还没有被删除。<br>输入命令：<code>git push origin :myBranch01</code><br>这样远程库中的myBranch01分支就被同步删除了。</p>
+
+      
+    </div>
+    <footer>
+      
+        
+  
+  <div class="categories">
+    <a href="/categories/技术/">技术</a>
+  </div>
+
+        
+  
+  <div class="tags">
+    <a href="/tags/Git/">Git</a>
+  </div>
+
+        
+  <div class="addthis addthis_toolbox addthis_default_style">
+    
+    
+    
+    
+    <!--
+    <a class="addthis_counter addthis_pill_style"></a>
+    -->
+
+    <!-- 加入多说分享 -->
+    
+      <div class="ds-share flat" data-thread-key="2016/02/14/git-branch-basic-intro/" data-title="Hunter的博客-Git分支的基础使用" data-images="此处请替换为分享时显示的图片的链接地址" data-content="" data-url="http://www.linmuxi.com/2016/02/14/git-branch-basic-intro/">
+  <div class="ds-share-inline">
+    <ul  class="ds-share-icons-16">
+      <li data-toggle="ds-share-icons-more"><a class="ds-more" href="javascript:void(0);">分享到：</a></li>
+      <li><a class="ds-weibo" href="javascript:void(0);" data-service="weibo">微博</a></li>
+      <li><a class="ds-qzone" href="javascript:void(0);" data-service="qzone">QQ空间</a></li>
+      <li><a class="ds-qqt" href="javascript:void(0);" data-service="qqt">腾讯微博</a></li>
+      <li><a class="ds-wechat" href="javascript:void(0);" data-service="wechat">微信</a></li>
+    </ul>
+    <div class="ds-share-icons-more">
+    </div>
+  </div>
+</div>
+    
+    <!-- end 加入多说分享 -->
+    
+  </div>
+  <script type="text/javascript" src="//s7.addthis.com/js/300/addthis_widget.js"></script>
+
+      
+      <div class="clearfix"></div>
+    </footer>
+  </div>
+</article>
+
+
+<section id="comment">
+  <h1 class="title">留言</h1>
+
+  <!-- 加入多说评论 -->
+  
+        
+  <!-- 多说评论框 start -->
+  <div class="ds-thread" data-thread-key="2016/02/14/git-branch-basic-intro/" data-title="Git分支的基础使用" data-url="http://www.linmuxi.com/2016/02/14/git-branch-basic-intro/"></div>
+  <!-- 多说评论框 end -->
+
+  <!-- 多说公共JS代码 start (一个网页只需插入一次) -->
+  <script type="text/javascript">
+  var duoshuoQuery = {short_name:"hunterlin"};
+    (function() {
+      var ds = document.createElement('script');
+      ds.type = 'text/javascript';ds.async = true;
+      ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+      ds.charset = 'UTF-8';
+      (document.getElementsByTagName('head')[0] 
+       || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+    </script>
+  <!-- 多说公共JS代码 end -->
+
+      
+  
+  <!-- end加入多说评论 -->
+
+  
+
+</section>
+
+</div></div>
+    <aside id="sidebar" class="alignright">
+  <div class="search">
+<!--
+  <form action="//google.com/search" method="get" accept-charset="utf-8">
+    <input type="search" name="q" results="0" placeholder="搜索">
+    <input type="hidden" name="q" value="site:www.linmuxi.com">
+  </form>
+-->
+	<form>
+		<input type="search" id="hunter-blog-search" placeholder="搜索">
+	</form>
+</div>
+
+  
+<div class="widget tag">
+  <h3 class="title">分类</h3>
+  <ul class="entry">
+  
+    <li><a href="/categories/技术/工作/">工作</a><small>4</small></li>
+  
+    <li><a href="/categories/技术/">技术</a><small>64</small></li>
+  
+    <li><a href="/categories/生活/">生活</a><small>0</small></li>
+  
+    <li><a href="/categories/项目管理/">项目管理</a><small>1</small></li>
+  
+  </ul>
+</div>
+
+
+  
+<div class="widget tag">
+  <h3 class="title">标签</h3>
+  <ul class="entry">
+  
+    <li><a href="/tags/Android/">Android</a><small>2</small></li>
+  
+    <li><a href="/tags/AndroidStudio2-0/">AndroidStudio2.0</a><small>2</small></li>
+  
+    <li><a href="/tags/Bat/">Bat</a><small>1</small></li>
+  
+    <li><a href="/tags/Echarts/">Echarts</a><small>1</small></li>
+  
+    <li><a href="/tags/Flex4/">Flex4</a><small>2</small></li>
+  
+    <li><a href="/tags/Fusionchart/">Fusionchart</a><small>1</small></li>
+  
+    <li><a href="/tags/Git/">Git</a><small>4</small></li>
+  
+    <li><a href="/tags/HTML5/">HTML5</a><small>1</small></li>
+  
+    <li><a href="/tags/Hexo/">Hexo</a><small>9</small></li>
+  
+    <li><a href="/tags/JVM/">JVM</a><small>9</small></li>
+  
+    <li><a href="/tags/Java/">Java</a><small>4</small></li>
+  
+    <li><a href="/tags/JavaScript/">JavaScript</a><small>1</small></li>
+  
+    <li><a href="/tags/Linux/">Linux</a><small>1</small></li>
+  
+    <li><a href="/tags/NPM/">NPM</a><small>1</small></li>
+  
+    <li><a href="/tags/Nginx/">Nginx</a><small>1</small></li>
+  
+    <li><a href="/tags/Node-js/">Node.js</a><small>7</small></li>
+  
+    <li><a href="/tags/Oracle/">Oracle</a><small>13</small></li>
+  
+    <li><a href="/tags/PowerDesigner/">PowerDesigner</a><small>1</small></li>
+  
+    <li><a href="/tags/Red5/">Red5</a><small>2</small></li>
+  
+    <li><a href="/tags/Spring/">Spring</a><small>1</small></li>
+  
+    <li><a href="/tags/Tomcat/">Tomcat</a><small>1</small></li>
+  
+    <li><a href="/tags/UML/">UML</a><small>1</small></li>
+  
+    <li><a href="/tags/WebApp/">WebApp</a><small>1</small></li>
+  
+    <li><a href="/tags/gulp/">gulp</a><small>1</small></li>
+  
+    <li><a href="/tags/hexo/">hexo</a><small>1</small></li>
+  
+    <li><a href="/tags/iReport/">iReport</a><small>1</small></li>
+  
+    <li><a href="/tags/webpack/">webpack</a><small>2</small></li>
+  
+    <li><a href="/tags/图形报表/">图形报表</a><small>3</small></li>
+  
+    <li><a href="/tags/推荐/">推荐</a><small>1</small></li>
+  
+    <li><a href="/tags/设计模式/">设计模式</a><small>1</small></li>
+  
+  </ul>
+</div>
+
+
+  
+<div class="widget tag">
+  <h3 class="title">最新文章</h3>
+  <ul class="entry">
+    
+      <li>
+        <a href="/2016/07/18/design-pattern-builder-01/">设计模式の构造器</a>
+      </li>
+    
+      <li>
+        <a href="/2016/07/04/spring-security-integration/">集成Spring Security</a>
+      </li>
+    
+      <li>
+        <a href="/2016/06/27/jvm-note-classfile/">读《深入理解Java虚拟机》-类文件结构</a>
+      </li>
+    
+      <li>
+        <a href="/2016/06/23/jvm-note-gc/">读《深入理解Java虚拟机》-垃圾收集器</a>
+      </li>
+    
+      <li>
+        <a href="/2016/06/13/jvm-note-javamemoryarea/">读《深入理解Java虚拟机》-Java内存区域</a>
+      </li>
+    
+  </ul>
+</div>
+
+
+  
+<div class="widget tag">
+  <h3 class="title">标签云</h3>
+  <div class="entry">
+    <a href="/tags/Android/" style="font-size: 11.67px;">Android</a> <a href="/tags/AndroidStudio2-0/" style="font-size: 11.67px;">AndroidStudio2.0</a> <a href="/tags/Bat/" style="font-size: 10px;">Bat</a> <a href="/tags/Echarts/" style="font-size: 10px;">Echarts</a> <a href="/tags/Flex4/" style="font-size: 11.67px;">Flex4</a> <a href="/tags/Fusionchart/" style="font-size: 10px;">Fusionchart</a> <a href="/tags/Git/" style="font-size: 15px;">Git</a> <a href="/tags/HTML5/" style="font-size: 10px;">HTML5</a> <a href="/tags/Hexo/" style="font-size: 18.33px;">Hexo</a> <a href="/tags/JVM/" style="font-size: 18.33px;">JVM</a> <a href="/tags/Java/" style="font-size: 15px;">Java</a> <a href="/tags/JavaScript/" style="font-size: 10px;">JavaScript</a> <a href="/tags/Linux/" style="font-size: 10px;">Linux</a> <a href="/tags/NPM/" style="font-size: 10px;">NPM</a> <a href="/tags/Nginx/" style="font-size: 10px;">Nginx</a> <a href="/tags/Node-js/" style="font-size: 16.67px;">Node.js</a> <a href="/tags/Oracle/" style="font-size: 20px;">Oracle</a> <a href="/tags/PowerDesigner/" style="font-size: 10px;">PowerDesigner</a> <a href="/tags/Red5/" style="font-size: 11.67px;">Red5</a> <a href="/tags/Spring/" style="font-size: 10px;">Spring</a> <a href="/tags/Tomcat/" style="font-size: 10px;">Tomcat</a> <a href="/tags/UML/" style="font-size: 10px;">UML</a> <a href="/tags/WebApp/" style="font-size: 10px;">WebApp</a> <a href="/tags/gulp/" style="font-size: 10px;">gulp</a> <a href="/tags/hexo/" style="font-size: 10px;">hexo</a> <a href="/tags/iReport/" style="font-size: 10px;">iReport</a> <a href="/tags/webpack/" style="font-size: 11.67px;">webpack</a> <a href="/tags/图形报表/" style="font-size: 13.33px;">图形报表</a> <a href="/tags/推荐/" style="font-size: 10px;">推荐</a> <a href="/tags/设计模式/" style="font-size: 10px;">设计模式</a>
+  </div>
+</div>
+
+
+  <div class="widget tag">
+  <h3 class="title">最新评论</h3>
+  <ul class="entry">
+	
+		<li>
+			<div class="ds-recent-comments" data-num-items="5" data-show-avatars="1" data-show-time="1" data-show-title="1" data-show-admin="1" data-excerpt-length="70"></div>
+		</li>
+	
+  </ul>
+</div>
+
+</aside>
+    <div class="clearfix"></div>
+  </div>
+  <footer id="footer" class="inner"><div class="alignleft">
+  
+  &copy; 2017 Hunter Lin
+  
+
+  <!-- 不蒜子统计 -->
+  
+
+<script type="text/javascript">var cnzz_protocol = (("https:" == document.location.protocol) ? " https://" : " http://");document.write(unescape("%3Cspan id='cnzz_stat_icon_1259167020'%3E%3C/span%3E%3Cscript src='" + cnzz_protocol + "s4.cnzz.com/z_stat.php%3Fid%3D1259167020%26show%3Dpic' type='text/javascript'%3E%3C/script%3E"));</script>
+
+</div>
+<div class="clearfix"></div></footer>
+  <!-- <script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script> -->
+<script src="/js/jquery-2.0.3.min.js"></script>
+<script src="/js/jquery.imagesloaded.min.js"></script>
+<script src="/js/gallery.js"></script>
+
+
+
+<!-- fancybox -->
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+(function($){
+  $('.fancybox').fancybox();
+})(jQuery);
+</script>
+
+
+<!-- 站内搜索 -->
+
+<script type="text/javascript">
+  (function(w,d,t,u,n,s,e){w['SwiftypeObject']=n;w[n]=w[n]||function(){
+  (w[n].q=w[n].q||[]).push(arguments);};s=d.createElement(t);
+  e=d.getElementsByTagName(t)[0];s.async=1;s.src=u;e.parentNode.insertBefore(s,e);
+  })(window,document,'script','//s.swiftypecdn.com/install/v2/st.js','_st');
+  
+  _st('install','fjox-txyzMTBRyd8dwrn','2.0.0');
+</script>
+
+
+<!-- google分析 -->
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-74187619-1', 'auto');
+  ga('send', 'pageview');
+</script>
+
+
+<!-- 添加baidu统计 -->
+
+<script>
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "//hm.baidu.com/hm.js?a4f074d0c4eecf056150ecbd92e46f89";
+  var s = document.getElementsByTagName("script")[0]; 
+  s.parentNode.insertBefore(hm, s);
+})();
+</script>
+
+
+<!-- 代码高亮 -->
+
+<script src="/plugins/google-code-prettify/prettify.js"></script>
+<script>
+  $(window).load(function(){
+    $('pre').addClass('prettyprint linenums').attr('style', 'overflow:auto;');
+    prettyPrint();
+  })
+</script>
+
+
+<!-- 不蒜子统计 -->
+
+
+<!-- baidu自动推送 -->
+
+
+
+<script type="text/javascript">
+var duoshuoQuery = {short_name:"hunterlin"};
+  (function() {
+    var ds = document.createElement('script');
+    ds.type = 'text/javascript';ds.async = true;
+    ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+    ds.charset = 'UTF-8';
+    (document.getElementsByTagName('head')[0] 
+     || document.getElementsByTagName('body')[0]).appendChild(ds);
+  })();
+  </script>
+
+</body>
+
+</html>
