@@ -5,7 +5,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://www.linmuxi.com/"/>
-  <updated>2017-02-07T08:45:10.652Z</updated>
+  <updated>2017-02-07T08:45:10.675Z</updated>
   <id>http://www.linmuxi.com/</id>
   
   <author>
@@ -14,99 +14,6 @@
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
-  
-  <entry>
-    <title>设计模式の构造器</title>
-    <link href="http://www.linmuxi.com/2016/07/18/design-pattern-builder-01/"/>
-    <id>http://www.linmuxi.com/2016/07/18/design-pattern-builder-01/</id>
-    <published>2016-07-18T06:42:04.000Z</published>
-    <updated>2017-02-07T08:45:10.652Z</updated>
-    
-    <content type="html"><![CDATA[<p>本篇分享有点逼格的实例化javabean的方式<br><a id="more"></a></p>
-<p>一般实例化javabean有如下两种方式：</p>
-<h3 id="构造器"><a href="#构造器" class="headerlink" title="构造器"></a><strong>构造器</strong></h3><pre><code class="java">User user = new User(...);
-</code></pre>
-<p>优点：代码行数较少<br>缺点：参数设置不够灵活</p>
-<h3 id="SET方法"><a href="#SET方法" class="headerlink" title="SET方法"></a><strong>SET方法</strong></h3><pre><code class="java">User user = new User();
-user.setXX(..);
-user.setXX(..);
-user.setXX(..);
-user.setXX(..);
-user.setXX(..);
-user.setXX(..);
-</code></pre>
-<p>优点：参数设置灵活<br>缺点：代码行数较多</p>
-<p>通过构造器模式可以兼容以上两种方式优点。</p>
-<p>使用：</p>
-<pre><code class="java">User user = new User.Builder().id(1).name(&quot;hunter&quot;).age(27).build();
-</code></pre>
-<p>定义：</p>
-<pre><code class="java">package build;
-
-public class User {
-
-    private final int id;
-    private final String name;
-    private final int age;
-
-    public User(int id, String name, int age) {
-        super();
-        this.id = id;
-        this.name = name;
-        this.age = age;
-    }
-
-    public int getId() {
-        return id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public int getAge() {
-        return age;
-    }
-
-    public static class Builder {
-        private int id;
-        private String name;
-        private int age;
-
-        public Builder id(int id){
-            this.id = id;
-            return this;
-        }
-        public Builder name(String name){
-            this.name = name;
-            return this;
-        }
-        public Builder age(int age){
-            this.age = age;
-            return this;
-        }
-
-        public User build(){
-            return new User(this.id,this.name,this.age);
-        }
-    }
-}
-</code></pre>
-<p>当然也有缺点：<br>1、bean定义相比以上两种略显复杂<br>2、而外的内存开销(builder对象)</p>
-]]></content>
-    
-    <summary type="html">
-    
-      设计模式の构造器
-    
-    </summary>
-    
-      <category term="技术" scheme="http://www.linmuxi.com/categories/%E6%8A%80%E6%9C%AF/"/>
-    
-    
-      <category term="设计模式" scheme="http://www.linmuxi.com/tags/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/"/>
-    
-  </entry>
   
   <entry>
     <title>集成Spring Security</title>
@@ -1539,6 +1446,92 @@ javap -v Test > E:/Test.dc
     <summary type="html">
     
       本篇通过一段简单的代码来分析下字节码的执行，认识认识几个常见的字节码指令
+    
+    </summary>
+    
+      <category term="技术" scheme="http://www.linmuxi.com/categories/%E6%8A%80%E6%9C%AF/"/>
+    
+    
+      <category term="JVM" scheme="http://www.linmuxi.com/tags/JVM/"/>
+    
+      <category term="Java" scheme="http://www.linmuxi.com/tags/Java/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>JVM字节码之整型入栈指令(iconst、bipush、sipush、ldc)</title>
+    <link href="http://www.linmuxi.com/2016/02/25/jvm-int-pushstack-01/"/>
+    <id>http://www.linmuxi.com/2016/02/25/jvm-int-pushstack-01/</id>
+    <published>2016-02-25T06:33:19.000Z</published>
+    <updated>2017-02-07T08:45:10.661Z</updated>
+    
+    <content type="html"><![CDATA[<p>本篇主要分享下在JVM中int类型数值采用何种指令入栈的，根据int值范围JVM入栈字节码指令就分为4类，下面分别介绍下这四类指令。<br><a id="more"></a></p>
+<h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a><strong>前言</strong></h2><p>当int取值<strong>-1~5</strong>采用iconst指令，取值<strong>-128~127</strong>采用bipush指令，取值<strong>-32768~32767</strong>采用sipush指令，取值<strong>-2147483648~2147483647</strong>采用 ldc 指令。</p>
+<h2 id="iconst"><a href="#iconst" class="headerlink" title="iconst"></a><strong>iconst</strong></h2><p>当int取值<strong>-1~5</strong>时，JVM采用<strong>iconst</strong>指令将常量压入栈中。<br>定义<strong>Test.java</strong>文件</p>
+<pre><code class="java">public static void main(String[] args) {
+    int i = 5;
+    int j = -1;
+}
+</code></pre>
+<p>查看<strong>class</strong>文件</p>
+<pre><code class="java">public static void main(java.lang.String[]);
+  Code:
+   0:   iconst_5
+   1:   istore_1
+   2:   iconst_m1
+   3:   istore_2
+   4:   return
+}
+</code></pre>
+<p>分析class文件，int取值0~5时JVM采用iconst_0、iconst_1、iconst_2、iconst_3、iconst_4、iconst_5指令将常量压入栈中，取值-1时采用iconst_m1指令将常量压入栈中。</p>
+<h3 id="bipush"><a href="#bipush" class="headerlink" title="bipush"></a><strong>bipush</strong></h3><p>当int取值<strong>-128~127</strong>时，JVM采用<strong>bipush</strong>指令将常量压入栈中。<br>定义<strong>Test.java</strong>文件</p>
+<pre><code class="java">public static void main(String[] args) {
+    int i = 127;
+}
+</code></pre>
+<p>查看<strong>class</strong>文件</p>
+<pre><code class="java">public static void main(java.lang.String[]);
+  Code:
+   0:   bipush  127
+   2:   istore_1
+   3:   return
+}
+</code></pre>
+<p>可以看到上面代码第三行是采用<strong>bipush</strong>指令将常量127压入栈中。</p>
+<h3 id="sipush"><a href="#sipush" class="headerlink" title="sipush"></a><strong>sipush</strong></h3><p>当int取值<strong>-32768~32767</strong>时，JVM采用<strong>sipush</strong>指令将常量压入栈中。<br>定义<strong>Test.java</strong>文件</p>
+<pre><code class="java">public static void main(String[] args) {
+    int i = 32767;
+}
+</code></pre>
+<p>查看<strong>class</strong>文件</p>
+<pre><code class="java">public static void main(java.lang.String[]);
+  Code:
+   0:   sipush  32767
+   3:   istore_1
+   4:   return
+}
+</code></pre>
+<p>可以看到上面代码第三行是采用<strong>sipush</strong>指令将常量32767压入栈中。</p>
+<h3 id="ldc"><a href="#ldc" class="headerlink" title="ldc"></a><strong>ldc</strong></h3><p>当int取值<strong>-2147483648~2147483647</strong>时，JVM采用<strong>ldc</strong>指令将常量压入栈中。<br>定义<strong>Test.java</strong>文件</p>
+<pre><code class="java">public static void main(String[] args) {
+    int i = Integer.MAX_VALUE;
+}
+</code></pre>
+<p>查看<strong>class</strong>文件</p>
+<pre><code class="java">public static void main(java.lang.String[]);
+  Code:
+   0:   ldc     #2; //int 2147483647
+   2:   istore_1
+   3:   return
+}
+</code></pre>
+<p>可以看到上面代码第三行是采用<strong>ldc</strong>指令将2147483647常量压入栈中，需要注意的是ldc指令是从常量池中获取值的，也就是说在这段范围（<strong>-2147483648~2147483647</strong>）内的int值是存储在常量池中的。</p>
+<h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a><strong>参考</strong></h2><p><a href="http://docs.oracle.com/javase/specs/jvms/se7/html/jvms-4.html" target="_blank" rel="external">JVM规范</a></p>
+]]></content>
+    
+    <summary type="html">
+    
+      本篇主要介绍下int类型数值入栈指令iconst、bipush、sipush、ldc
     
     </summary>
     
