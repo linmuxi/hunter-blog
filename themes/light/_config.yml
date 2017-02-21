@@ -3,16 +3,16 @@ menu:
   Archives: archives
   # About: about
   RSS: atom.xml
-  Book: Book
+  Book: mybook
 
 widgets:
-- search
-- category
-- tag
-- recent_posts
-- tagcloud
+# - search
+# - category
+# - tag
+# - recent_posts
+# - tagcloud
 # - blogroll
-- newComment
+# - newComment
 
 excerpt_link: Read More
 

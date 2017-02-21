@@ -1,3 +1,7 @@
-<% theme.widgets.forEach(function(widget){ %>
-  <%- partial('../_widget/' + widget) %>
-<% }); %>
+<% if(theme.widgets != null){ %>
+
+	<% theme.widgets.forEach(function(widget){ %>
+	  <%- partial('../_widget/' + widget) %>
+	<% }); %>
+	
+<% } %>

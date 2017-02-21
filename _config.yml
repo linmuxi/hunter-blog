@@ -5,16 +5,15 @@
 # Site
 title: Hunter的博客
 subtitle: 努力工作，幸福生活
-description: Hunter的博客-努力工作，幸福生活
+description: 努力工作，幸福生活
 author: Hunter Lin
-language: zh-CN
+language: zh-Hans
 timezone:
 
 # URL
 ## If your site is put in a subdirectory, set url as 'http://yoursite.com/child' and root as '/child/'
 # url: http://linmuxi.github.io
 url: http://www.linmuxi.com
-# root: /hunter-blog/
 root: /
 permalink: :year/:month/:day/:title/
 permalink_defaults:
@@ -65,7 +64,7 @@ pagination_dir: page
 # Extensions
 ## Plugins: http://hexo.io/plugins/
 ## Themes: http://hexo.io/themes/
-theme: light
+theme: next
 
 # Deployment
 ## Docs: http://hexo.io/docs/deployment.html
@@ -80,10 +79,6 @@ deploy:
     github: https://github.com/linmuxi/hunter-blog.git,gh-pages
     # gitcafe: https://gitcafe.com/hunterlin/hunterlin.git,gitcafe-pages
     coding: https://git.coding.net/hunterlin/hunterlin.git,coding-pages
-
-search:
-  path: search.xml
-  field: post
 
 sitemap:
   path: sitemap.xml
@@ -102,4 +97,9 @@ feed:
   type: atom
   path: atom.xml
   limit: 20
-  
+
+search:
+  path: search.xml
+  field: post
+  format: html
+  limit: 10000
