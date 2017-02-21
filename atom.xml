@@ -5,7 +5,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://www.linmuxi.com/"/>
-  <updated>2017-02-07T08:45:10.675Z</updated>
+  <updated>2017-02-21T09:59:51.033Z</updated>
   <id>http://www.linmuxi.com/</id>
   
   <author>
@@ -20,16 +20,16 @@
     <link href="http://www.linmuxi.com/2016/07/04/spring-security-integration/"/>
     <id>http://www.linmuxi.com/2016/07/04/spring-security-integration/</id>
     <published>2016-07-04T07:42:25.000Z</published>
-    <updated>2017-02-07T08:45:10.675Z</updated>
+    <updated>2017-02-21T09:59:51.033Z</updated>
     
-    <content type="html"><![CDATA[<h2 id="前言："><a href="#前言：" class="headerlink" title="前言："></a>前言：</h2><p>Spring Security是一个强大的和高度可定制的身份认证和访问控制框架。<br>一个能够为基于Spring的企业应用系统提供声明式的安全访问控制解决方案的安全框架。它提供了一组可以在Spring应用上下文中配置的Bean，充分利用了<strong>Spring IoC，DI和AOP</strong>功能，为应用系统提供声明式的安全访问控制功能，减少了为企业系统安全控制编写大量重复代码的工作。</p>
-<h2 id="原理："><a href="#原理：" class="headerlink" title="原理："></a>原理：</h2><p>Spring Security核心是他提供的<strong>过滤器</strong>，默认情况下用到了以下过滤器，及通过实例化一个虚拟过滤器链来对这些过滤器进行递归调用，源码如下图：<br><img src="http://7xqlat.com1.z0.glb.clouddn.com/SpringSecurity核心.png" alt="SpringSecurity核心"></p>
-<h2 id="代码："><a href="#代码：" class="headerlink" title="代码："></a>代码：</h2><p>集成代码已经托管到<strong><a href="https://github.com/linmuxi/SpringSecurity.git" target="_blank" rel="external">github</a></strong>上，Spring Security版本是<strong>3.2.0</strong>，项目结构是<strong>Maven</strong></p>
+    <content type="html"><![CDATA[<h2 id="SpringSecurity说明"><a href="#SpringSecurity说明" class="headerlink" title="SpringSecurity说明"></a>SpringSecurity说明</h2><p>Spring Security是一个强大的和高度可定制的身份认证和访问控制框架。<br>一个能够为基于Spring的企业应用系统提供声明式的安全访问控制解决方案的安全框架。它提供了一组可以在Spring应用上下文中配置的Bean，充分利用了<strong>Spring IoC，DI和AOP</strong>功能，为应用系统提供声明式的安全访问控制功能，减少了为企业系统安全控制编写大量重复代码的工作。</p>
+<h2 id="SpringSecurity核心点"><a href="#SpringSecurity核心点" class="headerlink" title="SpringSecurity核心点"></a>SpringSecurity核心点</h2><p>Spring Security核心是他提供的<strong>过滤器</strong>，默认情况下用到了以下过滤器，及通过实例化一个虚拟过滤器链来对这些过滤器进行递归调用，源码如下图：<br><img src="http://7xqlat.com1.z0.glb.clouddn.com/SpringSecurity核心.png" alt="SpringSecurity核心"></p>
+<h2 id="集成代码"><a href="#集成代码" class="headerlink" title="集成代码"></a>集成代码</h2><p>集成代码已经托管到<strong><a href="https://github.com/linmuxi/SpringSecurity.git" target="_blank" rel="external">github</a></strong>上，Spring Security版本是<strong>3.2.0</strong>，项目结构是<strong>Maven</strong></p>
 ]]></content>
     
     <summary type="html">
     
-      集成SpringSecurity
+      &lt;h2 id=&quot;SpringSecurity说明&quot;&gt;&lt;a href=&quot;#SpringSecurity说明&quot; class=&quot;headerlink&quot; title=&quot;SpringSecurity说明&quot;&gt;&lt;/a&gt;SpringSecurity说明&lt;/h2&gt;&lt;p&gt;Spring Securit
     
     </summary>
     
