@@ -5,7 +5,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://www.linmuxi.com/"/>
-  <updated>2017-02-21T09:59:51.033Z</updated>
+  <updated>2017-02-22T02:59:47.287Z</updated>
   <id>http://www.linmuxi.com/</id>
   
   <author>
@@ -14,6 +14,33 @@
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>可靠性设计之服务故障隔离</title>
+    <link href="http://www.linmuxi.com/2017/02/22/system-design-service-fault-isulate-01/"/>
+    <id>http://www.linmuxi.com/2017/02/22/system-design-service-fault-isulate-01/</id>
+    <published>2017-02-22T02:49:28.000Z</published>
+    <updated>2017-02-22T02:59:47.287Z</updated>
+    
+    <content type="html"><![CDATA[<h6 id="案例场景"><a href="#案例场景" class="headerlink" title="案例场景"></a>案例场景</h6><p>程序首先做黑名单规则校验，将命中规则的黑名单数据先写入DB，后邮件发送给相关业务人员</p>
+<h6 id="一般步骤"><a href="#一般步骤" class="headerlink" title="一般步骤"></a>一般步骤</h6><p>在做完黑名单规则校验之后，可以直接返回客户端命中结果，后面的写入DB和邮件发送操作可以放到线程池中异步进行。<br>那么是不是两个操作都放到一个线程池中进行操作呢？当然不是，至于为什么，看下面分析</p>
+<h6 id="案例分析"><a href="#案例分析" class="headerlink" title="案例分析"></a>案例分析</h6><p>从业务场景分析得出，写入DB操作明显是主要业务，邮件发送是次要业务，所以从服务优先级考虑首先要保证的是主要业务的可用，然后再保证次要业务的可用。</p>
+<p>再回到上面的问题，为什么不能将这两个操作放到同一个线程池中进行操作。</p>
+<p>假如这两个操作从同一个池中取线程，第一个写入DB顺利完成，第二个发送邮件由于网络原因（如连接超时等）导致发送失败，这里的失败的结果可能导致线程夯住；最坏的结果会是随着服务请求的增多，因为发送邮件这个操作导致线程池资源耗尽，使得写入DB这个操作无法分配到可以用线程资源，进入队列中等待，这样可能会出现等待超时，导致写入DB操作被丢弃，从而导致DB数据丢失；这样因为一个次要业务不可用故障级联主要业务不可用是程序设计中不允许的。<br>这里我们可以将写入DB操作分配到一个线程池，发送邮件操作分配到另外一个线程池，这样即使发送邮件操作失败导致线程池不可用，也不会影响到写入DB操作这个功能；</p>
+<h6 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h6><p>上面是关于服务故障隔离的一点点思路，也是我们能在代码层面进行实施的东西；其实关于服务故障隔离远不止这么简单，这里只是提供一点思路，就是从我们的业务进行分析，哪些是核心业务哪些是非核心业务，我们要做的就是优先保证核心业务的高可用，其次再是保证非核心业务的可用。</p>
+]]></content>
+    
+    <summary type="html">
+    
+      &lt;h6 id=&quot;案例场景&quot;&gt;&lt;a href=&quot;#案例场景&quot; class=&quot;headerlink&quot; title=&quot;案例场景&quot;&gt;&lt;/a&gt;案例场景&lt;/h6&gt;&lt;p&gt;程序首先做黑名单规则校验，将命中规则的黑名单数据先写入DB，后邮件发送给相关业务人员&lt;/p&gt;
+&lt;h6 id=&quot;一般步骤&quot;&gt;&lt;
+    
+    </summary>
+    
+      <category term="系统设计" scheme="http://www.linmuxi.com/categories/%E7%B3%BB%E7%BB%9F%E8%AE%BE%E8%AE%A1/"/>
+    
+    
+  </entry>
   
   <entry>
     <title>集成Spring Security</title>
@@ -1452,95 +1479,9 @@ javap -v Test > E:/Test.dc
       <category term="技术" scheme="http://www.linmuxi.com/categories/%E6%8A%80%E6%9C%AF/"/>
     
     
-      <category term="JVM" scheme="http://www.linmuxi.com/tags/JVM/"/>
-    
       <category term="Java" scheme="http://www.linmuxi.com/tags/Java/"/>
     
-  </entry>
-  
-  <entry>
-    <title>JVM字节码之整型入栈指令(iconst、bipush、sipush、ldc)</title>
-    <link href="http://www.linmuxi.com/2016/02/25/jvm-int-pushstack-01/"/>
-    <id>http://www.linmuxi.com/2016/02/25/jvm-int-pushstack-01/</id>
-    <published>2016-02-25T06:33:19.000Z</published>
-    <updated>2017-02-07T08:45:10.661Z</updated>
-    
-    <content type="html"><![CDATA[<p>本篇主要分享下在JVM中int类型数值采用何种指令入栈的，根据int值范围JVM入栈字节码指令就分为4类，下面分别介绍下这四类指令。<br><a id="more"></a></p>
-<h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a><strong>前言</strong></h2><p>当int取值<strong>-1~5</strong>采用iconst指令，取值<strong>-128~127</strong>采用bipush指令，取值<strong>-32768~32767</strong>采用sipush指令，取值<strong>-2147483648~2147483647</strong>采用 ldc 指令。</p>
-<h2 id="iconst"><a href="#iconst" class="headerlink" title="iconst"></a><strong>iconst</strong></h2><p>当int取值<strong>-1~5</strong>时，JVM采用<strong>iconst</strong>指令将常量压入栈中。<br>定义<strong>Test.java</strong>文件</p>
-<pre><code class="java">public static void main(String[] args) {
-    int i = 5;
-    int j = -1;
-}
-</code></pre>
-<p>查看<strong>class</strong>文件</p>
-<pre><code class="java">public static void main(java.lang.String[]);
-  Code:
-   0:   iconst_5
-   1:   istore_1
-   2:   iconst_m1
-   3:   istore_2
-   4:   return
-}
-</code></pre>
-<p>分析class文件，int取值0~5时JVM采用iconst_0、iconst_1、iconst_2、iconst_3、iconst_4、iconst_5指令将常量压入栈中，取值-1时采用iconst_m1指令将常量压入栈中。</p>
-<h3 id="bipush"><a href="#bipush" class="headerlink" title="bipush"></a><strong>bipush</strong></h3><p>当int取值<strong>-128~127</strong>时，JVM采用<strong>bipush</strong>指令将常量压入栈中。<br>定义<strong>Test.java</strong>文件</p>
-<pre><code class="java">public static void main(String[] args) {
-    int i = 127;
-}
-</code></pre>
-<p>查看<strong>class</strong>文件</p>
-<pre><code class="java">public static void main(java.lang.String[]);
-  Code:
-   0:   bipush  127
-   2:   istore_1
-   3:   return
-}
-</code></pre>
-<p>可以看到上面代码第三行是采用<strong>bipush</strong>指令将常量127压入栈中。</p>
-<h3 id="sipush"><a href="#sipush" class="headerlink" title="sipush"></a><strong>sipush</strong></h3><p>当int取值<strong>-32768~32767</strong>时，JVM采用<strong>sipush</strong>指令将常量压入栈中。<br>定义<strong>Test.java</strong>文件</p>
-<pre><code class="java">public static void main(String[] args) {
-    int i = 32767;
-}
-</code></pre>
-<p>查看<strong>class</strong>文件</p>
-<pre><code class="java">public static void main(java.lang.String[]);
-  Code:
-   0:   sipush  32767
-   3:   istore_1
-   4:   return
-}
-</code></pre>
-<p>可以看到上面代码第三行是采用<strong>sipush</strong>指令将常量32767压入栈中。</p>
-<h3 id="ldc"><a href="#ldc" class="headerlink" title="ldc"></a><strong>ldc</strong></h3><p>当int取值<strong>-2147483648~2147483647</strong>时，JVM采用<strong>ldc</strong>指令将常量压入栈中。<br>定义<strong>Test.java</strong>文件</p>
-<pre><code class="java">public static void main(String[] args) {
-    int i = Integer.MAX_VALUE;
-}
-</code></pre>
-<p>查看<strong>class</strong>文件</p>
-<pre><code class="java">public static void main(java.lang.String[]);
-  Code:
-   0:   ldc     #2; //int 2147483647
-   2:   istore_1
-   3:   return
-}
-</code></pre>
-<p>可以看到上面代码第三行是采用<strong>ldc</strong>指令将2147483647常量压入栈中，需要注意的是ldc指令是从常量池中获取值的，也就是说在这段范围（<strong>-2147483648~2147483647</strong>）内的int值是存储在常量池中的。</p>
-<h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a><strong>参考</strong></h2><p><a href="http://docs.oracle.com/javase/specs/jvms/se7/html/jvms-4.html" target="_blank" rel="external">JVM规范</a></p>
-]]></content>
-    
-    <summary type="html">
-    
-      本篇主要介绍下int类型数值入栈指令iconst、bipush、sipush、ldc
-    
-    </summary>
-    
-      <category term="技术" scheme="http://www.linmuxi.com/categories/%E6%8A%80%E6%9C%AF/"/>
-    
-    
       <category term="JVM" scheme="http://www.linmuxi.com/tags/JVM/"/>
-    
-      <category term="Java" scheme="http://www.linmuxi.com/tags/Java/"/>
     
   </entry>
   
