@@ -5,7 +5,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://www.linmuxi.com/"/>
-  <updated>2017-02-22T03:08:56.410Z</updated>
+  <updated>2017-03-01T03:12:05.353Z</updated>
   <id>http://www.linmuxi.com/</id>
   
   <author>
@@ -14,6 +14,32 @@
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>GC之“Stop The World”</title>
+    <link href="http://www.linmuxi.com/2017/03/01/gc-stop-the-world-01/"/>
+    <id>http://www.linmuxi.com/2017/03/01/gc-stop-the-world-01/</id>
+    <published>2017-03-01T03:05:38.000Z</published>
+    <updated>2017-03-01T03:12:05.353Z</updated>
+    
+    <content type="html"><![CDATA[<p>“Stop The World”是什么，和GC有什么关系？在谈这个之前，先简要叙述以下两点：<br>1、对象内存分代<br>2、JVM垃圾收集器</p>
+<p>大家都知道，JVM内存堆可以简单分为年轻代、老年代、持久代；其中年轻代又分为三部分：1个Eden区和2个Survivor区域（From和To）</p>
+<p>JVM提供了多种垃圾收集器，例如：serial、parnew、parallel scavenge、serial old、parallelold、cms、G1；每种垃圾收集器采用的收集算法又不一样，有的采用了一种收集算法，有的则是多种收集算法组合。</p>
+<p>关于垃圾收集算法有标记-清除、复制算法、标记-整理、分代收集</p>
+<p>回到正题，“Stop The World”是什么？因为JVM内存堆是分代的，不同的分代采用的垃圾收集器是不一样的；<br>例如在JDK1.3.1之前Serial收集器是年轻代垃圾收集的唯一选择；<br>Serial收集器，是单线程收集器，在进行垃圾收集时，必须暂停其他所有工作线程，直到它收集结束。这个就是Serial收集器的工作特性，我们也把这个特性称为“Stop The World”；<br>自然我们会想到，“Stop The World”的存在，假如GC耗时较长，那么我们的系统会处于一种假死状态。<br>当然随着JVM虚拟机的发展，“Stop The World”得到的很大的优化和缓解，具体大家可以了解CMS等垃圾收集器工作原理</p>
+]]></content>
+    
+    <summary type="html">
+    
+      &lt;p&gt;“Stop The World”是什么，和GC有什么关系？在谈这个之前，先简要叙述以下两点：&lt;br&gt;1、对象内存分代&lt;br&gt;2、JVM垃圾收集器&lt;/p&gt;
+&lt;p&gt;大家都知道，JVM内存堆可以简单分为年轻代、老年代、持久代；其中年轻代又分为三部分：1个Eden区和2个Survi
+    
+    </summary>
+    
+      <category term="技术" scheme="http://www.linmuxi.com/categories/%E6%8A%80%E6%9C%AF/"/>
+    
+    
+  </entry>
   
   <entry>
     <title>可靠性设计之服务故障隔离</title>
@@ -1397,91 +1423,6 @@ public class RuntimeConstantPoolOOM {
     
     
       <category term="Java" scheme="http://www.linmuxi.com/tags/Java/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>JVM字节码之简单解读01</title>
-    <link href="http://www.linmuxi.com/2016/02/26/jvm-class-read-01/"/>
-    <id>http://www.linmuxi.com/2016/02/26/jvm-class-read-01/</id>
-    <published>2016-02-26T02:41:39.000Z</published>
-    <updated>2017-02-07T08:45:10.660Z</updated>
-    
-    <content type="html"><![CDATA[<p>本篇通过一段简单的代码来分析下字节码的执行，认识认识几个常见的字节码指令<br><a id="more"></a></p>
-<h2 id="Java源代码"><a href="#Java源代码" class="headerlink" title="Java源代码"></a><strong>Java源代码</strong></h2><pre><code class="java">public static void main(String[] args) {
-    int i = 100;
-    int j = 200 + i - 100;
-    int z = j++;
-    System.out.println(z+i);
-}
-</code></pre>
-<p>上面源码执行之后的结果是300，下面我们就通过分析class来看看结果是怎么得来的。</p>
-<h2 id="Class字节码"><a href="#Class字节码" class="headerlink" title="Class字节码"></a><strong>Class字节码</strong></h2><pre><code class="java">public static void main(java.lang.String[]);
-  Code:
-   Stack=3, Locals=4, Args_size=1
-   0:   bipush  100
-   2:   istore_1
-   3:   sipush  200
-   6:   iload_1
-   7:   iadd
-   8:   bipush  100
-   10:  isub
-   11:  istore_2
-   12:  iload_2
-   13:  iinc    2, 1
-   16:  istore_3
-   17:  getstatic       #2; //Field java/lang/System.out:Ljava/io/PrintStream;
-   20:  iload_3
-   21:  iload_1
-   22:  iadd
-   23:  invokevirtual   #3; //Method java/io/PrintStream.println:(I)V
-   26:  return
-}
-</code></pre>
-<p>下面我们就来分析下字节码的执行：<br><strong>Stack=3, Locals=4, Args_size=1</strong>,这段说明栈中元素有3个，局部变量表中有元素4个，参数1个</p>
-<p><strong>0:   bipush  100</strong>      # 将常量100压入栈中<br><strong>2:   istore_1</strong>          # 从栈中取出常量100存储到局部变量表中，下标索引为1<br><img src="http://7xqlat.com1.z0.glb.clouddn.com/jvm_read_class_stack_01.png-hunterblog" alt=""></p>
-<p><strong>3:   sipush  200</strong>      # 将常量200压入栈中<br><strong>6:   iload_1</strong>          # 将下标索引为1的常量从局部变量表中压入栈中。<br><img src="http://7xqlat.com1.z0.glb.clouddn.com/jvm_read_class_stack_02.png-hunterblog" alt=""></p>
-<p><strong>7:   iadd      </strong>       # 从栈中取出两个整型常量相加并将结果存储到栈中<br><img src="http://7xqlat.com1.z0.glb.clouddn.com/jvm_read_class_stack_03.png-hunterblog" alt=""></p>
-<p><strong>8:   bipush  100  </strong>    # 将常量100压入栈中<br><img src="http://7xqlat.com1.z0.glb.clouddn.com/jvm_read_class_stack_04.png-hunterblog" alt=""></p>
-<p><strong>10:  isub      </strong>       # 从栈中取出两个整型常量做相减并将结果存储到栈中<br><img src="http://7xqlat.com1.z0.glb.clouddn.com/jvm_read_class_stack_05.png-hunterblog" alt=""></p>
-<p><strong>11:  istore_2    </strong>      # 从栈中取出常量存储到局部变量表中，下标索引为2<br><img src="http://7xqlat.com1.z0.glb.clouddn.com/jvm_read_class_stack_06.png-hunterblog" alt=""></p>
-<p><strong>12:  iload_2     </strong>     # 将下标索引为2的常量从局部变量表中压入栈中<br><strong>13:  iinc    2, 1 </strong>    # 将局部变量表中下标索引为2的变量自增。<br><img src="http://7xqlat.com1.z0.glb.clouddn.com/jvm_read_class_stack_07.png-hunterblog" alt=""></p>
-<p><strong>16:  istore_3   </strong>      # 从栈中取出常量存储到局部变量表中，下标索引为3<br><img src="http://7xqlat.com1.z0.glb.clouddn.com/jvm_read_class_stack_08.png-hunterblog" alt=""></p>
-<p><strong>17:  getstatic </strong>      #2; //Field java/lang/System.out:Ljava/io/PrintStream;<br><strong>20:  iload_3  </strong>        # 将下标索引为3的常量从局部变量表中压入栈中<br><strong>21:  iload_1  </strong>        # 将下标索引为1的常量从局部变量表中压入栈中<br><img src="http://7xqlat.com1.z0.glb.clouddn.com/jvm_read_class_stack_09.png-hunterblog" alt=""></p>
-<p><strong>22:  iadd    </strong>         # 从栈中取出两个整型常量相加并将结果存储到栈中<br><img src="http://7xqlat.com1.z0.glb.clouddn.com/jvm_read_class_stack_10.png-hunterblog" alt=""></p>
-<p><strong>23:  invokevirtual </strong>  #3; //Method java/io/PrintStream.println:(I)V<br><strong>26:  return</strong></p>
-<p>所以最后执行结果是300</p>
-<p>大家可能注意到了，在字节码第三行<strong>Stack=3, Locals=4, Args_size=1</strong>，显示的是栈中有3个元素，为什么我们这里只有两个？其实栈中还有一个this元素，由于this不在本篇介绍范围之类，所以例图就省略了，特此说明下。大家可能疑惑这个this是什么时候入栈的，通过下面的代码相信大家就明白了</p>
-<pre><code class="java">public test.Test();
-  Code:
-   Stack=1, Locals=1, Args_size=1
-   0:   aload_0
-   1:   invokespecial   #1; //Method java/lang/Object.&quot;&lt;init&gt;&quot;:()V
-   4:   return
-  LineNumberTable:
-   line 3: 0
-</code></pre>
-<!-- PS：由于认识较肤浅，如文中有不适当或有误的地方还望大家不吝指出。 -->
-<h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a><strong>参考</strong></h2><p><a href="https://en.wikipedia.org/wiki/Java_bytecode_instruction_listings" target="_blank" rel="external">Java字节码指令列表</a></p>
-<!--
-查看字节码
-javap -c Test
-javap -v Test
-javap -v Test > E:/Test.dc
--->]]></content>
-    
-    <summary type="html">
-    
-      本篇通过一段简单的代码来分析下字节码的执行，认识认识几个常见的字节码指令
-    
-    </summary>
-    
-      <category term="技术" scheme="http://www.linmuxi.com/categories/%E6%8A%80%E6%9C%AF/"/>
-    
-    
-      <category term="Java" scheme="http://www.linmuxi.com/tags/Java/"/>
-    
-      <category term="JVM" scheme="http://www.linmuxi.com/tags/JVM/"/>
     
   </entry>
   
