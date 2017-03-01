@@ -10,7 +10,7 @@ keywords: stop the world
 
 大家都知道，JVM内存堆可以简单分为年轻代、老年代、持久代；其中年轻代又分为三部分：1个Eden区和2个Survivor区域（From和To）
 
-JVM提供了多种垃圾收集器，例如：serial、parnew、parallel scavenge、serial old、parallelold、cms、G1；每种垃圾收集器采用的收集算法又不一样，有的采用了一种收集算法，有的则是多种收集算法组合。
+JVM提供了多种垃圾收集器，例如：serial、parnew、parallel scavenge、serial old、parallelold、cms、G1；每种垃圾收集器采用的收集算法又不一样。
 
 关于垃圾收集算法有标记-清除、复制算法、标记-整理、分代收集
 
