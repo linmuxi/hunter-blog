@@ -102,7 +102,7 @@ cd /opt
 wget http://download.redis.io/releases/redis-3.2.8.tar.gz
 tar -zxf">
 <meta property="og:image" content="http://7xqlat.com1.z0.glb.clouddn.com/redis-create-cluster-01.png">
-<meta property="og:updated_time" content="2017-03-07T04:19:28.071Z">
+<meta property="og:updated_time" content="2017-03-07T08:04:39.840Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Redis集群配置说明">
 <meta name="twitter:description" content="环境说明redis版本：3.2.8两台ubuntu，IP分别是：172.28.23.4、172.28.23.83，下面简称为ubuntuA、ubuntuB分别在ubuntuA和ubuntuB上面运行3个redis实例
@@ -409,7 +409,8 @@ make &amp;&amp; make install
 <pre><code>apt-get update
 apt-get install ruby
 gem install redis
-</code></pre><h4 id="实战操作"><a href="#实战操作" class="headerlink" title="实战操作"></a>实战操作</h4><p>1、创建redis节点目录<br>step1.在ubuntuA上redis根目录下创建redis_cluster目录</p>
+</code></pre><a id="more"></a>
+<h4 id="实战操作"><a href="#实战操作" class="headerlink" title="实战操作"></a>实战操作</h4><p>1、创建redis节点目录<br>step1.在ubuntuA上redis根目录下创建redis_cluster目录</p>
 <pre><code>cd redis-3.2.8
 mkdir redis_cluster
 </code></pre><p>step2.在redis_cluster目录下分别创建8001、8002、8003目录，并将redis根目录下的redis.conf复制到这三个目录下</p>
