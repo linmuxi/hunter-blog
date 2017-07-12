@@ -34,6 +34,8 @@ apt-get install ruby
 gem install redis
 ~~~
 
+<!--more-->
+
 #### 实战操作 ####
 
 1、创建redis节点目录
