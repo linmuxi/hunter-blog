@@ -153,6 +153,18 @@
 
 
 
+  <div style="display: none;">
+    <script src="//s95.cnzz.com/z_stat.php?id=1259167020&web_id=1259167020" language="JavaScript"></script>
+
+	<!--
+<script type="text/javascript">var cnzz_protocol = (("https:" == document.location.protocol) ? " https://" : " http://");document.write(unescape("%3Cspan id='cnzz_stat_icon_1259167020'%3E%3C/span%3E%3Cscript src='" + cnzz_protocol + "s4.cnzz.com/z_stat.php%3Fid%3D1259167020%26show%3Dpic' type='text/javascript'%3E%3C/script%3E"));</script>
+    -->
+
+
+  </div>
+
+
+
 
 
   
@@ -347,13 +359,6 @@
 
           
             
-              <span class="post-comments-count">
-                <span class="post-meta-divider">|</span>
-                <a href="/2017/03/07/redis-cluster-deploy-01/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count ds-thread-count" data-thread-key="2017/03/07/redis-cluster-deploy-01/" itemprop="commentCount"></span>
-                </a>
-              </span>
-            
           
 
           
@@ -387,20 +392,10 @@
       
         
           <h4 id="环境说明"><a href="#环境说明" class="headerlink" title="环境说明"></a>环境说明</h4><p>redis版本：3.2.8<br>两台ubuntu，IP分别是：172.28.23.4、172.28.23.83，下面简称为ubuntuA、ubuntuB<br>分别在ubuntuA和ubuntuB上面运行3个redis实例</p>
-<h4 id="环境准备"><a href="#环境准备" class="headerlink" title="环境准备"></a>环境准备</h4><p>1、下载解压redis</p>
-<pre><code class="shell">cd /opt
-wget http://download.redis.io/releases/redis-3.2.8.tar.gz
-tar -zxf redis-3.2.8.tar.gz
-</code></pre>
-<p>2、编译安装</p>
-<pre><code>cd redis-3.2.8
-make &amp;&amp; make install
-</code></pre><p>安装完成后可以运行make test检查安装是否正确</p>
-<p>3、ruby运行环境安装<br>因为后面我们需要使用到redis提供的redis-trib.rb来进行集群节点操作，该脚本是用ruby语言编写，所以需要先安装ruby运行环境</p>
-<pre><code>apt-get update
-apt-get install ruby
-gem install redis
-</code></pre>
+<h4 id="环境准备"><a href="#环境准备" class="headerlink" title="环境准备"></a>环境准备</h4><p>1、下载解压redis<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">cd /opt</div><div class="line">wget http://download.redis.io/releases/redis-3.2.8.tar.gz</div><div class="line">tar -zxf redis-3.2.8.tar.gz</div></pre></td></tr></table></figure></p>
+<p>2、编译安装<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">cd redis-3.2.8</div><div class="line">make &amp;&amp; make install</div></pre></td></tr></table></figure></p>
+<p>安装完成后可以运行make test检查安装是否正确</p>
+<p>3、ruby运行环境安装<br>因为后面我们需要使用到redis提供的redis-trib.rb来进行集群节点操作，该脚本是用ruby语言编写，所以需要先安装ruby运行环境<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">apt-get update</div><div class="line">apt-get install ruby</div><div class="line">gem install redis</div></pre></td></tr></table></figure></p>
           <!--noindex-->
           <div class="post-more-link text-center">
             <a class="btn" href="/2017/03/07/redis-cluster-deploy-01/#more" rel="contents">
@@ -515,13 +510,6 @@ gem install redis
           
 
           
-            
-              <span class="post-comments-count">
-                <span class="post-meta-divider">|</span>
-                <a href="/2017/03/01/gc-stop-the-world-01/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count ds-thread-count" data-thread-key="2017/03/01/gc-stop-the-world-01/" itemprop="commentCount"></span>
-                </a>
-              </span>
             
           
 
@@ -670,13 +658,6 @@ gem install redis
           
 
           
-            
-              <span class="post-comments-count">
-                <span class="post-meta-divider">|</span>
-                <a href="/2017/02/22/system-design-service-fault-isulate-01/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count ds-thread-count" data-thread-key="2017/02/22/system-design-service-fault-isulate-01/" itemprop="commentCount"></span>
-                </a>
-              </span>
             
           
 
@@ -827,13 +808,6 @@ gem install redis
 
           
             
-              <span class="post-comments-count">
-                <span class="post-meta-divider">|</span>
-                <a href="/2016/07/04/spring-security-integration/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/07/04/spring-security-integration/" itemprop="commentCount"></span>
-                </a>
-              </span>
-            
           
 
           
@@ -979,13 +953,6 @@ gem install redis
           
 
           
-            
-              <span class="post-comments-count">
-                <span class="post-meta-divider">|</span>
-                <a href="/2016/06/27/jvm-note-classfile/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/06/27/jvm-note-classfile/" itemprop="commentCount"></span>
-                </a>
-              </span>
             
           
 
@@ -1135,13 +1102,6 @@ gem install redis
 
           
             
-              <span class="post-comments-count">
-                <span class="post-meta-divider">|</span>
-                <a href="/2016/06/23/jvm-note-gc/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/06/23/jvm-note-gc/" itemprop="commentCount"></span>
-                </a>
-              </span>
-            
           
 
           
@@ -1289,13 +1249,6 @@ gem install redis
           
 
           
-            
-              <span class="post-comments-count">
-                <span class="post-meta-divider">|</span>
-                <a href="/2016/06/13/jvm-note-javamemoryarea/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/06/13/jvm-note-javamemoryarea/" itemprop="commentCount"></span>
-                </a>
-              </span>
             
           
 
@@ -1445,13 +1398,6 @@ gem install redis
 
           
             
-              <span class="post-comments-count">
-                <span class="post-meta-divider">|</span>
-                <a href="/2016/06/02/jvm-note-concurrent/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/06/02/jvm-note-concurrent/" itemprop="commentCount"></span>
-                </a>
-              </span>
-            
           
 
           
@@ -1600,13 +1546,6 @@ gem install redis
 
           
             
-              <span class="post-comments-count">
-                <span class="post-meta-divider">|</span>
-                <a href="/2016/05/31/oracle-login-security-01/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/05/31/oracle-login-security-01/" itemprop="commentCount"></span>
-                </a>
-              </span>
-            
           
 
           
@@ -1754,13 +1693,6 @@ gem install redis
           
 
           
-            
-              <span class="post-comments-count">
-                <span class="post-meta-divider">|</span>
-                <a href="/2016/05/16/androidstudio-modify-workstruct-01/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/05/16/androidstudio-modify-workstruct-01/" itemprop="commentCount"></span>
-                </a>
-              </span>
             
           
 
@@ -2034,33 +1966,14 @@ gem install redis
 
   
 
-  
-    
-  
 
-  <script type="text/javascript">
-    var duoshuoQuery = {short_name:"hunterlin"};
-    (function() {
-      var ds = document.createElement('script');
-      ds.type = 'text/javascript';ds.async = true;
-      ds.id = 'duoshuo-script';
-      ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
-      ds.charset = 'UTF-8';
-      (document.getElementsByTagName('head')[0]
-      || document.getElementsByTagName('body')[0]).appendChild(ds);
-    })();
-  </script>
 
-  
-    
-    
-    <script src="/lib/ua-parser-js/dist/ua-parser.min.js?v=0.7.9"></script>
-    <script src="/js/src/hook-duoshuo.js"></script>
   
 
 
 
 
+	
 
 
 

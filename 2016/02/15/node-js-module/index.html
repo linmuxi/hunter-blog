@@ -156,6 +156,18 @@
 
 
 
+  <div style="display: none;">
+    <script src="//s95.cnzz.com/z_stat.php?id=1259167020&web_id=1259167020" language="JavaScript"></script>
+
+	<!--
+<script type="text/javascript">var cnzz_protocol = (("https:" == document.location.protocol) ? " https://" : " http://");document.write(unescape("%3Cspan id='cnzz_stat_icon_1259167020'%3E%3C/span%3E%3Cscript src='" + cnzz_protocol + "s4.cnzz.com/z_stat.php%3Fid%3D1259167020%26show%3Dpic' type='text/javascript'%3E%3C/script%3E"));</script>
+    -->
+
+
+  </div>
+
+
+
 
 
   
@@ -345,13 +357,6 @@
 
           
             
-              <span class="post-comments-count">
-                <span class="post-meta-divider">|</span>
-                <a href="/2016/02/15/node-js-module/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/02/15/node-js-module/" itemprop="commentCount"></span>
-                </a>
-              </span>
-            
           
 
           
@@ -402,20 +407,9 @@
 <li>/pathtomodule/mod，绝对路径的文件模块。</li>
 <li>mod，非原生模块的文件模块。</li>
 </ol>
-<p><strong> 自定义模块 </strong><br>首先，我们创建一个文件命名为：hello.js，内容如下：</p>
-<pre><code class="js">exports.hello = function(){
-    console.log(&quot;hello&quot;);
-}
-/**
-module.exports.hello = function(){
-    console.log(&quot;hello&quot;);
-}
-**/
-</code></pre>
+<p><strong> 自定义模块 </strong><br>首先，我们创建一个文件命名为：hello.js，内容如下：<br><figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">exports.hello = <span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</div><div class="line">	<span class="built_in">console</span>.log(<span class="string">"hello"</span>);</div><div class="line">&#125;</div><div class="line"><span class="comment">/**</span></div><div class="line">module.exports.hello = function()&#123;</div><div class="line">	console.log("hello");</div><div class="line">&#125;</div><div class="line">**/</div></pre></td></tr></table></figure></p>
 <p>hello.js返回exports对象，即：{hello:Function}</p>
-<p>接下来我们创建另外一个文件：main.js,内容如下：</p>
-<pre><code class="js">require(&quot;./hello&quot;)();
-</code></pre>
+<p>接下来我们创建另外一个文件：main.js,内容如下：<br><figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">require</span>(<span class="string">"./hello"</span>)();</div></pre></td></tr></table></figure></p>
 <p>在main.js文件中，代码require(“./hello”)引入了当前目录下的hello.js文件(默认.js后缀),即引入了我们定义的hello模块。</p>
 <p>注意：require(“./hello”) 是引入当前目录下面的hello.js,也可以是引入当前目录下的hello目录(hello目录中有index.js文件)，这两种方法效果一样，hexo的启动方式就是采用第二种方式进行的。<br>目录结构如下：</p>
 <ul>
@@ -428,22 +422,10 @@ module.exports.hello = function(){
 </ul>
 </li>
 </ul>
-<p>index.js文件内容如下：</p>
-<pre><code class="js">&#39;use strict&#39;
-module.exports = function(){
-    console.log(&quot;hello world&quot;);
-}
-</code></pre>
-<p>main.js文件内容如下：</p>
-<pre><code class="js">&#39;use strict&#39;
-require(&#39;./lib&#39;)();
-</code></pre>
+<p>index.js文件内容如下：<br><figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="meta">'use strict'</span></div><div class="line"><span class="built_in">module</span>.exports = <span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</div><div class="line">	<span class="built_in">console</span>.log(<span class="string">"hello world"</span>);</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>main.js文件内容如下：<br><figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="meta">'use strict'</span></div><div class="line"><span class="built_in">require</span>(<span class="string">'./lib'</span>)();</div></pre></td></tr></table></figure></p>
 <p>即：require(‘./lib/index.js’) == require(‘./lib’);</p>
-<p><strong> 服务端模块 </strong><br>Node.js提供了很多内置的服务端模块供我们使用，大大的提高了我们的开发效率。<br>例如：使用提供的http模块</p>
-<pre><code class="js">var http = require(&quot;http&quot;);
-...
-http.createServer(...);
-</code></pre>
+<p><strong> 服务端模块 </strong><br>Node.js提供了很多内置的服务端模块供我们使用，大大的提高了我们的开发效率。<br>例如：使用提供的http模块<br><figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> http = <span class="built_in">require</span>(<span class="string">"http"</span>);</div><div class="line">...</div><div class="line">http.createServer(...);</div></pre></td></tr></table></figure></p>
 <p>关于服务端内置模块的查找规则如下：</p>
 <p>在Node.js中模块分为2类：原生模块和文件模块</p>
 <p>其中文件模块分为3类模块，通过后缀来区分，Node.js会根据后缀来决定加载方法。</p>
@@ -546,9 +528,25 @@ http.createServer(...);
           
   <div class="comments" id="comments">
     
-      <div class="ds-thread" data-thread-key="2016/02/15/node-js-module/"
-           data-title="Node.js的模块系统" data-url="http://www.linmuxi.com/2016/02/15/node-js-module/">
+      <!-- 来必力City版安装代码 -->
+      <div id="lv-container" data-id="city" data-uid="MTAyMC8zMDE0NS82NzAw">
+        <script type="text/javascript">
+         (function(d, s) {
+             var j, e = d.getElementsByTagName(s)[0];
+
+             if (typeof LivereTower === 'function') { return; }
+
+             j = d.createElement(s);
+             j.src = 'https://cdn-city.livere.com/js/embed.dist.js';
+             j.async = true;
+
+             e.parentNode.insertBefore(j, e);
+         })(document, 'script');
+        </script>
+      <noscript> 为正常使用来必力评论功能请激活JavaScript</noscript>
       </div>
+      <!-- City版安装代码已完成 -->
+
     
   </div>
 
@@ -747,33 +745,14 @@ http.createServer(...);
 
   
 
-  
-    
-  
 
-  <script type="text/javascript">
-    var duoshuoQuery = {short_name:"hunterlin"};
-    (function() {
-      var ds = document.createElement('script');
-      ds.type = 'text/javascript';ds.async = true;
-      ds.id = 'duoshuo-script';
-      ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
-      ds.charset = 'UTF-8';
-      (document.getElementsByTagName('head')[0]
-      || document.getElementsByTagName('body')[0]).appendChild(ds);
-    })();
-  </script>
 
-  
-    
-    
-    <script src="/lib/ua-parser-js/dist/ua-parser.min.js?v=0.7.9"></script>
-    <script src="/js/src/hook-duoshuo.js"></script>
   
 
 
 
 
+	
 
 
 

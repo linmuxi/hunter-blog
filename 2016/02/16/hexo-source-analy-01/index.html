@@ -154,6 +154,18 @@
 
 
 
+  <div style="display: none;">
+    <script src="//s95.cnzz.com/z_stat.php?id=1259167020&web_id=1259167020" language="JavaScript"></script>
+
+	<!--
+<script type="text/javascript">var cnzz_protocol = (("https:" == document.location.protocol) ? " https://" : " http://");document.write(unescape("%3Cspan id='cnzz_stat_icon_1259167020'%3E%3C/span%3E%3Cscript src='" + cnzz_protocol + "s4.cnzz.com/z_stat.php%3Fid%3D1259167020%26show%3Dpic' type='text/javascript'%3E%3C/script%3E"));</script>
+    -->
+
+
+  </div>
+
+
+
 
 
   
@@ -343,13 +355,6 @@
 
           
             
-              <span class="post-comments-count">
-                <span class="post-meta-divider">|</span>
-                <a href="/2016/02/16/hexo-source-analy-01/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/02/16/hexo-source-analy-01/" itemprop="commentCount"></span>
-                </a>
-              </span>
-            
           
 
           
@@ -383,24 +388,8 @@
       
         <p>Hexo使用已经有段时间了，昨天想利用Google-Code-Prettify取代Hexo默认的高亮配置，修改了_config.yml的highlight为false，结果在生成静态文件的时候报错，由于对Hexo内部运转不是太清楚，为了解决这个问题，我不得不深入研究下Hexo的源码来了解其运行过程。<br><a id="more"></a><br>hexo-cli安装完成后，需要进行环境变量配置，这样我们才能在dos中使用hexo命令。<br>我这里的nodejs是安装在E:\opensource\nodejs目录下面,那么需要把E:\opensource\nodejs配置到path变量中。</p>
 <p>我们在dos中执行：<code>hexo help</code>，其实是调用E:\opensource\nodejs目录下面的hexo.cmd批处理文件。</p>
-<p><strong>hexo.cmd</strong></p>
-<pre><code class="bash">rem 先判断当前目录下是否存在node.exe
-@IF EXIST &quot;%~dp0\node.exe&quot; (
-  rem 存在则调用当前目录下面的node_modules\hexo-cli\bin\hexo 模块
-  &quot;%~dp0\node.exe&quot;  &quot;%~dp0\node_modules\hexo-cli\bin\hexo&quot; %*
-) ELSE (
-  @SETLOCAL
-  @SET PATHEXT=%PATHEXT:;.JS;=;%
-  node  &quot;%~dp0\node_modules\hexo-cli\bin\hexo&quot; %*
-)
-</code></pre>
-<p><strong>hexo模块</strong></p>
-<pre><code class="bash">#!/usr/bin/env node
-
-&#39;use strict&#39;;
-//调用上一层目录lib(执行下面的index.js文件)
-require(&#39;../lib&#39;)();
-</code></pre>
+<p><strong>hexo.cmd</strong><br><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">rem 先判断当前目录下是否存在node.exe</div><div class="line">@IF EXIST <span class="string">"%~dp0\node.exe"</span> (</div><div class="line">  rem 存在则调用当前目录下面的node_modules\hexo-cli\bin\hexo 模块</div><div class="line">  <span class="string">"%~dp0\node.exe"</span>  <span class="string">"%~dp0\node_modules\hexo-cli\bin\hexo"</span> %*</div><div class="line">) ELSE (</div><div class="line">  @SETLOCAL</div><div class="line">  @SET PATHEXT=%PATHEXT:;.JS;=;%</div><div class="line">  node  <span class="string">"%~dp0\node_modules\hexo-cli\bin\hexo"</span> %*</div><div class="line">)</div></pre></td></tr></table></figure></p>
+<p><strong>hexo模块</strong><br><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="comment">#!/usr/bin/env node</span></div><div class="line"></div><div class="line"><span class="string">'use strict'</span>;</div><div class="line">//调用上一层目录lib(执行下面的index.js文件)</div><div class="line">require(<span class="string">'../lib'</span>)();</div></pre></td></tr></table></figure></p>
 <p>lib目录结构：</p>
 <ul>
 <li>lib<ul>
@@ -419,57 +408,10 @@ require(&#39;../lib&#39;)();
 </ul>
 </li>
 </ul>
-<p><strong>lib/index.js文件</strong><br>主要是调用find_pkg模块进行package.json的查找</p>
-<pre><code class="js">exports = module.exports = function() {
-  //调用find_pkg模块进行包查找
-  return findPkg(cwd, args).then(function(path) {
-    //如果当前目录不存在则调用hexo-cli命令输出
-    if (!path) return runCLICommand(args);
-    //如果找到了package.json，则加载Hexo模块
-    return loadHexoModule(path, args);
-  }).catch(handleError);
-};
-</code></pre>
-<p><strong>lib/find_pkg.js</strong><br>主要是查找当前目录下的package.json文件</p>
-<pre><code class="js">function findPkg(path) {
-  //查找当前目录下面的package.json,例如：E:\demo\hexo\source_analy\pakcage.json
-  var pkgPath = pathFn.join(path, &#39;package.json&#39;);
-
-  return fs.exists(pkgPath).then(function(exist) {
-    //如果找到了package.json则检查是否是hexo包声明
-    return exist ? checkPkg(pkgPath) : false;
-  }).then(function(exist) {
-    if (exist) return path;
-    //如果没有找到，则往上一目录进行查找
-    var parent = pathFn.dirname(path);
-    if (parent === path) return;
-
-    return findPkg(parent);
-  });
-}
-</code></pre>
-<p>假设我们的hexo环境已经初始化好(hexo init)，通过find_pkg模块已经查找到了package.json，接着会加载Hexo模块<br><!-- 新建一个目录E:/demo/hexo/source_analy,切换当前路径到该目录下面，然后执行:`hexo init & npm install hexo --save`。 --></p>
-<pre><code class="js">function loadHexoModule(path, args) {
-  var modulePath = pathFn.join(path, &#39;node_modules&#39;, &#39;hexo&#39;);
-
-  try {
-    //请求当前目录下面的/node_modules/hexo模块,这里我的全路径是：E:\demo\hexo\source_analy\node_modules\hexo
-    var Hexo = require(modulePath);
-    if(1==1){return;}
-    var hexo = new Hexo(path, args);
-    log = hexo.log;
-    //处理hexo命令
-    return runHexoCommand(hexo, args);
-  } catch (_) {
-    log.error(&#39;Local hexo not found in %s&#39;, chalk.magenta(tildify(path)));
-    log.error(&#39;Try running: \&#39;npm install hexo --save\&#39;&#39;);
-    process.exit(2);
-  }
-}
-</code></pre>
-<p>上面代码中require(modulePath)中modulePath是一个目录地址，不是js文件，下面没有index.js文件，这里是如何识别他是一个nodejs模块的呢。这就要看该目录下面的package.json文件了,在大概116行，其实是通过这里的main指定了node模块的。</p>
-<pre><code class="json">&quot;main&quot;: &quot;lib/hexo&quot;
-</code></pre>
+<p><strong>lib/index.js文件</strong><br>主要是调用find_pkg模块进行package.json的查找<br><figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">exports = <span class="built_in">module</span>.exports = <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</div><div class="line">  <span class="comment">//调用find_pkg模块进行包查找</span></div><div class="line">  <span class="keyword">return</span> findPkg(cwd, args).then(<span class="function"><span class="keyword">function</span>(<span class="params">path</span>) </span>&#123;</div><div class="line">    <span class="comment">//如果当前目录不存在则调用hexo-cli命令输出</span></div><div class="line">    <span class="keyword">if</span> (!path) <span class="keyword">return</span> runCLICommand(args);</div><div class="line">    <span class="comment">//如果找到了package.json，则加载Hexo模块</span></div><div class="line">    <span class="keyword">return</span> loadHexoModule(path, args);</div><div class="line">  &#125;).catch(handleError);</div><div class="line">&#125;;</div></pre></td></tr></table></figure></p>
+<p><strong>lib/find_pkg.js</strong><br>主要是查找当前目录下的package.json文件<br><figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">findPkg</span>(<span class="params">path</span>) </span>&#123;</div><div class="line">  <span class="comment">//查找当前目录下面的package.json,例如：E:\demo\hexo\source_analy\pakcage.json</span></div><div class="line">  <span class="keyword">var</span> pkgPath = pathFn.join(path, <span class="string">'package.json'</span>);</div><div class="line"></div><div class="line">  <span class="keyword">return</span> fs.exists(pkgPath).then(<span class="function"><span class="keyword">function</span>(<span class="params">exist</span>) </span>&#123;</div><div class="line">    <span class="comment">//如果找到了package.json则检查是否是hexo包声明</span></div><div class="line">    <span class="keyword">return</span> exist ? checkPkg(pkgPath) : <span class="literal">false</span>;</div><div class="line">  &#125;).then(<span class="function"><span class="keyword">function</span>(<span class="params">exist</span>) </span>&#123;</div><div class="line">    <span class="keyword">if</span> (exist) <span class="keyword">return</span> path;</div><div class="line">	<span class="comment">//如果没有找到，则往上一目录进行查找</span></div><div class="line">    <span class="keyword">var</span> parent = pathFn.dirname(path);</div><div class="line">    <span class="keyword">if</span> (parent === path) <span class="keyword">return</span>;</div><div class="line"></div><div class="line">    <span class="keyword">return</span> findPkg(parent);</div><div class="line">  &#125;);</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>假设我们的hexo环境已经初始化好(hexo init)，通过find_pkg模块已经查找到了package.json，接着会加载Hexo模块<br><!-- 新建一个目录E:/demo/hexo/source_analy,切换当前路径到该目录下面，然后执行:`hexo init & npm install hexo --save`。 --><br><figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">loadHexoModule</span>(<span class="params">path, args</span>) </span>&#123;</div><div class="line">  <span class="keyword">var</span> modulePath = pathFn.join(path, <span class="string">'node_modules'</span>, <span class="string">'hexo'</span>);</div><div class="line"></div><div class="line">  <span class="keyword">try</span> &#123;</div><div class="line">    <span class="comment">//请求当前目录下面的/node_modules/hexo模块,这里我的全路径是：E:\demo\hexo\source_analy\node_modules\hexo</span></div><div class="line">    <span class="keyword">var</span> Hexo = <span class="built_in">require</span>(modulePath);</div><div class="line">	<span class="keyword">if</span>(<span class="number">1</span>==<span class="number">1</span>)&#123;<span class="keyword">return</span>;&#125;</div><div class="line">    <span class="keyword">var</span> hexo = <span class="keyword">new</span> Hexo(path, args);</div><div class="line">    log = hexo.log;</div><div class="line">	<span class="comment">//处理hexo命令</span></div><div class="line">    <span class="keyword">return</span> runHexoCommand(hexo, args);</div><div class="line">  &#125; <span class="keyword">catch</span> (_) &#123;</div><div class="line">    log.error(<span class="string">'Local hexo not found in %s'</span>, chalk.magenta(tildify(path)));</div><div class="line">    log.error(<span class="string">'Try running: \'npm install hexo --save\''</span>);</div><div class="line">    process.exit(<span class="number">2</span>);</div><div class="line">  &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>上面代码中require(modulePath)中modulePath是一个目录地址，不是js文件，下面没有index.js文件，这里是如何识别他是一个nodejs模块的呢。这就要看该目录下面的package.json文件了,在大概116行，其实是通过这里的main指定了node模块的。<br><figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">"main": "lib/hexo"</div></pre></td></tr></table></figure></p>
 <p>到这里基本就很清楚Hexo模块是如何加载进来的，下一节着重分析下Hexo模块代码。</p>
 
       
@@ -564,9 +506,25 @@ require(&#39;../lib&#39;)();
           
   <div class="comments" id="comments">
     
-      <div class="ds-thread" data-thread-key="2016/02/16/hexo-source-analy-01/"
-           data-title="读Hexo源码第一节" data-url="http://www.linmuxi.com/2016/02/16/hexo-source-analy-01/">
+      <!-- 来必力City版安装代码 -->
+      <div id="lv-container" data-id="city" data-uid="MTAyMC8zMDE0NS82NzAw">
+        <script type="text/javascript">
+         (function(d, s) {
+             var j, e = d.getElementsByTagName(s)[0];
+
+             if (typeof LivereTower === 'function') { return; }
+
+             j = d.createElement(s);
+             j.src = 'https://cdn-city.livere.com/js/embed.dist.js';
+             j.async = true;
+
+             e.parentNode.insertBefore(j, e);
+         })(document, 'script');
+        </script>
+      <noscript> 为正常使用来必力评论功能请激活JavaScript</noscript>
       </div>
+      <!-- City版安装代码已完成 -->
+
     
   </div>
 
@@ -765,33 +723,14 @@ require(&#39;../lib&#39;)();
 
   
 
-  
-    
-  
 
-  <script type="text/javascript">
-    var duoshuoQuery = {short_name:"hunterlin"};
-    (function() {
-      var ds = document.createElement('script');
-      ds.type = 'text/javascript';ds.async = true;
-      ds.id = 'duoshuo-script';
-      ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
-      ds.charset = 'UTF-8';
-      (document.getElementsByTagName('head')[0]
-      || document.getElementsByTagName('body')[0]).appendChild(ds);
-    })();
-  </script>
 
-  
-    
-    
-    <script src="/lib/ua-parser-js/dist/ua-parser.min.js?v=0.7.9"></script>
-    <script src="/js/src/hook-duoshuo.js"></script>
   
 
 
 
 
+	
 
 
 

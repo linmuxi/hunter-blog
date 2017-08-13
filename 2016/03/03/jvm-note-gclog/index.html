@@ -154,6 +154,18 @@
 
 
 
+  <div style="display: none;">
+    <script src="//s95.cnzz.com/z_stat.php?id=1259167020&web_id=1259167020" language="JavaScript"></script>
+
+	<!--
+<script type="text/javascript">var cnzz_protocol = (("https:" == document.location.protocol) ? " https://" : " http://");document.write(unescape("%3Cspan id='cnzz_stat_icon_1259167020'%3E%3C/span%3E%3Cscript src='" + cnzz_protocol + "s4.cnzz.com/z_stat.php%3Fid%3D1259167020%26show%3Dpic' type='text/javascript'%3E%3C/script%3E"));</script>
+    -->
+
+
+  </div>
+
+
+
 
 
   
@@ -343,13 +355,6 @@
 
           
             
-              <span class="post-comments-count">
-                <span class="post-meta-divider">|</span>
-                <a href="/2016/03/03/jvm-note-gclog/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/03/03/jvm-note-gclog/" itemprop="commentCount"></span>
-                </a>
-              </span>
-            
           
 
           
@@ -387,49 +392,16 @@
       
         <p>读到第3.5.8节，按照文章描述跟着作者的步伐一起测试了下，特做下日志分析记录。<br><a id="more"></a></p>
 <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a><strong>前言</strong></h2><p>本篇以<strong>Serial+Serial Old</strong>组合收集器日志为例来分析下GC日志(-XX:+UseSerialGC)</p>
-<h2 id="GC日志"><a href="#GC日志" class="headerlink" title="GC日志"></a><strong>GC日志</strong></h2><pre><code>[GC[DefNew: 7146K-&gt;484K(9216K), 0.0034871 secs] 7146K-&gt;6628K(19456K), 0.0035216 secs] [Times: user=0.00 sys=0.00, 
-real=0.00 secs] 
-Heap
- def new generation   total 9216K, used 4746K [0x00000000f9a00000, 0x00000000fa400000, 0x00000000fa400000)
-  eden space 8192K,  52% used [0x00000000f9a00000, 0x00000000f9e297b0, 0x00000000fa200000)
-  from space 1024K,  47% used [0x00000000fa300000, 0x00000000fa3791a8, 0x00000000fa400000)
-  to   space 1024K,   0% used [0x00000000fa200000, 0x00000000fa200000, 0x00000000fa300000)
- tenured generation   total 10240K, used 6144K [0x00000000fa400000, 0x00000000fae00000, 0x00000000fae00000)
-   the space 10240K,  60% used [0x00000000fa400000, 0x00000000faa00030, 0x00000000faa00200, 0x00000000fae00000)
- compacting perm gen  total 21248K, used 2582K [0x00000000fae00000, 0x00000000fc2c0000, 0x0000000100000000)
-   the space 21248K,  12% used [0x00000000fae00000, 0x00000000fb085a70, 0x00000000fb085c00, 0x00000000fc2c0000)
-No shared spaces configured.
-</code></pre><h2 id="GC日志说明"><a href="#GC日志说明" class="headerlink" title="GC日志说明"></a><strong>GC日志说明</strong></h2><p>1、“[GC”和“[Full GC”说明了这次垃圾收集的停顿类型，如果有“Full”则说明这次GC是发生了Stop-The-World的(就是在垃圾收集的时候停止了所有用户进程)。如果是调用System.gc()所触发的收集，那么就显示“[Full GC(System)”</p>
+<h2 id="GC日志"><a href="#GC日志" class="headerlink" title="GC日志"></a><strong>GC日志</strong></h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line">[GC[DefNew: 7146K-&gt;484K(9216K), 0.0034871 secs] 7146K-&gt;6628K(19456K), 0.0035216 secs] [Times: user=0.00 sys=0.00, </div><div class="line">real=0.00 secs] </div><div class="line">Heap</div><div class="line"> def new generation   total 9216K, used 4746K [0x00000000f9a00000, 0x00000000fa400000, 0x00000000fa400000)</div><div class="line">  eden space 8192K,  52% used [0x00000000f9a00000, 0x00000000f9e297b0, 0x00000000fa200000)</div><div class="line">  from space 1024K,  47% used [0x00000000fa300000, 0x00000000fa3791a8, 0x00000000fa400000)</div><div class="line">  to   space 1024K,   0% used [0x00000000fa200000, 0x00000000fa200000, 0x00000000fa300000)</div><div class="line"> tenured generation   total 10240K, used 6144K [0x00000000fa400000, 0x00000000fae00000, 0x00000000fae00000)</div><div class="line">   the space 10240K,  60% used [0x00000000fa400000, 0x00000000faa00030, 0x00000000faa00200, 0x00000000fae00000)</div><div class="line"> compacting perm gen  total 21248K, used 2582K [0x00000000fae00000, 0x00000000fc2c0000, 0x0000000100000000)</div><div class="line">   the space 21248K,  12% used [0x00000000fae00000, 0x00000000fb085a70, 0x00000000fb085c00, 0x00000000fc2c0000)</div><div class="line">No shared spaces configured.</div></pre></td></tr></table></figure>
+<h2 id="GC日志说明"><a href="#GC日志说明" class="headerlink" title="GC日志说明"></a><strong>GC日志说明</strong></h2><p>1、“[GC”和“[Full GC”说明了这次垃圾收集的停顿类型，如果有“Full”则说明这次GC是发生了Stop-The-World的(就是在垃圾收集的时候停止了所有用户进程)。如果是调用System.gc()所触发的收集，那么就显示“[Full GC(System)”</p>
 <p>2、“[DefNew”、“[Tenured”、“[Perm”表示GC发生的区域，这里显示的区域名称和使用的GC收集器是有关系的。<br>例如：<br>Serial收集器：新生代名为“Default New Generation”，所以显示“[DefNew”<br>ParNew收集器，新生代名为“Parallel New Generation”，所以显示“[ParNew”<br>Parallel Scavenge收集器，新生代名为“PSYoungGen”<br>老年代和永久代同理，名称也是由收集器决定的。</p>
 <p>3、“7146K-&gt;484K(9216K)”表示“GC前该内存区域(新生代)已使用容量-&gt;GC后该内存区域已使用容量(该内存区域总容量)”</p>
 <p>4、“0.0034871 secs”表示该内存区域GC所占用的时间，单位是秒</p>
 <p>5、“7146K-&gt;6628K(19456K)”表示“GC前Java堆已使用容量-&gt;GC后Java堆已使用容量(Java堆总容量)”</p>
 <p>6、“Times: user=0.00 sys=0.00, real=0.00 secs”分别代表用户态消耗的CPU时间、内核态消耗的CPU时间和操作从开始到结束所经过的墙钟时间。（CPU时间与墙钟时间的区别是，墙钟时间包括各种非运算的等待耗时，例如等待磁盘I/O、等待线程阻塞，而CPU时间不包括这些耗时，但当系统有多CPU或者多核的话，多线程操作会叠加这些CPU时间，所以当看到user或sys时间超过real时间是完全正常的）</p>
-<h2 id="其他收集器日志"><a href="#其他收集器日志" class="headerlink" title="其他收集器日志"></a><strong>其他收集器日志</strong></h2><p>使用<strong>ParNew+Serial Old</strong>收集器组合日志(-XX:+UseParNewGC):</p>
-<pre><code>[GC[ParNew: 7146K-&gt;508K(9216K), 0.0023849 secs] 7146K-&gt;6652K(19456K), 0.0024203 secs] [Times: user=0.00 sys=0.00, 
+<h2 id="其他收集器日志"><a href="#其他收集器日志" class="headerlink" title="其他收集器日志"></a><strong>其他收集器日志</strong></h2><p>使用<strong>ParNew+Serial Old</strong>收集器组合日志(-XX:+UseParNewGC):<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line">[GC[ParNew: 7146K-&gt;508K(9216K), 0.0023849 secs] 7146K-&gt;6652K(19456K), 0.0024203 secs] [Times: user=0.00 sys=0.00, </div><div class="line"></div><div class="line">real=0.02 secs] </div><div class="line">Heap</div><div class="line"> par new generation   total 9216K, used 4770K [0x00000000f9a00000, 0x00000000fa400000, 0x00000000fa400000)</div><div class="line">  eden space 8192K,  52% used [0x00000000f9a00000, 0x00000000f9e297b0, 0x00000000fa200000)</div><div class="line">  from space 1024K,  49% used [0x00000000fa300000, 0x00000000fa37f1b8, 0x00000000fa400000)</div><div class="line">  to   space 1024K,   0% used [0x00000000fa200000, 0x00000000fa200000, 0x00000000fa300000)</div><div class="line"> tenured generation   total 10240K, used 6144K [0x00000000fa400000, 0x00000000fae00000, 0x00000000fae00000)</div><div class="line">   the space 10240K,  60% used [0x00000000fa400000, 0x00000000faa00030, 0x00000000faa00200, 0x00000000fae00000)</div><div class="line"> compacting perm gen  total 21248K, used 2582K [0x00000000fae00000, 0x00000000fc2c0000, 0x0000000100000000)</div><div class="line">   the space 21248K,  12% used [0x00000000fae00000, 0x00000000fb085a70, 0x00000000fb085c00, 0x00000000fc2c0000)</div><div class="line">No shared spaces configured.</div></pre></td></tr></table></figure></p>
+<p>使用<strong>Parallel Scavenge+Parallel Old</strong>收集器组合(-XX:+UseParallelOldGC):<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">Heap</div><div class="line"> PSYoungGen      total 9216K, used 7310K [0x00000000ff600000, 0x0000000100000000, 0x0000000100000000)</div><div class="line">  eden space 8192K, 89% used [0x00000000ff600000,0x00000000ffd23978,0x00000000ffe00000)</div><div class="line">  from space 1024K, 0% used [0x00000000fff00000,0x00000000fff00000,0x0000000100000000)</div><div class="line">  to   space 1024K, 0% used [0x00000000ffe00000,0x00000000ffe00000,0x00000000fff00000)</div><div class="line"> ParOldGen       total 10240K, used 4096K [0x00000000fec00000, 0x00000000ff600000, 0x00000000ff600000)</div><div class="line">  object space 10240K, 40% used [0x00000000fec00000,0x00000000ff000010,0x00000000ff600000)</div><div class="line"> PSPermGen       total 21504K, used 2582K [0x00000000f9a00000, 0x00000000faf00000, 0x00000000fec00000)</div><div class="line">  object space 21504K, 12% used [0x00000000f9a00000,0x00000000f9c85a70,0x00000000faf00000)</div></pre></td></tr></table></figure></p>
 
-real=0.02 secs] 
-Heap
- par new generation   total 9216K, used 4770K [0x00000000f9a00000, 0x00000000fa400000, 0x00000000fa400000)
-  eden space 8192K,  52% used [0x00000000f9a00000, 0x00000000f9e297b0, 0x00000000fa200000)
-  from space 1024K,  49% used [0x00000000fa300000, 0x00000000fa37f1b8, 0x00000000fa400000)
-  to   space 1024K,   0% used [0x00000000fa200000, 0x00000000fa200000, 0x00000000fa300000)
- tenured generation   total 10240K, used 6144K [0x00000000fa400000, 0x00000000fae00000, 0x00000000fae00000)
-   the space 10240K,  60% used [0x00000000fa400000, 0x00000000faa00030, 0x00000000faa00200, 0x00000000fae00000)
- compacting perm gen  total 21248K, used 2582K [0x00000000fae00000, 0x00000000fc2c0000, 0x0000000100000000)
-   the space 21248K,  12% used [0x00000000fae00000, 0x00000000fb085a70, 0x00000000fb085c00, 0x00000000fc2c0000)
-No shared spaces configured.
-</code></pre><p>使用<strong>Parallel Scavenge+Parallel Old</strong>收集器组合(-XX:+UseParallelOldGC):</p>
-<pre><code>Heap
- PSYoungGen      total 9216K, used 7310K [0x00000000ff600000, 0x0000000100000000, 0x0000000100000000)
-  eden space 8192K, 89% used [0x00000000ff600000,0x00000000ffd23978,0x00000000ffe00000)
-  from space 1024K, 0% used [0x00000000fff00000,0x00000000fff00000,0x0000000100000000)
-  to   space 1024K, 0% used [0x00000000ffe00000,0x00000000ffe00000,0x00000000fff00000)
- ParOldGen       total 10240K, used 4096K [0x00000000fec00000, 0x00000000ff600000, 0x00000000ff600000)
-  object space 10240K, 40% used [0x00000000fec00000,0x00000000ff000010,0x00000000ff600000)
- PSPermGen       total 21504K, used 2582K [0x00000000f9a00000, 0x00000000faf00000, 0x00000000fec00000)
-  object space 21504K, 12% used [0x00000000f9a00000,0x00000000f9c85a70,0x00000000faf00000)
-</code></pre>
       
     </div>
 
@@ -522,9 +494,25 @@ No shared spaces configured.
           
   <div class="comments" id="comments">
     
-      <div class="ds-thread" data-thread-key="2016/03/03/jvm-note-gclog/"
-           data-title="读《深入理解Java虚拟机》-理解GC日志" data-url="http://www.linmuxi.com/2016/03/03/jvm-note-gclog/">
+      <!-- 来必力City版安装代码 -->
+      <div id="lv-container" data-id="city" data-uid="MTAyMC8zMDE0NS82NzAw">
+        <script type="text/javascript">
+         (function(d, s) {
+             var j, e = d.getElementsByTagName(s)[0];
+
+             if (typeof LivereTower === 'function') { return; }
+
+             j = d.createElement(s);
+             j.src = 'https://cdn-city.livere.com/js/embed.dist.js';
+             j.async = true;
+
+             e.parentNode.insertBefore(j, e);
+         })(document, 'script');
+        </script>
+      <noscript> 为正常使用来必力评论功能请激活JavaScript</noscript>
       </div>
+      <!-- City版安装代码已完成 -->
+
     
   </div>
 
@@ -748,33 +736,14 @@ No shared spaces configured.
 
   
 
-  
-    
-  
 
-  <script type="text/javascript">
-    var duoshuoQuery = {short_name:"hunterlin"};
-    (function() {
-      var ds = document.createElement('script');
-      ds.type = 'text/javascript';ds.async = true;
-      ds.id = 'duoshuo-script';
-      ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
-      ds.charset = 'UTF-8';
-      (document.getElementsByTagName('head')[0]
-      || document.getElementsByTagName('body')[0]).appendChild(ds);
-    })();
-  </script>
 
-  
-    
-    
-    <script src="/lib/ua-parser-js/dist/ua-parser.min.js?v=0.7.9"></script>
-    <script src="/js/src/hook-duoshuo.js"></script>
   
 
 
 
 
+	
 
 
 

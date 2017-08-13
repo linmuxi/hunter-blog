@@ -154,6 +154,18 @@
 
 
 
+  <div style="display: none;">
+    <script src="//s95.cnzz.com/z_stat.php?id=1259167020&web_id=1259167020" language="JavaScript"></script>
+
+	<!--
+<script type="text/javascript">var cnzz_protocol = (("https:" == document.location.protocol) ? " https://" : " http://");document.write(unescape("%3Cspan id='cnzz_stat_icon_1259167020'%3E%3C/span%3E%3Cscript src='" + cnzz_protocol + "s4.cnzz.com/z_stat.php%3Fid%3D1259167020%26show%3Dpic' type='text/javascript'%3E%3C/script%3E"));</script>
+    -->
+
+
+  </div>
+
+
+
 
 
   
@@ -343,13 +355,6 @@
 
           
             
-              <span class="post-comments-count">
-                <span class="post-meta-divider">|</span>
-                <a href="/2016/02/01/plsql-developer-connect-oracle11g-64bit/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/02/01/plsql-developer-connect-oracle11g-64bit/" itemprop="commentCount"></span>
-                </a>
-              </span>
-            
           
 
           
@@ -392,12 +397,7 @@
 <p>第三步：将其解压至Oracle安装目录的Product下：<code>D:\Oracle\app\hunter\product\instantclient_11_2</code></p>
 <p>第四步：拷贝数据库安装根目录下的NETWORK目录到Oracle客户端目录的instantclient_11_2目录下面。<br>NETWORK目录的绝对路径：D:\Oracle\app\hunter\product\11.2.0\dbhome_1\NETWORK<br>instantclient_11_2目录的绝对路径：D:\Oracle\app\hunter\product\instantclient_11_2</p>
 <p>第五步：安装PL/SQL Developer<br>安装 PL/SQL Developer，在perference-&gt;Connection里面设置OCI Library和Oracle_Home，例如本机设置为：<br>Oracle Home ：D:\Oracle\app\hunter\product\instantclient_11_2<br>OCI Library ：D:\Oracle\app\hunter\product\instantclient_11_2\oci.dll</p>
-<p>第六步：设置环境变量(修改PATH和TNS_ADMIN环境变量)<br>对于NLS_LANG环境变量, 最好设置成和数据库端一致, 首先从数据库端查询字符集信息:</p>
-<pre><code class="dos">SQL&gt; select userenv(&#39;language&#39;) nls_lang from dual;
-NLS_LANG
-----------------------------------------------------
-SIMPLIFIED CHINESE_CHINA.ZHS16GBK
-</code></pre>
+<p>第六步：设置环境变量(修改PATH和TNS_ADMIN环境变量)<br>对于NLS_LANG环境变量, 最好设置成和数据库端一致, 首先从数据库端查询字符集信息:<br><figure class="highlight dos"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">SQL&gt; select userenv('language') nls_lang from dual;</div><div class="line">NLS_LANG</div><div class="line">----------------------------------------------------</div><div class="line">SIMPLIFIED CHINESE_CHINA.ZHS16GBK</div></pre></td></tr></table></figure></p>
 <p>右击”我的电脑” - “属性” - “高级” - “环境变量” - “系统环境变量”:<br>1&gt;.选择”Path” - 点击”编辑”, 把 “D:\Oracle\app\hunter\product\instantclient_11_2;” 加入;<br>2&gt;.点击”新建”, 变量名设置为”TNS_ADMIN”, 变量值设置为”D:\Oracle\app\hunter\product\instantclient_11_2;”, 点击”确定”;<br>3&gt;.点击”新建”, 变量名设置为”NLS_LANG”, 变量值设置为”SIMPLIFIED CHINESE_CHINA.ZHS16GBK”, 点击”确定”;</p>
 <p>最后，启动 PL/SQL Developer ，运行无问题。</p>
 
@@ -493,9 +493,25 @@ SIMPLIFIED CHINESE_CHINA.ZHS16GBK
           
   <div class="comments" id="comments">
     
-      <div class="ds-thread" data-thread-key="2016/02/01/plsql-developer-connect-oracle11g-64bit/"
-           data-title="使用PLSQL Developer连接64位Oracle11g数据库" data-url="http://www.linmuxi.com/2016/02/01/plsql-developer-connect-oracle11g-64bit/">
+      <!-- 来必力City版安装代码 -->
+      <div id="lv-container" data-id="city" data-uid="MTAyMC8zMDE0NS82NzAw">
+        <script type="text/javascript">
+         (function(d, s) {
+             var j, e = d.getElementsByTagName(s)[0];
+
+             if (typeof LivereTower === 'function') { return; }
+
+             j = d.createElement(s);
+             j.src = 'https://cdn-city.livere.com/js/embed.dist.js';
+             j.async = true;
+
+             e.parentNode.insertBefore(j, e);
+         })(document, 'script');
+        </script>
+      <noscript> 为正常使用来必力评论功能请激活JavaScript</noscript>
       </div>
+      <!-- City版安装代码已完成 -->
+
     
   </div>
 
@@ -694,33 +710,14 @@ SIMPLIFIED CHINESE_CHINA.ZHS16GBK
 
   
 
-  
-    
-  
 
-  <script type="text/javascript">
-    var duoshuoQuery = {short_name:"hunterlin"};
-    (function() {
-      var ds = document.createElement('script');
-      ds.type = 'text/javascript';ds.async = true;
-      ds.id = 'duoshuo-script';
-      ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
-      ds.charset = 'UTF-8';
-      (document.getElementsByTagName('head')[0]
-      || document.getElementsByTagName('body')[0]).appendChild(ds);
-    })();
-  </script>
 
-  
-    
-    
-    <script src="/lib/ua-parser-js/dist/ua-parser.min.js?v=0.7.9"></script>
-    <script src="/js/src/hook-duoshuo.js"></script>
   
 
 
 
 
+	
 
 
 

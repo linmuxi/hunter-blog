@@ -88,28 +88,19 @@
 
 
 <meta name="description" content="环境说明redis版本：3.2.8两台ubuntu，IP分别是：172.28.23.4、172.28.23.83，下面简称为ubuntuA、ubuntuB分别在ubuntuA和ubuntuB上面运行3个redis实例
-环境准备1、下载解压redis
-cd /opt
-wget http://download.redis.io/releases/redis-3.2.8.tar.gz
-tar -zxf">
+环境准备1、下载解压redis123cd /optwget http://download.redis.io/releases/redis-3.2.8.tar.gztar -zxf">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Redis集群配置说明">
 <meta property="og:url" content="http://www.linmuxi.com/2017/03/07/redis-cluster-deploy-01/index.html">
 <meta property="og:site_name" content="Hunter的博客">
 <meta property="og:description" content="环境说明redis版本：3.2.8两台ubuntu，IP分别是：172.28.23.4、172.28.23.83，下面简称为ubuntuA、ubuntuB分别在ubuntuA和ubuntuB上面运行3个redis实例
-环境准备1、下载解压redis
-cd /opt
-wget http://download.redis.io/releases/redis-3.2.8.tar.gz
-tar -zxf">
+环境准备1、下载解压redis123cd /optwget http://download.redis.io/releases/redis-3.2.8.tar.gztar -zxf">
 <meta property="og:image" content="http://7xqlat.com1.z0.glb.clouddn.com/redis-create-cluster-01.png">
 <meta property="og:updated_time" content="2017-03-07T08:06:12.534Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Redis集群配置说明">
 <meta name="twitter:description" content="环境说明redis版本：3.2.8两台ubuntu，IP分别是：172.28.23.4、172.28.23.83，下面简称为ubuntuA、ubuntuB分别在ubuntuA和ubuntuB上面运行3个redis实例
-环境准备1、下载解压redis
-cd /opt
-wget http://download.redis.io/releases/redis-3.2.8.tar.gz
-tar -zxf">
+环境准备1、下载解压redis123cd /optwget http://download.redis.io/releases/redis-3.2.8.tar.gztar -zxf">
 <meta name="twitter:image" content="http://7xqlat.com1.z0.glb.clouddn.com/redis-create-cluster-01.png">
 
 
@@ -165,6 +156,18 @@ tar -zxf">
 
 
 
+
+
+
+  <div style="display: none;">
+    <script src="//s95.cnzz.com/z_stat.php?id=1259167020&web_id=1259167020" language="JavaScript"></script>
+
+	<!--
+<script type="text/javascript">var cnzz_protocol = (("https:" == document.location.protocol) ? " https://" : " http://");document.write(unescape("%3Cspan id='cnzz_stat_icon_1259167020'%3E%3C/span%3E%3Cscript src='" + cnzz_protocol + "s4.cnzz.com/z_stat.php%3Fid%3D1259167020%26show%3Dpic' type='text/javascript'%3E%3C/script%3E"));</script>
+    -->
+
+
+  </div>
 
 
 
@@ -357,13 +360,6 @@ tar -zxf">
 
           
             
-              <span class="post-comments-count">
-                <span class="post-meta-divider">|</span>
-                <a href="/2017/03/07/redis-cluster-deploy-01/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count ds-thread-count" data-thread-key="2017/03/07/redis-cluster-deploy-01/" itemprop="commentCount"></span>
-                </a>
-              </span>
-            
           
 
           
@@ -396,66 +392,27 @@ tar -zxf">
 
       
         <h4 id="环境说明"><a href="#环境说明" class="headerlink" title="环境说明"></a>环境说明</h4><p>redis版本：3.2.8<br>两台ubuntu，IP分别是：172.28.23.4、172.28.23.83，下面简称为ubuntuA、ubuntuB<br>分别在ubuntuA和ubuntuB上面运行3个redis实例</p>
-<h4 id="环境准备"><a href="#环境准备" class="headerlink" title="环境准备"></a>环境准备</h4><p>1、下载解压redis</p>
-<pre><code class="shell">cd /opt
-wget http://download.redis.io/releases/redis-3.2.8.tar.gz
-tar -zxf redis-3.2.8.tar.gz
-</code></pre>
-<p>2、编译安装</p>
-<pre><code>cd redis-3.2.8
-make &amp;&amp; make install
-</code></pre><p>安装完成后可以运行make test检查安装是否正确</p>
-<p>3、ruby运行环境安装<br>因为后面我们需要使用到redis提供的redis-trib.rb来进行集群节点操作，该脚本是用ruby语言编写，所以需要先安装ruby运行环境</p>
-<pre><code>apt-get update
-apt-get install ruby
-gem install redis
-</code></pre><a id="more"></a>
-<h4 id="实战操作"><a href="#实战操作" class="headerlink" title="实战操作"></a>实战操作</h4><p>1、创建redis节点目录<br>step1.在ubuntuA上redis根目录下创建redis_cluster目录</p>
-<pre><code>cd redis-3.2.8
-mkdir redis_cluster
-</code></pre><p>step2.在redis_cluster目录下分别创建8001、8002、8003目录，并将redis根目录下的redis.conf复制到这三个目录下</p>
-<pre><code>cd redis_cluster
-mkdir 8001 8002 8003
-cp ../redis.conf 8001
-cp ../redis.conf 8002
-cp ../redis.conf 8003
-</code></pre><p>step3.分别修改这三个目录下redis.conf配置文件内容如下：</p>
-<pre><code>bind 127.0.0.1 172.28.23.4
-protected-mode no
-port 8001  # 8002 8003
-appendonly yes
-cluster-enabled yes
-cluster-config-file nodes-8001.conf #nodes-8002.conf nodes-8003.conf 文件会自动生成，无需创建
-cluster-node-timeout 15000 # 节点请求超时时间，默认15秒
-</code></pre><p>step4.在ubuntuB上的操作同上面的步骤，只需修改为对应的9001 9002 9003即可</p>
-<p>2、启动redis节点<br>在ubuntuA上面执行</p>
-<pre><code>cd /opt/redis-3.2.8/redis_cluster
-redis-server 8001/redis.conf
-redis-server 8002/redis.conf
-redis-server 8003/redis.conf
-</code></pre><p>在ubuntuB上面执行</p>
-<pre><code>cd /opt/redis-3.2.8/redis_cluster
-redis-server 9001/redis.conf
-redis-server 9002/redis.conf
-redis-server 9003/redis.conf
-</code></pre><p>3、检查redis节点启动情况</p>
-<pre><code>ps -ef |grep redis
-</code></pre><p>4、搭建集群<br>目前我们已经在两台机器上运行了6个redis节点实例，接下来我们利用这些redis实例来创建集群。<br>通过利用redis提供的工具redis-trib.rb可以很轻松的完成集群的搭建<br>创建集群命令如下：</p>
-<pre><code>
-./redis-trib.rb create --replicas 1 172.28.23.4:8001 172.28.23.4:8002 172.28.23.4:8003 172.28.23.83:9001 172.28.23.83:9002 172.28.23.83:9003
-</code></pre><p>运行如上命令之后，redis会响应如下内容：<br><img src="http://7xqlat.com1.z0.glb.clouddn.com/redis-create-cluster-01.png" alt=""><br>redis会根据当前运行的redis实例自动分配master和slave节点，从图中可以看出，172.28.23.4:8001 172.28.23.83:9001 172.28.23.4:8002这三个实例为master节点，其余三个实例为对应的slave节点，还显示主从对应关系及具体hash槽分配情况<br>如果我们接受redis的分配，输入yes即可</p>
-<p>5、检查集群节点运行状态</p>
-<pre><code>./redis-trib.rb check 172.28.23.4:8003
-</code></pre><p>6、连接集群操作</p>
-<pre><code>redis-cli -h 172.28.23.4 -p 8003 -c
-</code></pre><p>连接集群和连接普通redis实例不一样，一定要带参数-c；不然连接到实例之后进行操作会报错：(error)MOVED 5798 ip:port</p>
-<h4 id="其他操作"><a href="#其他操作" class="headerlink" title="其他操作"></a>其他操作</h4><p>1、往集群中添加新的节点</p>
-<pre><code>./redis-trib.rb add-node 新节点IP:端口 已存在的节点IP:端口
-</code></pre><p>2、往集群中添加slave节点</p>
-<pre><code>./redis-trib.rb add-node --slave 新节点IP:端口 已存在的节点IP:端口
-</code></pre><p>3、从集群中移除节点</p>
-<pre><code>./redis-trib del-node 127.0.0.1:7000 `&lt;node-id&gt;`
-</code></pre><h4 id="可能出现的问题"><a href="#可能出现的问题" class="headerlink" title="可能出现的问题"></a>可能出现的问题</h4><p>Q1：运行redis-trib.rb脚本创建集群报错：<br>node 172.28.22.72:8001 is not empty. either the node already knows other nodes(check with cluster nodes) or contains some key in database 0<br>A1：三步走<br>1、redis-cli -h ip -p port<br>2、flushdb<br>3、删除aof、rdb、nodes.conf文件</p>
+<h4 id="环境准备"><a href="#环境准备" class="headerlink" title="环境准备"></a>环境准备</h4><p>1、下载解压redis<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">cd /opt</div><div class="line">wget http://download.redis.io/releases/redis-3.2.8.tar.gz</div><div class="line">tar -zxf redis-3.2.8.tar.gz</div></pre></td></tr></table></figure></p>
+<p>2、编译安装<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">cd redis-3.2.8</div><div class="line">make &amp;&amp; make install</div></pre></td></tr></table></figure></p>
+<p>安装完成后可以运行make test检查安装是否正确</p>
+<p>3、ruby运行环境安装<br>因为后面我们需要使用到redis提供的redis-trib.rb来进行集群节点操作，该脚本是用ruby语言编写，所以需要先安装ruby运行环境<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">apt-get update</div><div class="line">apt-get install ruby</div><div class="line">gem install redis</div></pre></td></tr></table></figure></p>
+<a id="more"></a>
+<h4 id="实战操作"><a href="#实战操作" class="headerlink" title="实战操作"></a>实战操作</h4><p>1、创建redis节点目录<br>step1.在ubuntuA上redis根目录下创建redis_cluster目录<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">cd redis-3.2.8</div><div class="line">mkdir redis_cluster</div></pre></td></tr></table></figure></p>
+<p>step2.在redis_cluster目录下分别创建8001、8002、8003目录，并将redis根目录下的redis.conf复制到这三个目录下<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">cd redis_cluster</div><div class="line">mkdir 8001 8002 8003</div><div class="line">cp ../redis.conf 8001</div><div class="line">cp ../redis.conf 8002</div><div class="line">cp ../redis.conf 8003</div></pre></td></tr></table></figure></p>
+<p>step3.分别修改这三个目录下redis.conf配置文件内容如下：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">bind 127.0.0.1 172.28.23.4</div><div class="line">protected-mode no</div><div class="line">port 8001  # 8002 8003</div><div class="line">appendonly yes</div><div class="line">cluster-enabled yes</div><div class="line">cluster-config-file nodes-8001.conf #nodes-8002.conf nodes-8003.conf 文件会自动生成，无需创建</div><div class="line">cluster-node-timeout 15000 # 节点请求超时时间，默认15秒</div></pre></td></tr></table></figure></p>
+<p>step4.在ubuntuB上的操作同上面的步骤，只需修改为对应的9001 9002 9003即可</p>
+<p>2、启动redis节点<br>在ubuntuA上面执行<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">cd /opt/redis-3.2.8/redis_cluster</div><div class="line">redis-server 8001/redis.conf</div><div class="line">redis-server 8002/redis.conf</div><div class="line">redis-server 8003/redis.conf</div></pre></td></tr></table></figure></p>
+<p>在ubuntuB上面执行<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">cd /opt/redis-3.2.8/redis_cluster</div><div class="line">redis-server 9001/redis.conf</div><div class="line">redis-server 9002/redis.conf</div><div class="line">redis-server 9003/redis.conf</div></pre></td></tr></table></figure></p>
+<p>3、检查redis节点启动情况<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">ps -ef |grep redis</div></pre></td></tr></table></figure></p>
+<p>4、搭建集群<br>目前我们已经在两台机器上运行了6个redis节点实例，接下来我们利用这些redis实例来创建集群。<br>通过利用redis提供的工具redis-trib.rb可以很轻松的完成集群的搭建<br>创建集群命令如下：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">./redis-trib.rb create --replicas 1 172.28.23.4:8001 172.28.23.4:8002 172.28.23.4:8003 172.28.23.83:9001 172.28.23.83:9002 172.28.23.83:9003</div></pre></td></tr></table></figure></p>
+<p>运行如上命令之后，redis会响应如下内容：<br><img src="http://7xqlat.com1.z0.glb.clouddn.com/redis-create-cluster-01.png" alt=""><br>redis会根据当前运行的redis实例自动分配master和slave节点，从图中可以看出，172.28.23.4:8001 172.28.23.83:9001 172.28.23.4:8002这三个实例为master节点，其余三个实例为对应的slave节点，还显示主从对应关系及具体hash槽分配情况<br>如果我们接受redis的分配，输入yes即可</p>
+<p>5、检查集群节点运行状态<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">./redis-trib.rb check 172.28.23.4:8003</div></pre></td></tr></table></figure></p>
+<p>6、连接集群操作<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">redis-cli -h 172.28.23.4 -p 8003 -c</div></pre></td></tr></table></figure></p>
+<p>连接集群和连接普通redis实例不一样，一定要带参数-c；不然连接到实例之后进行操作会报错：(error)MOVED 5798 ip:port</p>
+<h4 id="其他操作"><a href="#其他操作" class="headerlink" title="其他操作"></a>其他操作</h4><p>1、往集群中添加新的节点<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">./redis-trib.rb add-node 新节点IP:端口 已存在的节点IP:端口</div></pre></td></tr></table></figure></p>
+<p>2、往集群中添加slave节点<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">./redis-trib.rb add-node --slave 新节点IP:端口 已存在的节点IP:端口</div></pre></td></tr></table></figure></p>
+<p>3、从集群中移除节点<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">./redis-trib del-node 127.0.0.1:7000 `&lt;node-id&gt;`</div></pre></td></tr></table></figure></p>
+<h4 id="可能出现的问题"><a href="#可能出现的问题" class="headerlink" title="可能出现的问题"></a>可能出现的问题</h4><p>Q1：运行redis-trib.rb脚本创建集群报错：<br>node 172.28.22.72:8001 is not empty. either the node already knows other nodes(check with cluster nodes) or contains some key in database 0<br>A1：三步走<br>1、redis-cli -h ip -p port<br>2、flushdb<br>3、删除aof、rdb、nodes.conf文件</p>
 <p>Q2：输入yes之后，如果一直停留在waiting for the cluster to join。。<br>A2：表示slave无法连接到master，检查下ip设置是否正确。我遇到的是因为redis.conf中的bind 127.0.0.1 172.28.22.72 把127.0.0.1去掉，只绑定外网ip即可</p>
 
       
@@ -546,9 +503,25 @@ redis-server 9003/redis.conf
           
   <div class="comments" id="comments">
     
-      <div class="ds-thread" data-thread-key="2017/03/07/redis-cluster-deploy-01/"
-           data-title="Redis集群配置说明" data-url="http://www.linmuxi.com/2017/03/07/redis-cluster-deploy-01/">
+      <!-- 来必力City版安装代码 -->
+      <div id="lv-container" data-id="city" data-uid="MTAyMC8zMDE0NS82NzAw">
+        <script type="text/javascript">
+         (function(d, s) {
+             var j, e = d.getElementsByTagName(s)[0];
+
+             if (typeof LivereTower === 'function') { return; }
+
+             j = d.createElement(s);
+             j.src = 'https://cdn-city.livere.com/js/embed.dist.js';
+             j.async = true;
+
+             e.parentNode.insertBefore(j, e);
+         })(document, 'script');
+        </script>
+      <noscript> 为正常使用来必力评论功能请激活JavaScript</noscript>
       </div>
+      <!-- City版安装代码已完成 -->
+
     
   </div>
 
@@ -772,33 +745,14 @@ redis-server 9003/redis.conf
 
   
 
-  
-    
-  
 
-  <script type="text/javascript">
-    var duoshuoQuery = {short_name:"hunterlin"};
-    (function() {
-      var ds = document.createElement('script');
-      ds.type = 'text/javascript';ds.async = true;
-      ds.id = 'duoshuo-script';
-      ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
-      ds.charset = 'UTF-8';
-      (document.getElementsByTagName('head')[0]
-      || document.getElementsByTagName('body')[0]).appendChild(ds);
-    })();
-  </script>
 
-  
-    
-    
-    <script src="/lib/ua-parser-js/dist/ua-parser.min.js?v=0.7.9"></script>
-    <script src="/js/src/hook-duoshuo.js"></script>
   
 
 
 
 
+	
 
 
 

@@ -154,6 +154,18 @@
 
 
 
+  <div style="display: none;">
+    <script src="//s95.cnzz.com/z_stat.php?id=1259167020&web_id=1259167020" language="JavaScript"></script>
+
+	<!--
+<script type="text/javascript">var cnzz_protocol = (("https:" == document.location.protocol) ? " https://" : " http://");document.write(unescape("%3Cspan id='cnzz_stat_icon_1259167020'%3E%3C/span%3E%3Cscript src='" + cnzz_protocol + "s4.cnzz.com/z_stat.php%3Fid%3D1259167020%26show%3Dpic' type='text/javascript'%3E%3C/script%3E"));</script>
+    -->
+
+
+  </div>
+
+
+
 
 
   
@@ -343,13 +355,6 @@
 
           
             
-              <span class="post-comments-count">
-                <span class="post-meta-divider">|</span>
-                <a href="/2016/02/01/use-sqlldr-csv-to-oracle/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/02/01/use-sqlldr-csv-to-oracle/" itemprop="commentCount"></span>
-                </a>
-              </span>
-            
           
 
           
@@ -387,23 +392,7 @@
       
         <p>这篇分享下使用SQLLDR工具将CSV表中的数据导入到Oracle数据库中。<br><a id="more"></a><br>SQLLDR是Oracle下提供的一款数据导入工具，使用简单方便，推荐有需要的使用.</p>
 <p>命令如下：<code>sqlldr 用户名/密码@SID control=SQLLDR语法文件(例如：control.ctl)</code></p>
-<p>control.ctl文件内容：</p>
-<pre><code class="sql">LOAD DATA 
-INFILE &#39;D:\data\inputData.csv&#39;       --要导入到数据库中的数据文件 
-INFILE &#39;D:\data\inputData2.csv&#39;      --可以导入多个文件 
-BADFILE &#39;D:\data\error\bad.bad&#39;      --导入失败后要写入的文件 
-DISCARDFILE &#39;D:\data\dsc\datadsc.dsc&#39;    
-DISCARDMAX 1000 
-append                              --表示向表中追加数据(其他选项请参考下面变量说明) 
-INTO TABLE top_excel_import_data    --插入的数据库表名 
-FIELDS TERMINATED BY &#39;,&#39;            --以&quot;,&quot;号分隔 
-TRAILING NULLCOLS                   --允许插入空值 
-(  
-   id ,                           --数据库字段名 
-   name , 
-   age
-  )
-</code></pre>
+<p>control.ctl文件内容：<br><figure class="highlight sql"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">LOAD</span> <span class="keyword">DATA</span> </div><div class="line"><span class="keyword">INFILE</span> <span class="string">'D:\data\inputData.csv'</span>       <span class="comment">--要导入到数据库中的数据文件 </span></div><div class="line"><span class="keyword">INFILE</span> <span class="string">'D:\data\inputData2.csv'</span>      <span class="comment">--可以导入多个文件 </span></div><div class="line"><span class="keyword">BADFILE</span> <span class="string">'D:\data\error\bad.bad'</span>      <span class="comment">--导入失败后要写入的文件 </span></div><div class="line"><span class="keyword">DISCARDFILE</span> <span class="string">'D:\data\dsc\datadsc.dsc'</span>    </div><div class="line">DISCARDMAX <span class="number">1000</span> </div><div class="line">append                              <span class="comment">--表示向表中追加数据(其他选项请参考下面变量说明) </span></div><div class="line"><span class="keyword">INTO</span> <span class="keyword">TABLE</span> top_excel_import_data    <span class="comment">--插入的数据库表名 </span></div><div class="line"><span class="keyword">FIELDS</span> <span class="keyword">TERMINATED</span> <span class="keyword">BY</span> <span class="string">','</span>            <span class="comment">--以","号分隔 </span></div><div class="line">TRAILING NULLCOLS                   <span class="comment">--允许插入空值 </span></div><div class="line">(  </div><div class="line">   <span class="keyword">id</span> ,                           <span class="comment">--数据库字段名 </span></div><div class="line">   <span class="keyword">name</span> , </div><div class="line">   age</div><div class="line">  )</div></pre></td></tr></table></figure></p>
 <p>变量说明：<br>append：向表中追加数据<br>insert：向表中插入值，但要求表开始时为空<br>replace：delete表中的数据，然后插入新值<br>truncate：trunctate表，然后插入新值</p>
 
       
@@ -498,9 +487,25 @@ TRAILING NULLCOLS                   --允许插入空值
           
   <div class="comments" id="comments">
     
-      <div class="ds-thread" data-thread-key="2016/02/01/use-sqlldr-csv-to-oracle/"
-           data-title="使用SQLLDR将CSV数据导入到Oracle数据库" data-url="http://www.linmuxi.com/2016/02/01/use-sqlldr-csv-to-oracle/">
+      <!-- 来必力City版安装代码 -->
+      <div id="lv-container" data-id="city" data-uid="MTAyMC8zMDE0NS82NzAw">
+        <script type="text/javascript">
+         (function(d, s) {
+             var j, e = d.getElementsByTagName(s)[0];
+
+             if (typeof LivereTower === 'function') { return; }
+
+             j = d.createElement(s);
+             j.src = 'https://cdn-city.livere.com/js/embed.dist.js';
+             j.async = true;
+
+             e.parentNode.insertBefore(j, e);
+         })(document, 'script');
+        </script>
+      <noscript> 为正常使用来必力评论功能请激活JavaScript</noscript>
       </div>
+      <!-- City版安装代码已完成 -->
+
     
   </div>
 
@@ -699,33 +704,14 @@ TRAILING NULLCOLS                   --允许插入空值
 
   
 
-  
-    
-  
 
-  <script type="text/javascript">
-    var duoshuoQuery = {short_name:"hunterlin"};
-    (function() {
-      var ds = document.createElement('script');
-      ds.type = 'text/javascript';ds.async = true;
-      ds.id = 'duoshuo-script';
-      ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
-      ds.charset = 'UTF-8';
-      (document.getElementsByTagName('head')[0]
-      || document.getElementsByTagName('body')[0]).appendChild(ds);
-    })();
-  </script>
 
-  
-    
-    
-    <script src="/lib/ua-parser-js/dist/ua-parser.min.js?v=0.7.9"></script>
-    <script src="/js/src/hook-duoshuo.js"></script>
   
 
 
 
 
+	
 
 
 

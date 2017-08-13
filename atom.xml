@@ -23,86 +23,37 @@
     <updated>2017-03-07T08:06:12.534Z</updated>
     
     <content type="html"><![CDATA[<h4 id="环境说明"><a href="#环境说明" class="headerlink" title="环境说明"></a>环境说明</h4><p>redis版本：3.2.8<br>两台ubuntu，IP分别是：172.28.23.4、172.28.23.83，下面简称为ubuntuA、ubuntuB<br>分别在ubuntuA和ubuntuB上面运行3个redis实例</p>
-<h4 id="环境准备"><a href="#环境准备" class="headerlink" title="环境准备"></a>环境准备</h4><p>1、下载解压redis</p>
-<pre><code class="shell">cd /opt
-wget http://download.redis.io/releases/redis-3.2.8.tar.gz
-tar -zxf redis-3.2.8.tar.gz
-</code></pre>
-<p>2、编译安装</p>
-<pre><code>cd redis-3.2.8
-make &amp;&amp; make install
-</code></pre><p>安装完成后可以运行make test检查安装是否正确</p>
-<p>3、ruby运行环境安装<br>因为后面我们需要使用到redis提供的redis-trib.rb来进行集群节点操作，该脚本是用ruby语言编写，所以需要先安装ruby运行环境</p>
-<pre><code>apt-get update
-apt-get install ruby
-gem install redis
-</code></pre><a id="more"></a>
-<h4 id="实战操作"><a href="#实战操作" class="headerlink" title="实战操作"></a>实战操作</h4><p>1、创建redis节点目录<br>step1.在ubuntuA上redis根目录下创建redis_cluster目录</p>
-<pre><code>cd redis-3.2.8
-mkdir redis_cluster
-</code></pre><p>step2.在redis_cluster目录下分别创建8001、8002、8003目录，并将redis根目录下的redis.conf复制到这三个目录下</p>
-<pre><code>cd redis_cluster
-mkdir 8001 8002 8003
-cp ../redis.conf 8001
-cp ../redis.conf 8002
-cp ../redis.conf 8003
-</code></pre><p>step3.分别修改这三个目录下redis.conf配置文件内容如下：</p>
-<pre><code>bind 127.0.0.1 172.28.23.4
-protected-mode no
-port 8001  # 8002 8003
-appendonly yes
-cluster-enabled yes
-cluster-config-file nodes-8001.conf #nodes-8002.conf nodes-8003.conf 文件会自动生成，无需创建
-cluster-node-timeout 15000 # 节点请求超时时间，默认15秒
-</code></pre><p>step4.在ubuntuB上的操作同上面的步骤，只需修改为对应的9001 9002 9003即可</p>
-<p>2、启动redis节点<br>在ubuntuA上面执行</p>
-<pre><code>cd /opt/redis-3.2.8/redis_cluster
-redis-server 8001/redis.conf
-redis-server 8002/redis.conf
-redis-server 8003/redis.conf
-</code></pre><p>在ubuntuB上面执行</p>
-<pre><code>cd /opt/redis-3.2.8/redis_cluster
-redis-server 9001/redis.conf
-redis-server 9002/redis.conf
-redis-server 9003/redis.conf
-</code></pre><p>3、检查redis节点启动情况</p>
-<pre><code>ps -ef |grep redis
-</code></pre><p>4、搭建集群<br>目前我们已经在两台机器上运行了6个redis节点实例，接下来我们利用这些redis实例来创建集群。<br>通过利用redis提供的工具redis-trib.rb可以很轻松的完成集群的搭建<br>创建集群命令如下：</p>
-<pre><code>
-./redis-trib.rb create --replicas 1 172.28.23.4:8001 172.28.23.4:8002 172.28.23.4:8003 172.28.23.83:9001 172.28.23.83:9002 172.28.23.83:9003
-</code></pre><p>运行如上命令之后，redis会响应如下内容：<br><img src="http://7xqlat.com1.z0.glb.clouddn.com/redis-create-cluster-01.png" alt=""><br>redis会根据当前运行的redis实例自动分配master和slave节点，从图中可以看出，172.28.23.4:8001 172.28.23.83:9001 172.28.23.4:8002这三个实例为master节点，其余三个实例为对应的slave节点，还显示主从对应关系及具体hash槽分配情况<br>如果我们接受redis的分配，输入yes即可</p>
-<p>5、检查集群节点运行状态</p>
-<pre><code>./redis-trib.rb check 172.28.23.4:8003
-</code></pre><p>6、连接集群操作</p>
-<pre><code>redis-cli -h 172.28.23.4 -p 8003 -c
-</code></pre><p>连接集群和连接普通redis实例不一样，一定要带参数-c；不然连接到实例之后进行操作会报错：(error)MOVED 5798 ip:port</p>
-<h4 id="其他操作"><a href="#其他操作" class="headerlink" title="其他操作"></a>其他操作</h4><p>1、往集群中添加新的节点</p>
-<pre><code>./redis-trib.rb add-node 新节点IP:端口 已存在的节点IP:端口
-</code></pre><p>2、往集群中添加slave节点</p>
-<pre><code>./redis-trib.rb add-node --slave 新节点IP:端口 已存在的节点IP:端口
-</code></pre><p>3、从集群中移除节点</p>
-<pre><code>./redis-trib del-node 127.0.0.1:7000 `&lt;node-id&gt;`
-</code></pre><h4 id="可能出现的问题"><a href="#可能出现的问题" class="headerlink" title="可能出现的问题"></a>可能出现的问题</h4><p>Q1：运行redis-trib.rb脚本创建集群报错：<br>node 172.28.22.72:8001 is not empty. either the node already knows other nodes(check with cluster nodes) or contains some key in database 0<br>A1：三步走<br>1、redis-cli -h ip -p port<br>2、flushdb<br>3、删除aof、rdb、nodes.conf文件</p>
+<h4 id="环境准备"><a href="#环境准备" class="headerlink" title="环境准备"></a>环境准备</h4><p>1、下载解压redis<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">cd /opt</div><div class="line">wget http://download.redis.io/releases/redis-3.2.8.tar.gz</div><div class="line">tar -zxf redis-3.2.8.tar.gz</div></pre></td></tr></table></figure></p>
+<p>2、编译安装<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">cd redis-3.2.8</div><div class="line">make &amp;&amp; make install</div></pre></td></tr></table></figure></p>
+<p>安装完成后可以运行make test检查安装是否正确</p>
+<p>3、ruby运行环境安装<br>因为后面我们需要使用到redis提供的redis-trib.rb来进行集群节点操作，该脚本是用ruby语言编写，所以需要先安装ruby运行环境<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">apt-get update</div><div class="line">apt-get install ruby</div><div class="line">gem install redis</div></pre></td></tr></table></figure></p>
+<a id="more"></a>
+<h4 id="实战操作"><a href="#实战操作" class="headerlink" title="实战操作"></a>实战操作</h4><p>1、创建redis节点目录<br>step1.在ubuntuA上redis根目录下创建redis_cluster目录<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">cd redis-3.2.8</div><div class="line">mkdir redis_cluster</div></pre></td></tr></table></figure></p>
+<p>step2.在redis_cluster目录下分别创建8001、8002、8003目录，并将redis根目录下的redis.conf复制到这三个目录下<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">cd redis_cluster</div><div class="line">mkdir 8001 8002 8003</div><div class="line">cp ../redis.conf 8001</div><div class="line">cp ../redis.conf 8002</div><div class="line">cp ../redis.conf 8003</div></pre></td></tr></table></figure></p>
+<p>step3.分别修改这三个目录下redis.conf配置文件内容如下：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">bind 127.0.0.1 172.28.23.4</div><div class="line">protected-mode no</div><div class="line">port 8001  # 8002 8003</div><div class="line">appendonly yes</div><div class="line">cluster-enabled yes</div><div class="line">cluster-config-file nodes-8001.conf #nodes-8002.conf nodes-8003.conf 文件会自动生成，无需创建</div><div class="line">cluster-node-timeout 15000 # 节点请求超时时间，默认15秒</div></pre></td></tr></table></figure></p>
+<p>step4.在ubuntuB上的操作同上面的步骤，只需修改为对应的9001 9002 9003即可</p>
+<p>2、启动redis节点<br>在ubuntuA上面执行<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">cd /opt/redis-3.2.8/redis_cluster</div><div class="line">redis-server 8001/redis.conf</div><div class="line">redis-server 8002/redis.conf</div><div class="line">redis-server 8003/redis.conf</div></pre></td></tr></table></figure></p>
+<p>在ubuntuB上面执行<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">cd /opt/redis-3.2.8/redis_cluster</div><div class="line">redis-server 9001/redis.conf</div><div class="line">redis-server 9002/redis.conf</div><div class="line">redis-server 9003/redis.conf</div></pre></td></tr></table></figure></p>
+<p>3、检查redis节点启动情况<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">ps -ef |grep redis</div></pre></td></tr></table></figure></p>
+<p>4、搭建集群<br>目前我们已经在两台机器上运行了6个redis节点实例，接下来我们利用这些redis实例来创建集群。<br>通过利用redis提供的工具redis-trib.rb可以很轻松的完成集群的搭建<br>创建集群命令如下：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">./redis-trib.rb create --replicas 1 172.28.23.4:8001 172.28.23.4:8002 172.28.23.4:8003 172.28.23.83:9001 172.28.23.83:9002 172.28.23.83:9003</div></pre></td></tr></table></figure></p>
+<p>运行如上命令之后，redis会响应如下内容：<br><img src="http://7xqlat.com1.z0.glb.clouddn.com/redis-create-cluster-01.png" alt=""><br>redis会根据当前运行的redis实例自动分配master和slave节点，从图中可以看出，172.28.23.4:8001 172.28.23.83:9001 172.28.23.4:8002这三个实例为master节点，其余三个实例为对应的slave节点，还显示主从对应关系及具体hash槽分配情况<br>如果我们接受redis的分配，输入yes即可</p>
+<p>5、检查集群节点运行状态<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">./redis-trib.rb check 172.28.23.4:8003</div></pre></td></tr></table></figure></p>
+<p>6、连接集群操作<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">redis-cli -h 172.28.23.4 -p 8003 -c</div></pre></td></tr></table></figure></p>
+<p>连接集群和连接普通redis实例不一样，一定要带参数-c；不然连接到实例之后进行操作会报错：(error)MOVED 5798 ip:port</p>
+<h4 id="其他操作"><a href="#其他操作" class="headerlink" title="其他操作"></a>其他操作</h4><p>1、往集群中添加新的节点<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">./redis-trib.rb add-node 新节点IP:端口 已存在的节点IP:端口</div></pre></td></tr></table></figure></p>
+<p>2、往集群中添加slave节点<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">./redis-trib.rb add-node --slave 新节点IP:端口 已存在的节点IP:端口</div></pre></td></tr></table></figure></p>
+<p>3、从集群中移除节点<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">./redis-trib del-node 127.0.0.1:7000 `&lt;node-id&gt;`</div></pre></td></tr></table></figure></p>
+<h4 id="可能出现的问题"><a href="#可能出现的问题" class="headerlink" title="可能出现的问题"></a>可能出现的问题</h4><p>Q1：运行redis-trib.rb脚本创建集群报错：<br>node 172.28.22.72:8001 is not empty. either the node already knows other nodes(check with cluster nodes) or contains some key in database 0<br>A1：三步走<br>1、redis-cli -h ip -p port<br>2、flushdb<br>3、删除aof、rdb、nodes.conf文件</p>
 <p>Q2：输入yes之后，如果一直停留在waiting for the cluster to join。。<br>A2：表示slave无法连接到master，检查下ip设置是否正确。我遇到的是因为redis.conf中的bind 127.0.0.1 172.28.22.72 把127.0.0.1去掉，只绑定外网ip即可</p>
 ]]></content>
     
     <summary type="html">
     
       &lt;h4 id=&quot;环境说明&quot;&gt;&lt;a href=&quot;#环境说明&quot; class=&quot;headerlink&quot; title=&quot;环境说明&quot;&gt;&lt;/a&gt;环境说明&lt;/h4&gt;&lt;p&gt;redis版本：3.2.8&lt;br&gt;两台ubuntu，IP分别是：172.28.23.4、172.28.23.83，下面简称为ubuntuA、ubuntuB&lt;br&gt;分别在ubuntuA和ubuntuB上面运行3个redis实例&lt;/p&gt;
-&lt;h4 id=&quot;环境准备&quot;&gt;&lt;a href=&quot;#环境准备&quot; class=&quot;headerlink&quot; title=&quot;环境准备&quot;&gt;&lt;/a&gt;环境准备&lt;/h4&gt;&lt;p&gt;1、下载解压redis&lt;/p&gt;
-&lt;pre&gt;&lt;code class=&quot;shell&quot;&gt;cd /opt
-wget http://download.redis.io/releases/redis-3.2.8.tar.gz
-tar -zxf redis-3.2.8.tar.gz
-&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;2、编译安装&lt;/p&gt;
-&lt;pre&gt;&lt;code&gt;cd redis-3.2.8
-make &amp;amp;&amp;amp; make install
-&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;安装完成后可以运行make test检查安装是否正确&lt;/p&gt;
-&lt;p&gt;3、ruby运行环境安装&lt;br&gt;因为后面我们需要使用到redis提供的redis-trib.rb来进行集群节点操作，该脚本是用ruby语言编写，所以需要先安装ruby运行环境&lt;/p&gt;
-&lt;pre&gt;&lt;code&gt;apt-get update
-apt-get install ruby
-gem install redis
-&lt;/code&gt;&lt;/pre&gt;
+&lt;h4 id=&quot;环境准备&quot;&gt;&lt;a href=&quot;#环境准备&quot; class=&quot;headerlink&quot; title=&quot;环境准备&quot;&gt;&lt;/a&gt;环境准备&lt;/h4&gt;&lt;p&gt;1、下载解压redis&lt;br&gt;&lt;figure class=&quot;highlight plain&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;&lt;div class=&quot;line&quot;&gt;1&lt;/div&gt;&lt;div class=&quot;line&quot;&gt;2&lt;/div&gt;&lt;div class=&quot;line&quot;&gt;3&lt;/div&gt;&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;code&quot;&gt;&lt;pre&gt;&lt;div class=&quot;line&quot;&gt;cd /opt&lt;/div&gt;&lt;div class=&quot;line&quot;&gt;wget http://download.redis.io/releases/redis-3.2.8.tar.gz&lt;/div&gt;&lt;div class=&quot;line&quot;&gt;tar -zxf redis-3.2.8.tar.gz&lt;/div&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/figure&gt;&lt;/p&gt;
+&lt;p&gt;2、编译安装&lt;br&gt;&lt;figure class=&quot;highlight plain&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;&lt;div class=&quot;line&quot;&gt;1&lt;/div&gt;&lt;div class=&quot;line&quot;&gt;2&lt;/div&gt;&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;code&quot;&gt;&lt;pre&gt;&lt;div class=&quot;line&quot;&gt;cd redis-3.2.8&lt;/div&gt;&lt;div class=&quot;line&quot;&gt;make &amp;amp;&amp;amp; make install&lt;/div&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/figure&gt;&lt;/p&gt;
+&lt;p&gt;安装完成后可以运行make test检查安装是否正确&lt;/p&gt;
+&lt;p&gt;3、ruby运行环境安装&lt;br&gt;因为后面我们需要使用到redis提供的redis-trib.rb来进行集群节点操作，该脚本是用ruby语言编写，所以需要先安装ruby运行环境&lt;br&gt;&lt;figure class=&quot;highlight plain&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;&lt;div class=&quot;line&quot;&gt;1&lt;/div&gt;&lt;div class=&quot;line&quot;&gt;2&lt;/div&gt;&lt;div class=&quot;line&quot;&gt;3&lt;/div&gt;&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;code&quot;&gt;&lt;pre&gt;&lt;div class=&quot;line&quot;&gt;apt-get update&lt;/div&gt;&lt;div class=&quot;line&quot;&gt;apt-get install ruby&lt;/div&gt;&lt;div class=&quot;line&quot;&gt;gem install redis&lt;/div&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/figure&gt;&lt;/p&gt;
     
     </summary>
     
@@ -752,17 +703,7 @@ nts：用于window平台，采用操作系统认证 -->
 <p>其中app中包含了Android项目源代码，这是AS将所有代码按照既定格式复制过去了，这样就存在两处源代码。这当然不是我们想要的结果，我们想要的是依旧使用Eclipse目录结构来进行开发。</p>
 <p>针对上面的问题，接下来，我们做下简单的配置，以便于在Eclipse和Android Studio中都能很好的进行协同开发。</p>
 <p>找到工程(TV)下面的build.gradle配置文件。</p>
-<p>步骤：<br>step1：将app目录下build.gradle内容复制到工程(TV)下的build.gradle里面。<br>step2：关键的一步，在Android闭包中增加如下代码</p>
-<pre><code class="groovy">sourceSets {
-    main {
-        manifest.srcFile &#39;AndroidManifest.xml&#39;
-        assets.srcDirs = [&#39;assets&#39;]
-        res.srcDirs = [&#39;res&#39;]
-        resources.srcDirs = [&#39;src&#39;]
-        java.srcDirs = [&#39;src&#39;]
-    }
-}
-</code></pre>
+<p>步骤：<br>step1：将app目录下build.gradle内容复制到工程(TV)下的build.gradle里面。<br>step2：关键的一步，在Android闭包中增加如下代码<br><figure class="highlight groovy"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">sourceSets &#123;</div><div class="line">    main &#123;</div><div class="line">        manifest.srcFile <span class="string">'AndroidManifest.xml'</span></div><div class="line">        assets.srcDirs = [<span class="string">'assets'</span>]</div><div class="line">        res.srcDirs = [<span class="string">'res'</span>]</div><div class="line">        resources.srcDirs = [<span class="string">'src'</span>]</div><div class="line">        java.srcDirs = [<span class="string">'src'</span>]</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
 <p>step3：Rebuild Project</p>
 <p>通过上面的步骤，就可以将AndroidStudio目录结构同Eclipse一样了。</p>
 <p>最后，可以将多余的文件进行删除：app</p>
@@ -819,46 +760,19 @@ nts：用于window平台，采用操作系统认证 -->
 <li>使用loaders</li>
 <li>使用developement server</li>
 </ul>
-<h2 id="安装webpack"><a href="#安装webpack" class="headerlink" title="安装webpack"></a><strong>安装webpack</strong></h2><p>前提是需要已经安装了node.js</p>
-<pre><code class="js">npm install webpack -g
-</code></pre>
+<h2 id="安装webpack"><a href="#安装webpack" class="headerlink" title="安装webpack"></a><strong>安装webpack</strong></h2><p>前提是需要已经安装了node.js<br><figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">npm install webpack -g</div></pre></td></tr></table></figure></p>
 <p>进行全局安装，这样webpack命令就可以正常使用了</p>
-<h2 id="使用webpack"><a href="#使用webpack" class="headerlink" title="使用webpack"></a><strong>使用webpack</strong></h2><p>先创建一个空目录<br>在目录下创建如下文件：<br>add entry.js</p>
-<pre><code class="js">document.write(&quot;hello world&quot;);
-</code></pre>
-<p>add index.html</p>
-<pre><code class="html">&lt;html&gt;
-    &lt;head&gt;
-        &lt;meta charset=&quot;utf-8&quot;&gt;
-    &lt;/head&gt;
-    &lt;body&gt;
-        &lt;script type=&quot;text/javascript&quot; src=&quot;bundle.js&quot; charset=&quot;utf-8&quot;&gt;&lt;/script&gt;
-    &lt;/body&gt;
-&lt;/html&gt;
-</code></pre>
-<p>接下来运行程序:</p>
-<pre><code>webpack ./entry.js bundle.js
-</code></pre><p>程序会完成编译并创建一个bundle.js文件.<br>如果程序运行成功你就能看到如下显示：</p>
-<pre><code>Hash: ac9248475027b987a559
-Version: webpack 1.12.15
-Time: 39ms
-    Asset     Size  Chunks             Chunk Names
-bundle.js  1.42 kB       0  [emitted]  main
-   [0] ./entry.js 30 bytes {0} [built]
-</code></pre><p>在浏览器中打开index.html，页面会显示</p>
+<h2 id="使用webpack"><a href="#使用webpack" class="headerlink" title="使用webpack"></a><strong>使用webpack</strong></h2><p>先创建一个空目录<br>在目录下创建如下文件：<br>add entry.js<br><figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">document</span>.write(<span class="string">"hello world"</span>);</div></pre></td></tr></table></figure></p>
+<p>add index.html<br><figure class="highlight html"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line"><span class="tag">&lt;<span class="name">html</span>&gt;</span></div><div class="line">    <span class="tag">&lt;<span class="name">head</span>&gt;</span></div><div class="line">        <span class="tag">&lt;<span class="name">meta</span> <span class="attr">charset</span>=<span class="string">"utf-8"</span>&gt;</span></div><div class="line">    <span class="tag">&lt;/<span class="name">head</span>&gt;</span></div><div class="line">    <span class="tag">&lt;<span class="name">body</span>&gt;</span></div><div class="line">        <span class="tag">&lt;<span class="name">script</span> <span class="attr">type</span>=<span class="string">"text/javascript"</span> <span class="attr">src</span>=<span class="string">"bundle.js"</span> <span class="attr">charset</span>=<span class="string">"utf-8"</span>&gt;</span><span class="undefined"></span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></div><div class="line">    <span class="tag">&lt;/<span class="name">body</span>&gt;</span></div><div class="line"><span class="tag">&lt;/<span class="name">html</span>&gt;</span></div></pre></td></tr></table></figure></p>
+<p>接下来运行程序:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">webpack ./entry.js bundle.js</div></pre></td></tr></table></figure></p>
+<p>程序会完成编译并创建一个bundle.js文件.<br>如果程序运行成功你就能看到如下显示：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">Hash: ac9248475027b987a559</div><div class="line">Version: webpack 1.12.15</div><div class="line">Time: 39ms</div><div class="line">    Asset     Size  Chunks             Chunk Names</div><div class="line">bundle.js  1.42 kB       0  [emitted]  main</div><div class="line">   [0] ./entry.js 30 bytes &#123;0&#125; [built]</div></pre></td></tr></table></figure></p>
+<p>在浏览器中打开index.html，页面会显示</p>
 <blockquote>
 <p>hello world</p>
 </blockquote>
-<p>接下来，我们将一部分代码移到外部文件中.<br>add content.js</p>
-<pre><code class="js">module.exports = &quot;hello world from content.js&quot;;
-</code></pre>
-<p>update entry.js</p>
-<pre><code class="js">- document.write(&quot;hello world&quot;);
-+ document.write(require(&quot;./content.js&quot;));
-</code></pre>
-<p>接着重新编译：</p>
-<pre><code class="js">webpack ./entry.js bundle.js
-</code></pre>
+<p>接下来，我们将一部分代码移到外部文件中.<br>add content.js<br><figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">module</span>.exports = <span class="string">"hello world from content.js"</span>;</div></pre></td></tr></table></figure></p>
+<p>update entry.js<br><figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">- <span class="built_in">document</span>.write(<span class="string">"hello world"</span>);</div><div class="line">+ <span class="built_in">document</span>.write(<span class="built_in">require</span>(<span class="string">"./content.js"</span>));</div></pre></td></tr></table></figure></p>
+<p>接着重新编译：<br><figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">webpack ./entry.js bundle.js</div></pre></td></tr></table></figure></p>
 <p>刷新浏览器你应该能看到：</p>
 <blockquote>
 <p>hello world from content.js</p>
@@ -866,68 +780,27 @@ bundle.js  1.42 kB       0  [emitted]  main
 <h2 id="使用loaders"><a href="#使用loaders" class="headerlink" title="使用loaders"></a><strong>使用loaders</strong></h2><p>接下来我们想添加一个css文件到我们的程序中。</p>
 <p>webpack默认只能处理JavaScript文件，所以我们需要使用<code>css-loader</code>和<code>style-loader</code>来处理css文件。</p>
 <p>运行<code>npm install css-loader style-loader</code>进行安装加载器。</p>
-<p>接下来我们做如下操作：<br>add style.css</p>
-<pre><code class="css">body{
-    background:#FF0000;
-}
-</code></pre>
-<p>update entry.js</p>
-<pre><code class="js">+ require(&quot;!style!css!./style.css&quot;);
-  document.write(require(&quot;./content.js&quot;));
-</code></pre>
+<p>接下来我们做如下操作：<br>add style.css<br><figure class="highlight css"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="selector-tag">body</span>&#123;</div><div class="line">	<span class="attribute">background</span>:<span class="number">#FF0000</span>;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>update entry.js<br><figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">+ <span class="built_in">require</span>(<span class="string">"!style!css!./style.css"</span>);</div><div class="line">  <span class="built_in">document</span>.write(<span class="built_in">require</span>(<span class="string">"./content.js"</span>));</div></pre></td></tr></table></figure></p>
 <p>重新运行编译并刷新浏览器，你应该能看到浏览器输出<code>hello world from content.js</code>并且背景是红色;</p>
 <p>在上面entry.js文件中<code>require(&quot;!style!css!./style.css&quot;);</code>表示使用style和css加载器来加载style.css文件,如果我们不想在文件中指定加载器，可以这样做：</p>
-<p>update entry.js</p>
-<pre><code class="js">- require(&quot;!style!css!./style.css&quot;);
-+ require(&quot;./style.css&quot;);
-  document.write(require(&quot;./content.js&quot;));
-</code></pre>
-<p>运行编译：</p>
-<pre><code class="js">webpack ./entry.js bundle.js --module-bind &quot;css=style!css&quot;
-</code></pre>
+<p>update entry.js<br><figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">- <span class="built_in">require</span>(<span class="string">"!style!css!./style.css"</span>);</div><div class="line">+ <span class="built_in">require</span>(<span class="string">"./style.css"</span>);</div><div class="line">  <span class="built_in">document</span>.write(<span class="built_in">require</span>(<span class="string">"./content.js"</span>));</div></pre></td></tr></table></figure></p>
+<p>运行编译：<br><figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">webpack ./entry.js bundle.js --<span class="built_in">module</span>-bind <span class="string">"css=style!css"</span></div></pre></td></tr></table></figure></p>
 <blockquote>
 <p>注意上面必须是双引号</p>
 </blockquote>
 <p>运行的结果和之前是一样的</p>
-<p>接下来我们将配置项移到一个配置文件中：<br>add webpack.config.js</p>
-<pre><code class="js">module.exports = {
-    entry: &quot;./entry.js&quot;,
-    output: {
-        path: __dirname,
-        filename: &quot;bundle.js&quot;
-    },
-    module: {
-        loaders: [
-            { test: /\.css$/, loader: &quot;style!css&quot; }
-        ]
-    }
-};
-</code></pre>
-<p>现在我们运行编译：</p>
-<pre><code class="js">webpack
-</code></pre>
-<p>编译输出：</p>
-<pre><code>Hash: ac9248475027b987a559
-Version: webpack 1.12.15
-Time: 39ms
-    Asset     Size  Chunks             Chunk Names
-bundle.js  1.42 kB       0  [emitted]  main
-   [0] ./entry.js 30 bytes {0} [built]
-   ...
-</code></pre><blockquote>
+<p>接下来我们将配置项移到一个配置文件中：<br>add webpack.config.js<br><figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">module</span>.exports = &#123;</div><div class="line">    <span class="attr">entry</span>: <span class="string">"./entry.js"</span>,</div><div class="line">    <span class="attr">output</span>: &#123;</div><div class="line">        <span class="attr">path</span>: __dirname,</div><div class="line">        <span class="attr">filename</span>: <span class="string">"bundle.js"</span></div><div class="line">    &#125;,</div><div class="line">    <span class="attr">module</span>: &#123;</div><div class="line">        <span class="attr">loaders</span>: [</div><div class="line">            &#123; <span class="attr">test</span>: <span class="regexp">/\.css$/</span>, <span class="attr">loader</span>: <span class="string">"style!css"</span> &#125;</div><div class="line">        ]</div><div class="line">    &#125;</div><div class="line">&#125;;</div></pre></td></tr></table></figure></p>
+<p>现在我们运行编译：<br><figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">webpack</div></pre></td></tr></table></figure></p>
+<p>编译输出：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">Hash: ac9248475027b987a559</div><div class="line">Version: webpack 1.12.15</div><div class="line">Time: 39ms</div><div class="line">    Asset     Size  Chunks             Chunk Names</div><div class="line">bundle.js  1.42 kB       0  [emitted]  main</div><div class="line">   [0] ./entry.js 30 bytes &#123;0&#125; [built]</div><div class="line">   ...</div></pre></td></tr></table></figure></p>
+<blockquote>
 <p>webpack命令会尝试在当前目录加载<strong>webpack.config.js</strong>文件</p>
 </blockquote>
-<h3 id="输出设置"><a href="#输出设置" class="headerlink" title="输出设置"></a>输出设置</h3><p>如果项目编译是时间比较长，我们想显示进度条，可以通过如下配置：</p>
-<pre><code class="js">webpack --progress --colors
-</code></pre>
-<h3 id="监视模式"><a href="#监视模式" class="headerlink" title="监视模式"></a>监视模式</h3><p>我们不想当文件发生改变每次都要重新进行编译。可以通过如下配置：</p>
-<pre><code class="js">webpack --progress --colors --watch
-</code></pre>
-<h2 id="使用developement-server"><a href="#使用developement-server" class="headerlink" title="使用developement server"></a><strong>使用developement server</strong></h2><p>先安装</p>
-<pre><code>npm install webpack-dev-server -g
-</code></pre><p>然后运行</p>
-<pre><code>webpack-dev-server --progress --colors
-</code></pre><p>通过<a href="http://localhost:8080/webpack-dev-server/bundle" target="_blank" rel="external">http://localhost:8080/webpack-dev-server/bundle</a> 来访问；</p>
+<h3 id="输出设置"><a href="#输出设置" class="headerlink" title="输出设置"></a>输出设置</h3><p>如果项目编译是时间比较长，我们想显示进度条，可以通过如下配置：<br><figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">webpack --progress --colors</div></pre></td></tr></table></figure></p>
+<h3 id="监视模式"><a href="#监视模式" class="headerlink" title="监视模式"></a>监视模式</h3><p>我们不想当文件发生改变每次都要重新进行编译。可以通过如下配置：<br><figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">webpack --progress --colors --watch</div></pre></td></tr></table></figure></p>
+<h2 id="使用developement-server"><a href="#使用developement-server" class="headerlink" title="使用developement server"></a><strong>使用developement server</strong></h2><p>先安装<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">npm install webpack-dev-server -g</div></pre></td></tr></table></figure></p>
+<p>然后运行<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">webpack-dev-server --progress --colors</div></pre></td></tr></table></figure></p>
+<p>通过<a href="http://localhost:8080/webpack-dev-server/bundle" target="_blank" rel="external">http://localhost:8080/webpack-dev-server/bundle</a> 来访问；</p>
 <blockquote>
 <p>服务以监控模式在运行。</p>
 </blockquote>
@@ -995,69 +868,9 @@ bundle.js  1.42 kB       0  [emitted]  main
     
     <content type="html"><![CDATA[<p>标题取的有点模糊不清，主要是想说下如何通过gulp来压缩hexo生成的html、js、css、png内容<br><a id="more"></a></p>
 <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>gulp：基于nodejs流的自动化构建工具<br>关于gulp的介绍与安装请自行参考官网描述，本章不做阐述</p>
-<h2 id="步骤"><a href="#步骤" class="headerlink" title="步骤"></a>步骤</h2><h3 id="Step1：hexo根目录新增gulpfile-js文件"><a href="#Step1：hexo根目录新增gulpfile-js文件" class="headerlink" title="Step1：hexo根目录新增gulpfile.js文件"></a>Step1：hexo根目录新增gulpfile.js文件</h3><pre><code class="js">var gulp = require(&#39;gulp&#39;);
-//html压缩
-var htmlmin = require(&#39;gulp-htmlmin&#39;);
-//js压缩
-var jsmin = require(&#39;gulp-jsmin&#39;);
-//文件重命名
-var rename = require(&#39;gulp-rename&#39;);
-//图片压缩png/jpg/gif
-var imagemin = require(&#39;gulp-imagemin&#39;);
-//png压缩
-var pngquant = require(&#39;imagemin-pngquant&#39;);
-//css压缩
-var csso = require(&#39;gulp-csso&#39;);
-
-var root = &quot;./public&quot;;
-var buildDir = root;
-var datas={
-    html:[root+&quot;/**/*.html&quot;],
-    image:[root+&quot;/**/*.png&quot;],
-    css:[root+&quot;/**/*.css&quot;],
-    js:[root+&quot;/**/*.js&quot;,&#39;!*min.js&#39;]
-}
-
-// 压缩html
-gulp.task(&quot;htmlmin&quot;,function(){
-    gulp.src(datas.html)
-    .pipe(htmlmin({collapseWhitespace:true,minifyJS:true,minifyCSS:true,removeComments:true}))
-    .pipe(gulp.dest(buildDir));
-});
-
-// png图片压缩
-gulp.task(&quot;imagemin&quot;,function(){
-    gulp.src(datas.image)
-    .pipe(imagemin({
-        progressive:true,
-        svgoPlugins:[{removeViewBox:false}],
-        use:[pngquant()] //压缩率64%
-    }))
-    .pipe(gulp.dest(buildDir));
-});
-
-// js压缩
-gulp.task(&quot;jsmin&quot;,function(){
-    gulp.src(datas.js)
-    .pipe(jsmin())
-    //.pipe(rename({suffix:&#39;.min&#39;}))
-    .pipe(gulp.dest(buildDir));
-});
-
-// css压缩
-gulp.task(&quot;cssmin&quot;,function(){
-    gulp.src(datas.css)
-    .pipe(csso())
-    .pipe(gulp.dest(buildDir));
-});
-
-gulp.task(&quot;default&quot;,[&quot;htmlmin&quot;,&quot;imagemin&quot;,&quot;jsmin&quot;,&quot;cssmin&quot;]);
-</code></pre>
-<h3 id="Step2：执行命令"><a href="#Step2：执行命令" class="headerlink" title="Step2：执行命令"></a>Step2：执行命令</h3><pre><code>hexo clean
-hexo ge
-gulp
-hexo d
-</code></pre><h2 id="最后"><a href="#最后" class="headerlink" title="最后"></a>最后</h2><p>gulp提供了相当多的插件，大家可以自行去了解使用，还是挺好使的</p>
+<h2 id="步骤"><a href="#步骤" class="headerlink" title="步骤"></a>步骤</h2><h3 id="Step1：hexo根目录新增gulpfile-js文件"><a href="#Step1：hexo根目录新增gulpfile-js文件" class="headerlink" title="Step1：hexo根目录新增gulpfile.js文件"></a>Step1：hexo根目录新增gulpfile.js文件</h3><figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> gulp = <span class="built_in">require</span>(<span class="string">'gulp'</span>);</div><div class="line"><span class="comment">//html压缩</span></div><div class="line"><span class="keyword">var</span> htmlmin = <span class="built_in">require</span>(<span class="string">'gulp-htmlmin'</span>);</div><div class="line"><span class="comment">//js压缩</span></div><div class="line"><span class="keyword">var</span> jsmin = <span class="built_in">require</span>(<span class="string">'gulp-jsmin'</span>);</div><div class="line"><span class="comment">//文件重命名</span></div><div class="line"><span class="keyword">var</span> rename = <span class="built_in">require</span>(<span class="string">'gulp-rename'</span>);</div><div class="line"><span class="comment">//图片压缩png/jpg/gif</span></div><div class="line"><span class="keyword">var</span> imagemin = <span class="built_in">require</span>(<span class="string">'gulp-imagemin'</span>);</div><div class="line"><span class="comment">//png压缩</span></div><div class="line"><span class="keyword">var</span> pngquant = <span class="built_in">require</span>(<span class="string">'imagemin-pngquant'</span>);</div><div class="line"><span class="comment">//css压缩</span></div><div class="line"><span class="keyword">var</span> csso = <span class="built_in">require</span>(<span class="string">'gulp-csso'</span>);</div><div class="line"></div><div class="line"><span class="keyword">var</span> root = <span class="string">"./public"</span>;</div><div class="line"><span class="keyword">var</span> buildDir = root;</div><div class="line"><span class="keyword">var</span> datas=&#123;</div><div class="line">	<span class="attr">html</span>:[root+<span class="string">"/**/*.html"</span>],</div><div class="line">	<span class="attr">image</span>:[root+<span class="string">"/**/*.png"</span>],</div><div class="line">	<span class="attr">css</span>:[root+<span class="string">"/**/*.css"</span>],</div><div class="line">	<span class="attr">js</span>:[root+<span class="string">"/**/*.js"</span>,<span class="string">'!*min.js'</span>]</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="comment">// 压缩html</span></div><div class="line">gulp.task(<span class="string">"htmlmin"</span>,<span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</div><div class="line">	gulp.src(datas.html)</div><div class="line">	.pipe(htmlmin(&#123;<span class="attr">collapseWhitespace</span>:<span class="literal">true</span>,<span class="attr">minifyJS</span>:<span class="literal">true</span>,<span class="attr">minifyCSS</span>:<span class="literal">true</span>,<span class="attr">removeComments</span>:<span class="literal">true</span>&#125;))</div><div class="line">	.pipe(gulp.dest(buildDir));</div><div class="line">&#125;);</div><div class="line"></div><div class="line"><span class="comment">// png图片压缩</span></div><div class="line">gulp.task(<span class="string">"imagemin"</span>,<span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</div><div class="line">	gulp.src(datas.image)</div><div class="line">	.pipe(imagemin(&#123;</div><div class="line">		<span class="attr">progressive</span>:<span class="literal">true</span>,</div><div class="line">		<span class="attr">svgoPlugins</span>:[&#123;<span class="attr">removeViewBox</span>:<span class="literal">false</span>&#125;],</div><div class="line">		<span class="attr">use</span>:[pngquant()] <span class="comment">//压缩率64%</span></div><div class="line">	&#125;))</div><div class="line">	.pipe(gulp.dest(buildDir));</div><div class="line">&#125;);</div><div class="line"></div><div class="line"><span class="comment">// js压缩</span></div><div class="line">gulp.task(<span class="string">"jsmin"</span>,<span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</div><div class="line">	gulp.src(datas.js)</div><div class="line">	.pipe(jsmin())</div><div class="line">	<span class="comment">//.pipe(rename(&#123;suffix:'.min'&#125;))</span></div><div class="line">	.pipe(gulp.dest(buildDir));</div><div class="line">&#125;);</div><div class="line"></div><div class="line"><span class="comment">// css压缩</span></div><div class="line">gulp.task(<span class="string">"cssmin"</span>,<span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</div><div class="line">	gulp.src(datas.css)</div><div class="line">	.pipe(csso())</div><div class="line">	.pipe(gulp.dest(buildDir));</div><div class="line">&#125;);</div><div class="line"></div><div class="line">gulp.task(<span class="string">"default"</span>,[<span class="string">"htmlmin"</span>,<span class="string">"imagemin"</span>,<span class="string">"jsmin"</span>,<span class="string">"cssmin"</span>]);</div></pre></td></tr></table></figure>
+<h3 id="Step2：执行命令"><a href="#Step2：执行命令" class="headerlink" title="Step2：执行命令"></a>Step2：执行命令</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">hexo clean</div><div class="line">hexo ge</div><div class="line">gulp</div><div class="line">hexo d</div></pre></td></tr></table></figure>
+<h2 id="最后"><a href="#最后" class="headerlink" title="最后"></a>最后</h2><p>gulp提供了相当多的插件，大家可以自行去了解使用，还是挺好使的</p>
 <h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><p><a href="http://gulpjs.com/" target="_blank" rel="external">gulp官网</a><br><a href="http://www.gulpjs.com.cn/" target="_blank" rel="external">gulp中文</a></p>
 ]]></content>
     
@@ -1164,12 +977,8 @@ hexo d
 <h3 id="项目迁移"><a href="#项目迁移" class="headerlink" title="项目迁移"></a><strong>项目迁移</strong></h3><p>我们可以直接将Gitcafe上面的库迁移到Coding上来，也可以重新在Coding上新建库都是可以的。<br>如果要迁移，官网也提供了一键迁移的操作页面，这里就不描述了。</p>
 <h3 id="Coding平台"><a href="#Coding平台" class="headerlink" title="Coding平台"></a><strong>Coding平台</strong></h3><p>新建一个分支：<strong>coding-pages</strong><br><img src="http://7xqlat.com1.z0.glb.clouddn.com/coding_branch.png-hunterblog" alt=""></p>
 <p>开启Pages服务并绑定自定义域名<br><img src="http://7xqlat.com1.z0.glb.clouddn.com/coding_pages.png-hunterblog" alt=""></p>
-<h3 id="config-yml"><a href="#config-yml" class="headerlink" title="_config.yml"></a><strong>_config.yml</strong></h3><p>在全局_config.yml中deploy新增coding节点</p>
-<pre><code>deploy:
-  type: git
-  repo:
-    coding: https://git.coding.net/hunterlin/hunterlin.git,coding-pages
-</code></pre>]]></content>
+<h3 id="config-yml"><a href="#config-yml" class="headerlink" title="_config.yml"></a><strong>_config.yml</strong></h3><p>在全局_config.yml中deploy新增coding节点<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">deploy:</div><div class="line">  type: git</div><div class="line">  repo:</div><div class="line">    coding: https://git.coding.net/hunterlin/hunterlin.git,coding-pages</div></pre></td></tr></table></figure></p>
+]]></content>
     
     <summary type="html">
     
@@ -1199,153 +1008,45 @@ hexo d
 <li>长期存活的对象将进入老年代</li>
 </ul>
 <h2 id="对象优先在Eden分配"><a href="#对象优先在Eden分配" class="headerlink" title="对象优先在Eden分配"></a><strong>对象优先在Eden分配</strong></h2><p>大多数情况，对象在新生代Eden区中分配内存，当Eden区没有足够的空间进行分配时，虚拟机将发起一次Minor GC。</p>
-<p>下面我们通过具体代码来分析对象在新生代中的分配情况：</p>
-<pre><code class="java">/**
- * VM Args: 
- * -Xms20M -Xmx20M -Xmn10M  #Java堆大小为20m，不可扩展，其中10m分配给年轻代，剩下10m分配给老年代
- * -XX:SurvivorRatio=8 #设置为8,则两个Survivor区与一个Eden区的比值为2:8,一个Survivor区占整个年轻代的1/10，Eden区占8/10
- * -XX:+PrintGCDetails #打印GC日志 
- * -XX:+UseSerialGC #使用Serial+Serial Old的收集器组合进行内存回收
- */
-public class TestMemoryAlloc {
-    private static final int _1MB = 1024*1024;
-    public static void main(String[] args) {
-        byte[] allocation1,allocation2,allocation3,allocation4;
-        allocation1 = new byte[2*_1MB];
-        allocation2 = new byte[2*_1MB];
-        allocation3 = new byte[2*_1MB];
-        allocation4 = new byte[4*_1MB];//发生第一次Minor GC
-    }
-}
-</code></pre>
+<p>下面我们通过具体代码来分析对象在新生代中的分配情况：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div></pre></td><td class="code"><pre><div class="line"><span class="comment">/**</span></div><div class="line"> * VM Args: </div><div class="line"> * -Xms20M -Xmx20M -Xmn10M  #Java堆大小为20m，不可扩展，其中10m分配给年轻代，剩下10m分配给老年代</div><div class="line"> * -XX:SurvivorRatio=8 #设置为8,则两个Survivor区与一个Eden区的比值为2:8,一个Survivor区占整个年轻代的1/10，Eden区占8/10</div><div class="line"> * -XX:+PrintGCDetails #打印GC日志 </div><div class="line"> * -XX:+UseSerialGC #使用Serial+Serial Old的收集器组合进行内存回收</div><div class="line"> */</div><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">TestMemoryAlloc</span> </span>&#123;</div><div class="line">	<span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">int</span> _1MB = <span class="number">1024</span>*<span class="number">1024</span>;</div><div class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</div><div class="line">		<span class="keyword">byte</span>[] allocation1,allocation2,allocation3,allocation4;</div><div class="line">		allocation1 = <span class="keyword">new</span> <span class="keyword">byte</span>[<span class="number">2</span>*_1MB];</div><div class="line">		allocation2 = <span class="keyword">new</span> <span class="keyword">byte</span>[<span class="number">2</span>*_1MB];</div><div class="line">		allocation3 = <span class="keyword">new</span> <span class="keyword">byte</span>[<span class="number">2</span>*_1MB];</div><div class="line">		allocation4 = <span class="keyword">new</span> <span class="keyword">byte</span>[<span class="number">4</span>*_1MB];<span class="comment">//发生第一次Minor GC</span></div><div class="line">	&#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
 <p>根据虚拟机参数初始新生代的内存是这样：<br><img src="http://7xqlat.com1.z0.glb.clouddn.com/jvm_memory_alloc_01.png-hunterblog" alt=""></p>
 <p>main方法中分配了3个2MB大小和1个4MB大小的对象，当在进行allocation4分配的时候会触发第一次MinorGC操作。</p>
 <p>因为allocation4对象需要分配4MB的内存空间，此时Eden已经被前面3个2MB的对象占用了共6MB的大小，Eden还剩余2MB的大小(总Eden空间大小是8192K)，所以在进行allocation4分配的时候由于Eden空间不足会触发第一次MinorGC操作。</p>
 <p>MinorGC操作(采用“复制算法”)会将Eden区的3个2MB对象复制到Survivor区域，由于Survivor区域总大小只有1024K，分配不下3个2MB大小的对象，所以只好通过分配担保机制提前将3个2MB的对象转移到年老代中过去。</p>
 <p>最后MinorGC操作完成后，Eden分配着4MB的allocation4对象，Survivor区空闲，年老代分配了总共6MB(allocation1,allocation2,allocation3)的对象，下面我们通过GC日志来验证这点。</p>
-<pre><code>[GC[DefNew: 7146K-&gt;484K(9216K), 0.0047529 secs] 7146K-&gt;6628K(19456K), 0.0047906 secs] [Times: user=0.00 sys=0.00, real=0.01 secs] 
-Heap
- def new generation   total 9216K, used 4746K [0x00000000f9a00000, 0x00000000fa400000, 0x00000000fa400000)
-  eden space 8192K,  52% used [0x00000000f9a00000, 0x00000000f9e297b0, 0x00000000fa200000)
-  from space 1024K,  47% used [0x00000000fa300000, 0x00000000fa3791a8, 0x00000000fa400000)
-  to   space 1024K,   0% used [0x00000000fa200000, 0x00000000fa200000, 0x00000000fa300000)
- tenured generation   total 10240K, used 6144K [0x00000000fa400000, 0x00000000fae00000, 0x00000000fae00000)
-   the space 10240K,  60% used [0x00000000fa400000, 0x00000000faa00030, 0x00000000faa00200, 0x00000000fae00000)
- compacting perm gen  total 21248K, used 2582K [0x00000000fae00000, 0x00000000fc2c0000, 0x0000000100000000)
-   the space 21248K,  12% used [0x00000000fae00000, 0x00000000fb085a70, 0x00000000fb085c00, 0x00000000fc2c0000)
-No shared spaces configured.
-</code></pre><p><code>[GC[DefNew: 7146K-&gt;484K(9216K), 0.0047529 secs] 7146K-&gt;6628K(19456K), 0.0047906 secs]</code><br>可以看到新生代总内存9216K，由GC前占用的7146K回收到了484K，Java堆内存从7146K到6628K几乎没有怎么变化，因为GC回收时四个对象仍然是可用的(存在Eden和老年代中)。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line">[GC[DefNew: 7146K-&gt;484K(9216K), 0.0047529 secs] 7146K-&gt;6628K(19456K), 0.0047906 secs] [Times: user=0.00 sys=0.00, real=0.01 secs] </div><div class="line">Heap</div><div class="line"> def new generation   total 9216K, used 4746K [0x00000000f9a00000, 0x00000000fa400000, 0x00000000fa400000)</div><div class="line">  eden space 8192K,  52% used [0x00000000f9a00000, 0x00000000f9e297b0, 0x00000000fa200000)</div><div class="line">  from space 1024K,  47% used [0x00000000fa300000, 0x00000000fa3791a8, 0x00000000fa400000)</div><div class="line">  to   space 1024K,   0% used [0x00000000fa200000, 0x00000000fa200000, 0x00000000fa300000)</div><div class="line"> tenured generation   total 10240K, used 6144K [0x00000000fa400000, 0x00000000fae00000, 0x00000000fae00000)</div><div class="line">   the space 10240K,  60% used [0x00000000fa400000, 0x00000000faa00030, 0x00000000faa00200, 0x00000000fae00000)</div><div class="line"> compacting perm gen  total 21248K, used 2582K [0x00000000fae00000, 0x00000000fc2c0000, 0x0000000100000000)</div><div class="line">   the space 21248K,  12% used [0x00000000fae00000, 0x00000000fb085a70, 0x00000000fb085c00, 0x00000000fc2c0000)</div><div class="line">No shared spaces configured.</div></pre></td></tr></table></figure>
+<p><code>[GC[DefNew: 7146K-&gt;484K(9216K), 0.0047529 secs] 7146K-&gt;6628K(19456K), 0.0047906 secs]</code><br>可以看到新生代总内存9216K，由GC前占用的7146K回收到了484K，Java堆内存从7146K到6628K几乎没有怎么变化，因为GC回收时四个对象仍然是可用的(存在Eden和老年代中)。</p>
 <p><code>def new generation   total 9216K, used 4746K</code><br>新生代总内存9216K，已经使用了4746K，被占用的区域就是Eden区</p>
 <p><code>eden space 8192K,  52% used</code><br>新生代中Eden的内存为8192K，已经被使用了52%，就是被allocation4对象占用着</p>
 <p><code>to   space 1024K,   0%</code><br>Survivor to区总大小1024k，空闲</p>
 <p><code>tenured generation   total 10240K, used 6144K</code><br>年老代总内存10240K，已经被allocation1,allocation2,allocation3三个对象占用了6144K。</p>
 <p>通过GC日志的分析已经证明了我们上面提到的内存分配规则。</p>
 <h2 id="大对象直接进入老年代"><a href="#大对象直接进入老年代" class="headerlink" title="大对象直接进入老年代"></a><strong>大对象直接进入老年代</strong></h2><p>大对象是指需要大量连续内存空间的Java对象，写程序的时候要尽量避免大对象，经常出现大对象容易导致内存还有不少空间时候就提前触发垃圾收集以获取足够的内存空间来安放这些大对象。</p>
-<p>下面我们还是通过代码来分析下，将上面代码中allocation4对象的大小改为8MB：</p>
-<pre><code class="java">/**
- * VM Args: 
- * -Xms20M -Xmx20M -Xmn10M  #Java堆大小为20m，不可扩展，其中10m分配给年轻代，剩下10m分配给老年代
- * -XX:SurvivorRatio=8 #设置为8,则两个Survivor区与一个Eden区的比值为2:8,一个Survivor区占整个年轻代的1/10，Eden区占8/10
- * -XX:+PrintGCDetails #打印GC日志 
- * -XX:+UseSerialGC #使用Serial+Serial Old的收集器组合进行内存回收
- */
-public class TestMemoryAlloc {
-    private static final int _1MB = 1024*1024;
-    public static void main(String[] args) {
-        byte[] allocation1,allocation2,allocation3,allocation4;
-        allocation1 = new byte[2*_1MB];
-        allocation2 = new byte[2*_1MB];
-        allocation3 = new byte[2*_1MB];
-        allocation4 = new byte[8*_1MB];
-    }
-}
-</code></pre>
-<p>我们看下运行之后的GC日志：</p>
-<pre><code>Heap
- def new generation   total 9216K, used 7310K [0x00000000f9a00000, 0x00000000fa400000, 0x00000000fa400000)
-  eden space 8192K,  89% used [0x00000000f9a00000, 0x00000000fa123978, 0x00000000fa200000)
-  from space 1024K,   0% used [0x00000000fa200000, 0x00000000fa200000, 0x00000000fa300000)
-  to   space 1024K,   0% used [0x00000000fa300000, 0x00000000fa300000, 0x00000000fa400000)
- tenured generation   total 10240K, used 8192K [0x00000000fa400000, 0x00000000fae00000, 0x00000000fae00000)
-   the space 10240K,  80% used [0x00000000fa400000, 0x00000000fac00010, 0x00000000fac00200, 0x00000000fae00000)
- compacting perm gen  total 21248K, used 2582K [0x00000000fae00000, 0x00000000fc2c0000, 0x0000000100000000)
-   the space 21248K,  12% used [0x00000000fae00000, 0x00000000fb085a70, 0x00000000fb085c00, 0x00000000fc2c0000)
-No shared spaces configured.
-</code></pre><p>通过日志发现在分配allocation4对象内存的时候并没有触发GC操作，而是将allocation4对象直接分配到了老年代中。</p>
+<p>下面我们还是通过代码来分析下，将上面代码中allocation4对象的大小改为8MB：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div></pre></td><td class="code"><pre><div class="line"><span class="comment">/**</span></div><div class="line"> * VM Args: </div><div class="line"> * -Xms20M -Xmx20M -Xmn10M  #Java堆大小为20m，不可扩展，其中10m分配给年轻代，剩下10m分配给老年代</div><div class="line"> * -XX:SurvivorRatio=8 #设置为8,则两个Survivor区与一个Eden区的比值为2:8,一个Survivor区占整个年轻代的1/10，Eden区占8/10</div><div class="line"> * -XX:+PrintGCDetails #打印GC日志 </div><div class="line"> * -XX:+UseSerialGC #使用Serial+Serial Old的收集器组合进行内存回收</div><div class="line"> */</div><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">TestMemoryAlloc</span> </span>&#123;</div><div class="line">	<span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">int</span> _1MB = <span class="number">1024</span>*<span class="number">1024</span>;</div><div class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</div><div class="line">		<span class="keyword">byte</span>[] allocation1,allocation2,allocation3,allocation4;</div><div class="line">		allocation1 = <span class="keyword">new</span> <span class="keyword">byte</span>[<span class="number">2</span>*_1MB];</div><div class="line">		allocation2 = <span class="keyword">new</span> <span class="keyword">byte</span>[<span class="number">2</span>*_1MB];</div><div class="line">		allocation3 = <span class="keyword">new</span> <span class="keyword">byte</span>[<span class="number">2</span>*_1MB];</div><div class="line">		allocation4 = <span class="keyword">new</span> <span class="keyword">byte</span>[<span class="number">8</span>*_1MB];</div><div class="line">	&#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>我们看下运行之后的GC日志：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line">Heap</div><div class="line"> def new generation   total 9216K, used 7310K [0x00000000f9a00000, 0x00000000fa400000, 0x00000000fa400000)</div><div class="line">  eden space 8192K,  89% used [0x00000000f9a00000, 0x00000000fa123978, 0x00000000fa200000)</div><div class="line">  from space 1024K,   0% used [0x00000000fa200000, 0x00000000fa200000, 0x00000000fa300000)</div><div class="line">  to   space 1024K,   0% used [0x00000000fa300000, 0x00000000fa300000, 0x00000000fa400000)</div><div class="line"> tenured generation   total 10240K, used 8192K [0x00000000fa400000, 0x00000000fae00000, 0x00000000fae00000)</div><div class="line">   the space 10240K,  80% used [0x00000000fa400000, 0x00000000fac00010, 0x00000000fac00200, 0x00000000fae00000)</div><div class="line"> compacting perm gen  total 21248K, used 2582K [0x00000000fae00000, 0x00000000fc2c0000, 0x0000000100000000)</div><div class="line">   the space 21248K,  12% used [0x00000000fae00000, 0x00000000fb085a70, 0x00000000fb085c00, 0x00000000fc2c0000)</div><div class="line">No shared spaces configured.</div></pre></td></tr></table></figure></p>
+<p>通过日志发现在分配allocation4对象内存的时候并没有触发GC操作，而是将allocation4对象直接分配到了老年代中。</p>
 <p>另外虚拟机提供了-XX:PretenureSizeThreshold参数(默认是0)，令大于这个设置值的对象直接在老年代分配。这样做的目的是避免在Eden区和两个Survior区之间发生大量的内存复制(复制算法收集内存)操作。</p>
 <p><strong>PS:PretenureSizeThreshold参数只对Serial和ParNew两款收集器有效</strong></p>
 <h2 id="长期存活的对象将进入老年代"><a href="#长期存活的对象将进入老年代" class="headerlink" title="长期存活的对象将进入老年代"></a><strong>长期存活的对象将进入老年代</strong></h2><p>虚拟机采用分代收集的思想来管理内存，那么内存回收时如何识别哪些对象应该在新生代，哪些对象应该在老年代中。为了做到这点，虚拟机给每个对象定义了一个对象年龄计数器。即对象在Eden中出生并经过第一次Minor GC后仍然存活的且能被Survivor容纳的，将被移动到Survivor空间中，并且对象年龄设为1。对象在Survivor空间每熬过一次Minor GC，年龄就增加1，当它的年龄增加到一定程度（默认是15），就将会被迁移到老年代中。对象迁移老年代的年龄阈值可以通过参数-XX:+MaxTenuringThreshold设置。</p>
 <p>下面我们分别通过参数-XX:+MaxTenuringThreshold=1和-XX:+MaxTenuringThreshold=15设置对象的年龄为1和15来验证下：</p>
-<p><strong>-XX:+MaxTenuringThreshold=1</strong></p>
-<pre><code>/**
-    VM Args: -Xms20m -Xmx20m -Xmn10m -XX:+PrintGCDetails -XX:SurvivorRatio=8 
-    -XX:MaxTenuringThreshold=1 -XX:+UseSerialGC -XX:+PrintTenuringDistribution
-**/
-public class TestMaxTenuringThreshold {
-    private static final int _1MB = 1024*1024;
-    public static void main(String[] args) {
-        //什么时候进入老年代取决于XX:MaxTenuringThreshold设置
-        byte[]allocation1,allocation2,allocation3;
-        allocation1 = new byte[_1MB / 4];
-        allocation2 = new byte[4 * _1MB];
-        allocation3 = new byte[4 * _1MB];// 第一次触发Minor GC
-        allocation3 = null;
-        allocation3 = new byte[4 * _1MB];// 第二次触发Minor GC
-    }
-}
-</code></pre><p>GC日志：</p>
-<pre><code>[GC[DefNew: 5190K-&gt;740K(9216K), 0.0029755 secs] 5190K-&gt;4836K(19456K), 0.0030150 secs] [Times: user=0.00 sys=0.00, real=0.00 secs] 
-[GC[DefNew: 4836K-&gt;0K(9216K), 0.0012083 secs] 8932K-&gt;4836K(19456K), 0.0012270 secs] [Times: user=0.00 sys=0.00, real=0.00 secs] 
-Heap
- def new generation   total 9216K, used 4259K [0x00000000f9a00000, 0x00000000fa400000, 0x00000000fa400000)
-  eden space 8192K,  52% used [0x00000000f9a00000, 0x00000000f9e28fd0, 0x00000000fa200000)
-  from space 1024K,   0% used [0x00000000fa200000, 0x00000000fa200000, 0x00000000fa300000)
-  to   space 1024K,   0% used [0x00000000fa300000, 0x00000000fa300000, 0x00000000fa400000)
- tenured generation   total 10240K, used 4836K [0x00000000fa400000, 0x00000000fae00000, 0x00000000fae00000)
-   the space 10240K,  47% used [0x00000000fa400000, 0x00000000fa8b9218, 0x00000000fa8b9400, 0x00000000fae00000)
- compacting perm gen  total 21248K, used 2582K [0x00000000fae00000, 0x00000000fc2c0000, 0x0000000100000000)
-   the space 21248K,  12% used [0x00000000fae00000, 0x00000000fb085a60, 0x00000000fb085c00, 0x00000000fc2c0000)
-No shared spaces configured.
-</code></pre><p>通过日志可以看到一共触发了2次Minor GC操作，分别代码第11行和13行；下面我们具体分析下：</p>
+<p><strong>-XX:+MaxTenuringThreshold=1</strong><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div></pre></td><td class="code"><pre><div class="line">/**</div><div class="line">	VM Args: -Xms20m -Xmx20m -Xmn10m -XX:+PrintGCDetails -XX:SurvivorRatio=8 </div><div class="line">	-XX:MaxTenuringThreshold=1 -XX:+UseSerialGC -XX:+PrintTenuringDistribution</div><div class="line">**/</div><div class="line">public class TestMaxTenuringThreshold &#123;</div><div class="line">	private static final int _1MB = 1024*1024;</div><div class="line">	public static void main(String[] args) &#123;</div><div class="line">		//什么时候进入老年代取决于XX:MaxTenuringThreshold设置</div><div class="line">		byte[]allocation1,allocation2,allocation3;</div><div class="line">		allocation1 = new byte[_1MB / 4];</div><div class="line">		allocation2 = new byte[4 * _1MB];</div><div class="line">		allocation3 = new byte[4 * _1MB];// 第一次触发Minor GC</div><div class="line">		allocation3 = null;</div><div class="line">		allocation3 = new byte[4 * _1MB];// 第二次触发Minor GC</div><div class="line">	&#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>GC日志：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line">[GC[DefNew: 5190K-&gt;740K(9216K), 0.0029755 secs] 5190K-&gt;4836K(19456K), 0.0030150 secs] [Times: user=0.00 sys=0.00, real=0.00 secs] </div><div class="line">[GC[DefNew: 4836K-&gt;0K(9216K), 0.0012083 secs] 8932K-&gt;4836K(19456K), 0.0012270 secs] [Times: user=0.00 sys=0.00, real=0.00 secs] </div><div class="line">Heap</div><div class="line"> def new generation   total 9216K, used 4259K [0x00000000f9a00000, 0x00000000fa400000, 0x00000000fa400000)</div><div class="line">  eden space 8192K,  52% used [0x00000000f9a00000, 0x00000000f9e28fd0, 0x00000000fa200000)</div><div class="line">  from space 1024K,   0% used [0x00000000fa200000, 0x00000000fa200000, 0x00000000fa300000)</div><div class="line">  to   space 1024K,   0% used [0x00000000fa300000, 0x00000000fa300000, 0x00000000fa400000)</div><div class="line"> tenured generation   total 10240K, used 4836K [0x00000000fa400000, 0x00000000fae00000, 0x00000000fae00000)</div><div class="line">   the space 10240K,  47% used [0x00000000fa400000, 0x00000000fa8b9218, 0x00000000fa8b9400, 0x00000000fae00000)</div><div class="line"> compacting perm gen  total 21248K, used 2582K [0x00000000fae00000, 0x00000000fc2c0000, 0x0000000100000000)</div><div class="line">   the space 21248K,  12% used [0x00000000fae00000, 0x00000000fb085a60, 0x00000000fb085c00, 0x00000000fc2c0000)</div><div class="line">No shared spaces configured.</div></pre></td></tr></table></figure></p>
+<p>通过日志可以看到一共触发了2次Minor GC操作，分别代码第11行和13行；下面我们具体分析下：</p>
 <p>在进行第一次GC的时候，Eden区域已经被allocation1和allocation2两个对象占用了4352K的内存空间，当再分配allocation3的内存空间的时候（由于Eden总空间只有8M）会触发第一次MinorGC操作，会将allocation1和allocation2两个对象迁移到Survivor区域，然后将allocation3对象分配在Eden区共占用4M内存大小。</p>
 <p><code>[DefNew: 5190K-&gt;740K(9216K), 0.0029755 secs] 5190K-&gt;4836K(19456K), 0.0030150 secs]</code><br>可以看到GC发生时，新生代由5190K回收到了740k；Java Heap几乎没有怎么变化；因为此时对象仍然可用。</p>
 <p>接下来将allocation3对象失效；然后再分配allocation3对象内存空间，由于Eden空间已经被之前的allocation3老对象占用着，剩余空间不足以分配新的allocation3对象内存，所以会触发第二次Minor GC操作；</p>
 <p>由于allocation3老对象已经被设置为失效(内存中的allocation3老对象已经没有引用指向它)，所以会在第二次GC的时候将其在Eden中占用的内存回收掉；<br>由于MaxTenuringThreshold参数设置为1，那么在Survivor区域的allocation1和allocation2两个对象会被迁移到老年代；<br>最后新的allocation3对象会被分配到Eden区域；</p>
 <p><code>[DefNew: 4836K-&gt;0K(9216K), 0.0012083 secs] 8932K-&gt;4836K(19456K), 0.0012270 secs]</code><br>可以看到新生代由4836K回收到了0k，Java Heap由8932K回收到了4836K，回收掉的就是allocation3老对象占用的内存</p>
 <p>最后通过日志可以看到<code>def new generation   total 9216K, used 4259K</code>,年轻代占用了4259k的内存（eden区的allocation3新对象），<code>tenured generation   total 10240K, used 4836K</code>老年代占用了4836K的内存(allocation1和allocation2两个对象)</p>
-<p><strong>-XX:+MaxTenuringThreshold=15</strong><br>GC日志：</p>
-<pre><code>[GC [DefNew
-Desired survivor size 524288 bytes, new threshold 15 (max 15)
-- age   1:     445680 bytes,     445680 total
-: 4703K-&gt;435K(9216K), 0.0025569 secs] 4703K-&gt;4531K(19456K), 0.0025839 secs] [Times: user=0.00 sys=0.00, real=0.00 secs] 
-[GC [DefNew
-Desired survivor size 524288 bytes, new threshold 15 (max 15)
-- age   2:     445680 bytes,     445680 total
-: 4531K-&gt;435K(9216K), 0.0004236 secs] 8627K-&gt;4531K(19456K), 0.0004367 secs] [Times: user=0.00 sys=0.00, real=0.00 secs] 
-Heap
- def new generation   total 9216K, used 4859K [0x00000000f9a00000, 0x00000000fa400000, 0x00000000fa400000)
-  eden space 8192K,  54% used [0x00000000f9a00000, 0x00000000f9e51f98, 0x00000000fa200000)
-  from space 1024K,  42% used [0x00000000fa200000, 0x00000000fa26ccf0, 0x00000000fa300000)
-  to   space 1024K,   0% used [0x00000000fa300000, 0x00000000fa300000, 0x00000000fa400000)
- tenured generation   total 10240K, used 4096K [0x00000000fa400000, 0x00000000fae00000, 0x00000000fae00000)
-   the space 10240K,  40% used [0x00000000fa400000, 0x00000000fa800010, 0x00000000fa800200, 0x00000000fae00000)
- compacting perm gen  total 21248K, used 3045K [0x00000000fae00000, 0x00000000fc2c0000, 0x0000000100000000)
-   the space 21248K,  14% used [0x00000000fae00000, 0x00000000fb0f9740, 0x00000000fb0f9800, 0x00000000fc2c0000)
-No shared spaces configured.
-</code></pre><p>从GC日志可以分析：</p>
+<p><strong>-XX:+MaxTenuringThreshold=15</strong><br>GC日志：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div></pre></td><td class="code"><pre><div class="line">[GC [DefNew</div><div class="line">Desired survivor size 524288 bytes, new threshold 15 (max 15)</div><div class="line">- age   1:     445680 bytes,     445680 total</div><div class="line">: 4703K-&gt;435K(9216K), 0.0025569 secs] 4703K-&gt;4531K(19456K), 0.0025839 secs] [Times: user=0.00 sys=0.00, real=0.00 secs] </div><div class="line">[GC [DefNew</div><div class="line">Desired survivor size 524288 bytes, new threshold 15 (max 15)</div><div class="line">- age   2:     445680 bytes,     445680 total</div><div class="line">: 4531K-&gt;435K(9216K), 0.0004236 secs] 8627K-&gt;4531K(19456K), 0.0004367 secs] [Times: user=0.00 sys=0.00, real=0.00 secs] </div><div class="line">Heap</div><div class="line"> def new generation   total 9216K, used 4859K [0x00000000f9a00000, 0x00000000fa400000, 0x00000000fa400000)</div><div class="line">  eden space 8192K,  54% used [0x00000000f9a00000, 0x00000000f9e51f98, 0x00000000fa200000)</div><div class="line">  from space 1024K,  42% used [0x00000000fa200000, 0x00000000fa26ccf0, 0x00000000fa300000)</div><div class="line">  to   space 1024K,   0% used [0x00000000fa300000, 0x00000000fa300000, 0x00000000fa400000)</div><div class="line"> tenured generation   total 10240K, used 4096K [0x00000000fa400000, 0x00000000fae00000, 0x00000000fae00000)</div><div class="line">   the space 10240K,  40% used [0x00000000fa400000, 0x00000000fa800010, 0x00000000fa800200, 0x00000000fae00000)</div><div class="line"> compacting perm gen  total 21248K, used 3045K [0x00000000fae00000, 0x00000000fc2c0000, 0x0000000100000000)</div><div class="line">   the space 21248K,  14% used [0x00000000fae00000, 0x00000000fb0f9740, 0x00000000fb0f9800, 0x00000000fc2c0000)</div><div class="line">No shared spaces configured.</div></pre></td></tr></table></figure></p>
+<p>从GC日志可以分析：</p>
 <p>第一次GC操作之前：新生代Eden区有allocation1对象（256KB）和allocation2对象（4MB）。<br>GC操作之后：将Eden区域的两个对象进行迁移（采用复制算法），由于Survivor区(1024K)无法容纳allocation2对象(4MB)，所以将allocation1对象迁移到了老年代中，而allocation1对象（256K）则迁移到了Survivor区，所以此时新生代内存占有总容量只有Survivor区域的allocation1对象。这就是GC操作内存变换的缘由<code>4703K-&gt;435K(9216K)</code></p>
 <p>第二次GC之前：新生代Eden区域有老的allocation3对象(4MB),Survivor区域的allocation1对象(256KB)。<br>GC操作之后：由于老的allocation3对象已经是无效对象，所以其占用的内存会被清理掉；而Survivor区的allocation1对象则在Survivor区域来回倒腾下(to-from)还停留在Survivor区域，只是年龄加1(原因是我们配置了MaxTenuringThreshold=15)。所以此时新生代内存占有总容量还是只有Survivor区域的allocation1对象。这就是GC操作内存变换的缘由<code>4531K-&gt;435K(9216K)</code></p>
 <p>所以最后新生代占用内存4859K（eden区allocation3对象的4MB，Survivor区的allocation1对象）；老年代占用内存4096K（allocation2对象的4MB）</p>
 <p><strong>说明</strong><br>在测试MaxTenuringThreshold=15的过程中，发现在JDK1.7上运行该参数无效，设置与否都是1；切换到JDK1.6上运行该参数就有效；</p>
-<p>JDK1.6版本：</p>
-<pre><code>java version &quot;1.6.0_45&quot;
-Java(TM) SE Runtime Environment (build 1.6.0_45-b06)
-Java HotSpot(TM) 64-Bit Server VM (build 20.45-b01, mixed mode)
-</code></pre><p>JDK1.7版本：</p>
-<pre><code>java version &quot;1.7.0_79&quot;
-Java(TM) SE Runtime Environment (build 1.7.0_79-b15)
-Java HotSpot(TM) 64-Bit Server VM (build 24.79-b02, mixed mode)
-</code></pre><p>PS：大家可以留言分享下。</p>
+<p>JDK1.6版本：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">java version &quot;1.6.0_45&quot;</div><div class="line">Java(TM) SE Runtime Environment (build 1.6.0_45-b06)</div><div class="line">Java HotSpot(TM) 64-Bit Server VM (build 20.45-b01, mixed mode)</div></pre></td></tr></table></figure></p>
+<p>JDK1.7版本：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">java version &quot;1.7.0_79&quot;</div><div class="line">Java(TM) SE Runtime Environment (build 1.7.0_79-b15)</div><div class="line">Java HotSpot(TM) 64-Bit Server VM (build 24.79-b02, mixed mode)</div></pre></td></tr></table></figure></p>
+<p>PS：大家可以留言分享下。</p>
 <!--
 分配担保机制：
 当出现大量对象在Minor GC后仍然存活的情况（最极端的情况就是内存回收后新生代中所有对象都存活），就需要老年代进行分配担保，把Survivor无法容纳的对象直接进入老年代。与生活中的贷款担保类似，老年代要进行这样的担保，前提是老年代本身还有容纳这些对象的剩余空间，一共有多少对象会活下来在实际完成内存回收之前是无法明确知道的，所以只好取之前每一次回收晋升到老年代对象容量的平均大小值作为经验值，与老年代的剩余空间进行比较，决定是否进行Full GC来让老年代腾出更多空间。
@@ -1374,49 +1075,16 @@ Java HotSpot(TM) 64-Bit Server VM (build 24.79-b02, mixed mode)
     
     <content type="html"><![CDATA[<p>读到第3.5.8节，按照文章描述跟着作者的步伐一起测试了下，特做下日志分析记录。<br><a id="more"></a></p>
 <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a><strong>前言</strong></h2><p>本篇以<strong>Serial+Serial Old</strong>组合收集器日志为例来分析下GC日志(-XX:+UseSerialGC)</p>
-<h2 id="GC日志"><a href="#GC日志" class="headerlink" title="GC日志"></a><strong>GC日志</strong></h2><pre><code>[GC[DefNew: 7146K-&gt;484K(9216K), 0.0034871 secs] 7146K-&gt;6628K(19456K), 0.0035216 secs] [Times: user=0.00 sys=0.00, 
-real=0.00 secs] 
-Heap
- def new generation   total 9216K, used 4746K [0x00000000f9a00000, 0x00000000fa400000, 0x00000000fa400000)
-  eden space 8192K,  52% used [0x00000000f9a00000, 0x00000000f9e297b0, 0x00000000fa200000)
-  from space 1024K,  47% used [0x00000000fa300000, 0x00000000fa3791a8, 0x00000000fa400000)
-  to   space 1024K,   0% used [0x00000000fa200000, 0x00000000fa200000, 0x00000000fa300000)
- tenured generation   total 10240K, used 6144K [0x00000000fa400000, 0x00000000fae00000, 0x00000000fae00000)
-   the space 10240K,  60% used [0x00000000fa400000, 0x00000000faa00030, 0x00000000faa00200, 0x00000000fae00000)
- compacting perm gen  total 21248K, used 2582K [0x00000000fae00000, 0x00000000fc2c0000, 0x0000000100000000)
-   the space 21248K,  12% used [0x00000000fae00000, 0x00000000fb085a70, 0x00000000fb085c00, 0x00000000fc2c0000)
-No shared spaces configured.
-</code></pre><h2 id="GC日志说明"><a href="#GC日志说明" class="headerlink" title="GC日志说明"></a><strong>GC日志说明</strong></h2><p>1、“[GC”和“[Full GC”说明了这次垃圾收集的停顿类型，如果有“Full”则说明这次GC是发生了Stop-The-World的(就是在垃圾收集的时候停止了所有用户进程)。如果是调用System.gc()所触发的收集，那么就显示“[Full GC(System)”</p>
+<h2 id="GC日志"><a href="#GC日志" class="headerlink" title="GC日志"></a><strong>GC日志</strong></h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line">[GC[DefNew: 7146K-&gt;484K(9216K), 0.0034871 secs] 7146K-&gt;6628K(19456K), 0.0035216 secs] [Times: user=0.00 sys=0.00, </div><div class="line">real=0.00 secs] </div><div class="line">Heap</div><div class="line"> def new generation   total 9216K, used 4746K [0x00000000f9a00000, 0x00000000fa400000, 0x00000000fa400000)</div><div class="line">  eden space 8192K,  52% used [0x00000000f9a00000, 0x00000000f9e297b0, 0x00000000fa200000)</div><div class="line">  from space 1024K,  47% used [0x00000000fa300000, 0x00000000fa3791a8, 0x00000000fa400000)</div><div class="line">  to   space 1024K,   0% used [0x00000000fa200000, 0x00000000fa200000, 0x00000000fa300000)</div><div class="line"> tenured generation   total 10240K, used 6144K [0x00000000fa400000, 0x00000000fae00000, 0x00000000fae00000)</div><div class="line">   the space 10240K,  60% used [0x00000000fa400000, 0x00000000faa00030, 0x00000000faa00200, 0x00000000fae00000)</div><div class="line"> compacting perm gen  total 21248K, used 2582K [0x00000000fae00000, 0x00000000fc2c0000, 0x0000000100000000)</div><div class="line">   the space 21248K,  12% used [0x00000000fae00000, 0x00000000fb085a70, 0x00000000fb085c00, 0x00000000fc2c0000)</div><div class="line">No shared spaces configured.</div></pre></td></tr></table></figure>
+<h2 id="GC日志说明"><a href="#GC日志说明" class="headerlink" title="GC日志说明"></a><strong>GC日志说明</strong></h2><p>1、“[GC”和“[Full GC”说明了这次垃圾收集的停顿类型，如果有“Full”则说明这次GC是发生了Stop-The-World的(就是在垃圾收集的时候停止了所有用户进程)。如果是调用System.gc()所触发的收集，那么就显示“[Full GC(System)”</p>
 <p>2、“[DefNew”、“[Tenured”、“[Perm”表示GC发生的区域，这里显示的区域名称和使用的GC收集器是有关系的。<br>例如：<br>Serial收集器：新生代名为“Default New Generation”，所以显示“[DefNew”<br>ParNew收集器，新生代名为“Parallel New Generation”，所以显示“[ParNew”<br>Parallel Scavenge收集器，新生代名为“PSYoungGen”<br>老年代和永久代同理，名称也是由收集器决定的。</p>
 <p>3、“7146K-&gt;484K(9216K)”表示“GC前该内存区域(新生代)已使用容量-&gt;GC后该内存区域已使用容量(该内存区域总容量)”</p>
 <p>4、“0.0034871 secs”表示该内存区域GC所占用的时间，单位是秒</p>
 <p>5、“7146K-&gt;6628K(19456K)”表示“GC前Java堆已使用容量-&gt;GC后Java堆已使用容量(Java堆总容量)”</p>
 <p>6、“Times: user=0.00 sys=0.00, real=0.00 secs”分别代表用户态消耗的CPU时间、内核态消耗的CPU时间和操作从开始到结束所经过的墙钟时间。（CPU时间与墙钟时间的区别是，墙钟时间包括各种非运算的等待耗时，例如等待磁盘I/O、等待线程阻塞，而CPU时间不包括这些耗时，但当系统有多CPU或者多核的话，多线程操作会叠加这些CPU时间，所以当看到user或sys时间超过real时间是完全正常的）</p>
-<h2 id="其他收集器日志"><a href="#其他收集器日志" class="headerlink" title="其他收集器日志"></a><strong>其他收集器日志</strong></h2><p>使用<strong>ParNew+Serial Old</strong>收集器组合日志(-XX:+UseParNewGC):</p>
-<pre><code>[GC[ParNew: 7146K-&gt;508K(9216K), 0.0023849 secs] 7146K-&gt;6652K(19456K), 0.0024203 secs] [Times: user=0.00 sys=0.00, 
-
-real=0.02 secs] 
-Heap
- par new generation   total 9216K, used 4770K [0x00000000f9a00000, 0x00000000fa400000, 0x00000000fa400000)
-  eden space 8192K,  52% used [0x00000000f9a00000, 0x00000000f9e297b0, 0x00000000fa200000)
-  from space 1024K,  49% used [0x00000000fa300000, 0x00000000fa37f1b8, 0x00000000fa400000)
-  to   space 1024K,   0% used [0x00000000fa200000, 0x00000000fa200000, 0x00000000fa300000)
- tenured generation   total 10240K, used 6144K [0x00000000fa400000, 0x00000000fae00000, 0x00000000fae00000)
-   the space 10240K,  60% used [0x00000000fa400000, 0x00000000faa00030, 0x00000000faa00200, 0x00000000fae00000)
- compacting perm gen  total 21248K, used 2582K [0x00000000fae00000, 0x00000000fc2c0000, 0x0000000100000000)
-   the space 21248K,  12% used [0x00000000fae00000, 0x00000000fb085a70, 0x00000000fb085c00, 0x00000000fc2c0000)
-No shared spaces configured.
-</code></pre><p>使用<strong>Parallel Scavenge+Parallel Old</strong>收集器组合(-XX:+UseParallelOldGC):</p>
-<pre><code>Heap
- PSYoungGen      total 9216K, used 7310K [0x00000000ff600000, 0x0000000100000000, 0x0000000100000000)
-  eden space 8192K, 89% used [0x00000000ff600000,0x00000000ffd23978,0x00000000ffe00000)
-  from space 1024K, 0% used [0x00000000fff00000,0x00000000fff00000,0x0000000100000000)
-  to   space 1024K, 0% used [0x00000000ffe00000,0x00000000ffe00000,0x00000000fff00000)
- ParOldGen       total 10240K, used 4096K [0x00000000fec00000, 0x00000000ff600000, 0x00000000ff600000)
-  object space 10240K, 40% used [0x00000000fec00000,0x00000000ff000010,0x00000000ff600000)
- PSPermGen       total 21504K, used 2582K [0x00000000f9a00000, 0x00000000faf00000, 0x00000000fec00000)
-  object space 21504K, 12% used [0x00000000f9a00000,0x00000000f9c85a70,0x00000000faf00000)
-</code></pre>]]></content>
+<h2 id="其他收集器日志"><a href="#其他收集器日志" class="headerlink" title="其他收集器日志"></a><strong>其他收集器日志</strong></h2><p>使用<strong>ParNew+Serial Old</strong>收集器组合日志(-XX:+UseParNewGC):<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line">[GC[ParNew: 7146K-&gt;508K(9216K), 0.0023849 secs] 7146K-&gt;6652K(19456K), 0.0024203 secs] [Times: user=0.00 sys=0.00, </div><div class="line"></div><div class="line">real=0.02 secs] </div><div class="line">Heap</div><div class="line"> par new generation   total 9216K, used 4770K [0x00000000f9a00000, 0x00000000fa400000, 0x00000000fa400000)</div><div class="line">  eden space 8192K,  52% used [0x00000000f9a00000, 0x00000000f9e297b0, 0x00000000fa200000)</div><div class="line">  from space 1024K,  49% used [0x00000000fa300000, 0x00000000fa37f1b8, 0x00000000fa400000)</div><div class="line">  to   space 1024K,   0% used [0x00000000fa200000, 0x00000000fa200000, 0x00000000fa300000)</div><div class="line"> tenured generation   total 10240K, used 6144K [0x00000000fa400000, 0x00000000fae00000, 0x00000000fae00000)</div><div class="line">   the space 10240K,  60% used [0x00000000fa400000, 0x00000000faa00030, 0x00000000faa00200, 0x00000000fae00000)</div><div class="line"> compacting perm gen  total 21248K, used 2582K [0x00000000fae00000, 0x00000000fc2c0000, 0x0000000100000000)</div><div class="line">   the space 21248K,  12% used [0x00000000fae00000, 0x00000000fb085a70, 0x00000000fb085c00, 0x00000000fc2c0000)</div><div class="line">No shared spaces configured.</div></pre></td></tr></table></figure></p>
+<p>使用<strong>Parallel Scavenge+Parallel Old</strong>收集器组合(-XX:+UseParallelOldGC):<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">Heap</div><div class="line"> PSYoungGen      total 9216K, used 7310K [0x00000000ff600000, 0x0000000100000000, 0x0000000100000000)</div><div class="line">  eden space 8192K, 89% used [0x00000000ff600000,0x00000000ffd23978,0x00000000ffe00000)</div><div class="line">  from space 1024K, 0% used [0x00000000fff00000,0x00000000fff00000,0x0000000100000000)</div><div class="line">  to   space 1024K, 0% used [0x00000000ffe00000,0x00000000ffe00000,0x00000000fff00000)</div><div class="line"> ParOldGen       total 10240K, used 4096K [0x00000000fec00000, 0x00000000ff600000, 0x00000000ff600000)</div><div class="line">  object space 10240K, 40% used [0x00000000fec00000,0x00000000ff000010,0x00000000ff600000)</div><div class="line"> PSPermGen       total 21504K, used 2582K [0x00000000f9a00000, 0x00000000faf00000, 0x00000000fec00000)</div><div class="line">  object space 21504K, 12% used [0x00000000f9a00000,0x00000000f9c85a70,0x00000000faf00000)</div></pre></td></tr></table></figure></p>
+]]></content>
     
     <summary type="html">
     
@@ -1439,19 +1107,7 @@ No shared spaces configured.
     <updated>2017-02-07T08:45:10.665Z</updated>
     
     <content type="html"><![CDATA[<p>运行时常量池属于方法区(俗称永久代)，如果要使运行时常量池溢出其实就是使方法区溢出，可以通过调整方法区的大小并配合String.intern方法来实现。<br><a id="more"></a></p>
-<h2 id="Java代码"><a href="#Java代码" class="headerlink" title="Java代码"></a><strong>Java代码</strong></h2><pre><code class="java">/**
- * VM Args: -XX:PermSize=10m -XX:MaxPermSize=10m
- */
-public class RuntimeConstantPoolOOM {
-    public static void main(String[] args) {
-        List&lt;String&gt; list = new ArrayList&lt;String&gt;();
-        int i =1;
-        while(true){
-            list.add(String.valueOf(i++).intern());
-        }
-    }
-}
-</code></pre>
+<h2 id="Java代码"><a href="#Java代码" class="headerlink" title="Java代码"></a><strong>Java代码</strong></h2><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line"><span class="comment">/**</span></div><div class="line"> * VM Args: -XX:PermSize=10m -XX:MaxPermSize=10m</div><div class="line"> */</div><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">RuntimeConstantPoolOOM</span> </span>&#123;</div><div class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</div><div class="line">		List&lt;String&gt; list = <span class="keyword">new</span> ArrayList&lt;String&gt;();</div><div class="line">		<span class="keyword">int</span> i =<span class="number">1</span>;</div><div class="line">		<span class="keyword">while</span>(<span class="keyword">true</span>)&#123;</div><div class="line">			list.add(String.valueOf(i++).intern());</div><div class="line">		&#125;</div><div class="line">	&#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
 <p>上面代码设置方法区的初始内存和最大内存为10m，并通过intern方法不停往方法区写入数据。</p>
 <p>最后运行的结果如自己所预料的那样，出现方法区溢出<br><img src="http://7xqlat.com1.z0.glb.clouddn.com/oom_permgen_space_01.png" alt="方法区溢出"></p>
 <p>不过，大家请仔细看，上面是基于jdk1.6运行的结果，我们切换到jdk1.7运行再看看，发现不会出现方法区溢出，这是为什么呢？</p>

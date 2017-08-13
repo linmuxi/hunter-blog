@@ -154,6 +154,18 @@
 
 
 
+  <div style="display: none;">
+    <script src="//s95.cnzz.com/z_stat.php?id=1259167020&web_id=1259167020" language="JavaScript"></script>
+
+	<!--
+<script type="text/javascript">var cnzz_protocol = (("https:" == document.location.protocol) ? " https://" : " http://");document.write(unescape("%3Cspan id='cnzz_stat_icon_1259167020'%3E%3C/span%3E%3Cscript src='" + cnzz_protocol + "s4.cnzz.com/z_stat.php%3Fid%3D1259167020%26show%3Dpic' type='text/javascript'%3E%3C/script%3E"));</script>
+    -->
+
+
+  </div>
+
+
+
 
 
   
@@ -343,13 +355,6 @@
 
           
             
-              <span class="post-comments-count">
-                <span class="post-meta-divider">|</span>
-                <a href="/2016/01/29/git-basic-cmd-intro/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/01/29/git-basic-cmd-intro/" itemprop="commentCount"></span>
-                </a>
-              </span>
-            
           
 
           
@@ -392,68 +397,18 @@
 <li>提交文件到版本库</li>
 </ul>
 <p><strong> 创建版本库 </strong><br>直接登录github网站创建一个reps,这里就不具体描述了，我创建的resp就命名为test-git，地址为：<a href="https://github.com/linmuxi/test-git.git" target="_blank" rel="external">https://github.com/linmuxi/test-git.git</a></p>
-<p><strong> 从版本库下载文件到本地 </strong><br>输入命令：<code>git clone http://github.com/linmuxi/test-git.git</code></p>
-<pre><code class="dos">E:\demo\git&gt;git clone http://github.com/linmuxi/test-git.git
-Cloning into &#39;test-git&#39;...
-remote: Counting objects: 3, done.
-remote: Total 3 (delta 0), reused 0 (delta 0), pack-reused 0
-Unpacking objects: 100% (3/3), done.
-Checking connectivity... done.
-</code></pre>
+<p><strong> 从版本库下载文件到本地 </strong><br>输入命令：<code>git clone http://github.com/linmuxi/test-git.git</code><br><figure class="highlight dos"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line"><span class="function">E:\<span class="title">demo</span>\<span class="title">git</span>&gt;<span class="title">git</span> <span class="title">clone</span> <span class="title">http</span>://<span class="title">github.com</span>/<span class="title">linmuxi</span>/<span class="title">test</span>-<span class="title">git.git</span></span></div><div class="line"><span class="title">Cloning</span> <span class="title">into</span> '<span class="title">test</span>-<span class="title">git</span>'...</div><div class="line"><span class="title">remote</span>: <span class="title">Counting</span> <span class="title">objects</span>: 3, <span class="title">done</span>.</div><div class="line"><span class="title">remote</span>: <span class="title">Total</span> 3 (<span class="title">delta</span> 0), <span class="title">reused</span> 0 (<span class="title">delta</span> 0), <span class="title">pack</span>-<span class="title">reused</span> 0</div><div class="line"><span class="title">Unpacking</span> <span class="title">objects</span>: 100% (3/3), <span class="title">done</span>.</div><div class="line"><span class="title">Checking</span> <span class="title">connectivity</span>... <span class="title">done</span>.</div></pre></td></tr></table></figure></p>
 <p>这样就把我们刚才创建的test-git下载到本地了,对应我本地目录就是：E\demo\git\test-git</p>
-<p><strong> 提交文件到版本库 </strong><br>假如，我在test-git目录下面增加了一个hello-world.txt文件，那么如何把它提交到版本库上去呢。这里我们描述细致点。<br>路径切换到包含.git的目录也就是test-git目录下面来<br>先输入命令查看工作树状态:<code>git status</code></p>
-<pre><code class="dos">E:\demo\git\test-git&gt;git status
-On branch master
-Your branch is up-to-date with &#39;origin/master&#39;.
-Untracked files:
-  (use &quot;git add &lt;file&gt;...&quot; to include in what will be committed)
-
-        hello-world.txt
-
-nothing added to commit but untracked files present (use &quot;git add&quot; to track)
-</code></pre>
+<p><strong> 提交文件到版本库 </strong><br>假如，我在test-git目录下面增加了一个hello-world.txt文件，那么如何把它提交到版本库上去呢。这里我们描述细致点。<br>路径切换到包含.git的目录也就是test-git目录下面来<br>先输入命令查看工作树状态:<code>git status</code><br><figure class="highlight dos"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line"><span class="function">E:\<span class="title">demo</span>\<span class="title">git</span>\<span class="title">test</span>-<span class="title">git</span>&gt;<span class="title">git</span> <span class="title">status</span></span></div><div class="line"><span class="title">On</span> <span class="title">branch</span> <span class="title">master</span></div><div class="line"><span class="title">Your</span> <span class="title">branch</span> <span class="title">is</span> <span class="title">up</span>-<span class="title">to</span>-<span class="title">date</span> <span class="title">with</span> '<span class="title">origin</span>/<span class="title">master</span>'.</div><div class="line"><span class="title">Untracked</span> <span class="title">files</span>:</div><div class="line">  (<span class="title">use</span> "<span class="title">git</span> <span class="title">add</span> &lt;<span class="title">file</span>&gt;..." <span class="title">to</span> <span class="title">include</span> <span class="title">in</span> <span class="title">what</span> <span class="title">will</span> <span class="title">be</span> <span class="title">committed</span>)</div><div class="line"></div><div class="line">        <span class="title">hello</span>-<span class="title">world.txt</span></div><div class="line"></div><div class="line"><span class="title">nothing</span> <span class="title">added</span> <span class="title">to</span> <span class="title">commit</span> <span class="title">but</span> <span class="title">untracked</span> <span class="title">files</span> <span class="title">present</span> (<span class="title">use</span> "<span class="title">git</span> <span class="title">add</span>" <span class="title">to</span> <span class="title">track</span>)</div></pre></td></tr></table></figure></p>
 <p>可以看到系统提示hello-world.txt文件在本地工作树中找不到踪迹，并提示我们使用’git add’来进行操作。</p>
 <p>接着输入命令：<code>git add hello-world.txt</code><br>到这一步,文件hello-world.txt就被添加到索引中了</p>
-<p>然后再次查看工作树状态：<code>git status</code></p>
-<pre><code class="dos">E:\demo\git\test-git&gt;git status
-On branch master
-Your branch is up-to-date with &#39;origin/master&#39;.
-Changes to be committed:
-  (use &quot;git reset HEAD &lt;file&gt;...&quot; to unstage)
-
-        new file:   hello-world.txt
-</code></pre>
+<p>然后再次查看工作树状态：<code>git status</code><br><figure class="highlight dos"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line"><span class="function">E:\<span class="title">demo</span>\<span class="title">git</span>\<span class="title">test</span>-<span class="title">git</span>&gt;<span class="title">git</span> <span class="title">status</span></span></div><div class="line"><span class="title">On</span> <span class="title">branch</span> <span class="title">master</span></div><div class="line"><span class="title">Your</span> <span class="title">branch</span> <span class="title">is</span> <span class="title">up</span>-<span class="title">to</span>-<span class="title">date</span> <span class="title">with</span> '<span class="title">origin</span>/<span class="title">master</span>'.</div><div class="line"><span class="title">Changes</span> <span class="title">to</span> <span class="title">be</span> <span class="title">committed</span>:</div><div class="line">  (<span class="title">use</span> "<span class="title">git</span> <span class="title">reset</span> <span class="title">HEAD</span> &lt;<span class="title">file</span>&gt;..." <span class="title">to</span> <span class="title">unstage</span>)</div><div class="line"></div><div class="line">        <span class="title">new</span> <span class="title">file</span>:   <span class="title">hello</span>-<span class="title">world.txt</span></div></pre></td></tr></table></figure></p>
 <p>系统提示检测到了一个新的文件，并提示我们使用’git reset head’来进行操作，我们的目的是要将文件提交到版本库，这里就不能使用这个命令了。</p>
-<p>我们改输入命令：<code>git commit -m &quot;new file helloworld.txt&quot;</code></p>
-<pre><code class="dos">E:\demo\git\test-git&gt;git commit -m &quot;new file helloworld.txt&quot;
-[master 2d620a7] new file helloworld.txt
- 1 file changed, 0 insertions(+), 0 deletions(-)
- create mode 100644 hello-world.txt
-</code></pre>
+<p>我们改输入命令：<code>git commit -m &quot;new file helloworld.txt&quot;</code><br><figure class="highlight dos"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="function">E:\<span class="title">demo</span>\<span class="title">git</span>\<span class="title">test</span>-<span class="title">git</span>&gt;<span class="title">git</span> <span class="title">commit</span> -<span class="title">m</span> "<span class="title">new</span> <span class="title">file</span> <span class="title">helloworld.txt</span>"</span></div><div class="line">[<span class="title">master</span> 2<span class="title">d620a7</span>] <span class="title">new</span> <span class="title">file</span> <span class="title">helloworld.txt</span></div><div class="line"> 1 <span class="title">file</span> <span class="title">changed</span>, 0 <span class="title">insertions</span>(+), 0 <span class="title">deletions</span>(-)</div><div class="line"> <span class="title">create</span> <span class="title">mode</span> 100644 <span class="title">hello</span>-<span class="title">world.txt</span></div></pre></td></tr></table></figure></p>
 <p>到这一步，文件hello-world.txt就被添加到本地库了，此时还没有提交到github远程库中去。</p>
-<p>再次查看工作树状态：<code>git status</code></p>
-<pre><code class="dos">E:\demo\git\test-git&gt;git status
-On branch master
-Your branch is ahead of &#39;origin/master&#39; by 1 commit.
-  (use &quot;git push&quot; to publish your local commits)
-nothing to commit, working directory clean
-</code></pre>
+<p>再次查看工作树状态：<code>git status</code><br><figure class="highlight dos"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="function">E:\<span class="title">demo</span>\<span class="title">git</span>\<span class="title">test</span>-<span class="title">git</span>&gt;<span class="title">git</span> <span class="title">status</span></span></div><div class="line"><span class="title">On</span> <span class="title">branch</span> <span class="title">master</span></div><div class="line"><span class="title">Your</span> <span class="title">branch</span> <span class="title">is</span> <span class="title">ahead</span> <span class="title">of</span> '<span class="title">origin</span>/<span class="title">master</span>' <span class="title">by</span> 1 <span class="title">commit</span>.</div><div class="line">  (<span class="title">use</span> "<span class="title">git</span> <span class="title">push</span>" <span class="title">to</span> <span class="title">publish</span> <span class="title">your</span> <span class="title">local</span> <span class="title">commits</span>)</div><div class="line"><span class="title">nothing</span> <span class="title">to</span> <span class="title">commit</span>, <span class="title">working</span> <span class="title">directory</span> <span class="title">clean</span></div></pre></td></tr></table></figure></p>
 <p>系统提示没有任何可以提交的文件，工作目录是干净的。</p>
-<p>接下来，我们就要把提交到本地库中的hello-world.txt文件同步到github运程库中去了<br>使用命令:<code>git push -u origin master</code></p>
-<pre><code class="dos">E:\demo\git\test-git&gt;git push -u origin master
-error: cannot spawn sh: No such file or directory
-Username for &#39;https://github.com&#39;: linmuxi
-Password for &#39;https://linmuxi@github.com&#39;:
-error: cannot spawn sh: No such file or directory
-Counting objects: 3, done.
-Delta compression using up to 4 threads.
-Compressing objects: 100% (2/2), done.
-Writing objects: 100% (3/3), 285 bytes | 0 bytes/s, done.
-Total 3 (delta 0), reused 0 (delta 0)
-To http://github.com/linmuxi/test-git.git
-   24c6ae3..2d620a7  master -&gt; master
-Branch master set up to track remote branch master from origin.
-</code></pre>
+<p>接下来，我们就要把提交到本地库中的hello-world.txt文件同步到github运程库中去了<br>使用命令:<code>git push -u origin master</code><br><figure class="highlight dos"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line"><span class="function">E:\<span class="title">demo</span>\<span class="title">git</span>\<span class="title">test</span>-<span class="title">git</span>&gt;<span class="title">git</span> <span class="title">push</span> -<span class="title">u</span> <span class="title">origin</span> <span class="title">master</span></span></div><div class="line"><span class="title">error</span>: <span class="title">cannot</span> <span class="title">spawn</span> <span class="title">sh</span>: <span class="title">No</span> <span class="title">such</span> <span class="title">file</span> <span class="title">or</span> <span class="title">directory</span></div><div class="line"><span class="title">Username</span> <span class="title">for</span> '<span class="title">https</span>://<span class="title">github.com</span>': <span class="title">linmuxi</span></div><div class="line"><span class="title">Password</span> <span class="title">for</span> '<span class="title">https</span>://<span class="title">linmuxi</span>@<span class="title">github.com</span>':</div><div class="line"><span class="title">error</span>: <span class="title">cannot</span> <span class="title">spawn</span> <span class="title">sh</span>: <span class="title">No</span> <span class="title">such</span> <span class="title">file</span> <span class="title">or</span> <span class="title">directory</span></div><div class="line"><span class="title">Counting</span> <span class="title">objects</span>: 3, <span class="title">done</span>.</div><div class="line"><span class="title">Delta</span> <span class="title">compression</span> <span class="title">using</span> <span class="title">up</span> <span class="title">to</span> 4 <span class="title">threads</span>.</div><div class="line"><span class="title">Compressing</span> <span class="title">objects</span>: 100% (2/2), <span class="title">done</span>.</div><div class="line"><span class="title">Writing</span> <span class="title">objects</span>: 100% (3/3), 285 <span class="title">bytes</span> | 0 <span class="title">bytes</span>/<span class="title">s</span>, <span class="title">done</span>.</div><div class="line"><span class="title">Total</span> 3 (<span class="title">delta</span> 0), <span class="title">reused</span> 0 (<span class="title">delta</span> 0)</div><div class="line"><span class="title">To</span> <span class="title">http</span>://<span class="title">github.com</span>/<span class="title">linmuxi</span>/<span class="title">test</span>-<span class="title">git.git</span></div><div class="line">   24<span class="title">c6ae3</span>..2<span class="title">d620a7</span>  <span class="title">master</span> -&gt; <span class="title">master</span></div><div class="line"><span class="title">Branch</span> <span class="title">master</span> <span class="title">set</span> <span class="title">up</span> <span class="title">to</span> <span class="title">track</span> <span class="title">remote</span> <span class="title">branch</span> <span class="title">master</span> <span class="title">from</span> <span class="title">origin</span>.</div></pre></td></tr></table></figure></p>
 <p>在输入github账户和密码之后，文件hello-world.txt就被同步到github上去了<br><!-- 也可以简写命令：`git push` 所有提交的文件会被默认同步到当前所在分支下面 --></p>
 <p>会用到基础命令：</p>
 <pre><code>git --help #查看git命令帮助
@@ -566,9 +521,25 @@ git checkout newFile.txt #撤销newFile.txt的修改
           
   <div class="comments" id="comments">
     
-      <div class="ds-thread" data-thread-key="2016/01/29/git-basic-cmd-intro/"
-           data-title="Git最最最基础命令入门" data-url="http://www.linmuxi.com/2016/01/29/git-basic-cmd-intro/">
+      <!-- 来必力City版安装代码 -->
+      <div id="lv-container" data-id="city" data-uid="MTAyMC8zMDE0NS82NzAw">
+        <script type="text/javascript">
+         (function(d, s) {
+             var j, e = d.getElementsByTagName(s)[0];
+
+             if (typeof LivereTower === 'function') { return; }
+
+             j = d.createElement(s);
+             j.src = 'https://cdn-city.livere.com/js/embed.dist.js';
+             j.async = true;
+
+             e.parentNode.insertBefore(j, e);
+         })(document, 'script');
+        </script>
+      <noscript> 为正常使用来必力评论功能请激活JavaScript</noscript>
       </div>
+      <!-- City版安装代码已完成 -->
+
     
   </div>
 
@@ -767,33 +738,14 @@ git checkout newFile.txt #撤销newFile.txt的修改
 
   
 
-  
-    
-  
 
-  <script type="text/javascript">
-    var duoshuoQuery = {short_name:"hunterlin"};
-    (function() {
-      var ds = document.createElement('script');
-      ds.type = 'text/javascript';ds.async = true;
-      ds.id = 'duoshuo-script';
-      ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
-      ds.charset = 'UTF-8';
-      (document.getElementsByTagName('head')[0]
-      || document.getElementsByTagName('body')[0]).appendChild(ds);
-    })();
-  </script>
 
-  
-    
-    
-    <script src="/lib/ua-parser-js/dist/ua-parser.min.js?v=0.7.9"></script>
-    <script src="/js/src/hook-duoshuo.js"></script>
   
 
 
 
 
+	
 
 
 

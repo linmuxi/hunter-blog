@@ -165,6 +165,18 @@
 
 
 
+  <div style="display: none;">
+    <script src="//s95.cnzz.com/z_stat.php?id=1259167020&web_id=1259167020" language="JavaScript"></script>
+
+	<!--
+<script type="text/javascript">var cnzz_protocol = (("https:" == document.location.protocol) ? " https://" : " http://");document.write(unescape("%3Cspan id='cnzz_stat_icon_1259167020'%3E%3C/span%3E%3Cscript src='" + cnzz_protocol + "s4.cnzz.com/z_stat.php%3Fid%3D1259167020%26show%3Dpic' type='text/javascript'%3E%3C/script%3E"));</script>
+    -->
+
+
+  </div>
+
+
+
 
 
   
@@ -354,13 +366,6 @@
 
           
             
-              <span class="post-comments-count">
-                <span class="post-meta-divider">|</span>
-                <a href="/2016/02/26/jvm-class-read-01/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/02/26/jvm-class-read-01/" itemprop="commentCount"></span>
-                </a>
-              </span>
-            
           
 
           
@@ -397,36 +402,9 @@
 
       
         <p>本篇通过一段简单的代码来分析下字节码的执行，认识认识几个常见的字节码指令<br><a id="more"></a></p>
-<h2 id="Java源代码"><a href="#Java源代码" class="headerlink" title="Java源代码"></a><strong>Java源代码</strong></h2><pre><code class="java">public static void main(String[] args) {
-    int i = 100;
-    int j = 200 + i - 100;
-    int z = j++;
-    System.out.println(z+i);
-}
-</code></pre>
+<h2 id="Java源代码"><a href="#Java源代码" class="headerlink" title="Java源代码"></a><strong>Java源代码</strong></h2><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</div><div class="line">	<span class="keyword">int</span> i = <span class="number">100</span>;</div><div class="line">	<span class="keyword">int</span> j = <span class="number">200</span> + i - <span class="number">100</span>;</div><div class="line">	<span class="keyword">int</span> z = j++;</div><div class="line">	System.out.println(z+i);</div><div class="line">&#125;</div></pre></td></tr></table></figure>
 <p>上面源码执行之后的结果是300，下面我们就通过分析class来看看结果是怎么得来的。</p>
-<h2 id="Class字节码"><a href="#Class字节码" class="headerlink" title="Class字节码"></a><strong>Class字节码</strong></h2><pre><code class="java">public static void main(java.lang.String[]);
-  Code:
-   Stack=3, Locals=4, Args_size=1
-   0:   bipush  100
-   2:   istore_1
-   3:   sipush  200
-   6:   iload_1
-   7:   iadd
-   8:   bipush  100
-   10:  isub
-   11:  istore_2
-   12:  iload_2
-   13:  iinc    2, 1
-   16:  istore_3
-   17:  getstatic       #2; //Field java/lang/System.out:Ljava/io/PrintStream;
-   20:  iload_3
-   21:  iload_1
-   22:  iadd
-   23:  invokevirtual   #3; //Method java/io/PrintStream.println:(I)V
-   26:  return
-}
-</code></pre>
+<h2 id="Class字节码"><a href="#Class字节码" class="headerlink" title="Class字节码"></a><strong>Class字节码</strong></h2><figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div></pre></td><td class="code"><pre><div class="line">public static void main(java.lang.String[]);</div><div class="line">  Code:</div><div class="line">   Stack=3, Locals=4, Args_size=1</div><div class="line">   0:   bipush  100</div><div class="line">   2:   istore_1</div><div class="line">   3:   sipush  200</div><div class="line">   6:   iload_1</div><div class="line">   7:   iadd</div><div class="line">   8:   bipush  100</div><div class="line">   10:  isub</div><div class="line">   11:  istore_2</div><div class="line">   12:  iload_2</div><div class="line">   13:  iinc    2, 1</div><div class="line">   16:  istore_3</div><div class="line">   17:  getstatic       #2; //Field java/lang/System.out:Ljava/io/PrintStream;</div><div class="line">   20:  iload_3</div><div class="line">   21:  iload_1</div><div class="line">   22:  iadd</div><div class="line">   23:  invokevirtual   #3; //Method java/io/PrintStream.println:(I)V</div><div class="line">   26:  return</div><div class="line">&#125;</div></pre></td></tr></table></figure>
 <p>下面我们就来分析下字节码的执行：<br><strong>Stack=3, Locals=4, Args_size=1</strong>,这段说明栈中元素有3个，局部变量表中有元素4个，参数1个</p>
 <p><strong>0:   bipush  100</strong>      # 将常量100压入栈中<br><strong>2:   istore_1</strong>          # 从栈中取出常量100存储到局部变量表中，下标索引为1<br><img src="http://7xqlat.com1.z0.glb.clouddn.com/jvm_read_class_stack_01.png-hunterblog" alt=""></p>
 <p><strong>3:   sipush  200</strong>      # 将常量200压入栈中<br><strong>6:   iload_1</strong>          # 将下标索引为1的常量从局部变量表中压入栈中。<br><img src="http://7xqlat.com1.z0.glb.clouddn.com/jvm_read_class_stack_02.png-hunterblog" alt=""></p>
@@ -440,16 +418,7 @@
 <p><strong>22:  iadd    </strong>         # 从栈中取出两个整型常量相加并将结果存储到栈中<br><img src="http://7xqlat.com1.z0.glb.clouddn.com/jvm_read_class_stack_10.png-hunterblog" alt=""></p>
 <p><strong>23:  invokevirtual </strong>  #3; //Method java/io/PrintStream.println:(I)V<br><strong>26:  return</strong></p>
 <p>所以最后执行结果是300</p>
-<p>大家可能注意到了，在字节码第三行<strong>Stack=3, Locals=4, Args_size=1</strong>，显示的是栈中有3个元素，为什么我们这里只有两个？其实栈中还有一个this元素，由于this不在本篇介绍范围之类，所以例图就省略了，特此说明下。大家可能疑惑这个this是什么时候入栈的，通过下面的代码相信大家就明白了</p>
-<pre><code class="java">public test.Test();
-  Code:
-   Stack=1, Locals=1, Args_size=1
-   0:   aload_0
-   1:   invokespecial   #1; //Method java/lang/Object.&quot;&lt;init&gt;&quot;:()V
-   4:   return
-  LineNumberTable:
-   line 3: 0
-</code></pre>
+<p>大家可能注意到了，在字节码第三行<strong>Stack=3, Locals=4, Args_size=1</strong>，显示的是栈中有3个元素，为什么我们这里只有两个？其实栈中还有一个this元素，由于this不在本篇介绍范围之类，所以例图就省略了，特此说明下。大家可能疑惑这个this是什么时候入栈的，通过下面的代码相信大家就明白了<br><figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">public test.Test();</div><div class="line">  Code:</div><div class="line">   Stack=1, Locals=1, Args_size=1</div><div class="line">   0:   aload_0</div><div class="line">   1:   invokespecial   #1; //Method java/lang/Object."&lt;init&gt;":()V</div><div class="line">   4:   return</div><div class="line">  LineNumberTable:</div><div class="line">   line 3: 0</div></pre></td></tr></table></figure></p>
 <!-- PS：由于认识较肤浅，如文中有不适当或有误的地方还望大家不吝指出。 -->
 <h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a><strong>参考</strong></h2><p><a href="https://en.wikipedia.org/wiki/Java_bytecode_instruction_listings" target="_blank" rel="external">Java字节码指令列表</a></p>
 <!--
@@ -552,9 +521,25 @@ javap -v Test > E:/Test.dc
           
   <div class="comments" id="comments">
     
-      <div class="ds-thread" data-thread-key="2016/02/26/jvm-class-read-01/"
-           data-title="JVM字节码之简单解读01" data-url="http://www.linmuxi.com/2016/02/26/jvm-class-read-01/">
+      <!-- 来必力City版安装代码 -->
+      <div id="lv-container" data-id="city" data-uid="MTAyMC8zMDE0NS82NzAw">
+        <script type="text/javascript">
+         (function(d, s) {
+             var j, e = d.getElementsByTagName(s)[0];
+
+             if (typeof LivereTower === 'function') { return; }
+
+             j = d.createElement(s);
+             j.src = 'https://cdn-city.livere.com/js/embed.dist.js';
+             j.async = true;
+
+             e.parentNode.insertBefore(j, e);
+         })(document, 'script');
+        </script>
+      <noscript> 为正常使用来必力评论功能请激活JavaScript</noscript>
       </div>
+      <!-- City版安装代码已完成 -->
+
     
   </div>
 
@@ -778,33 +763,14 @@ javap -v Test > E:/Test.dc
 
   
 
-  
-    
-  
 
-  <script type="text/javascript">
-    var duoshuoQuery = {short_name:"hunterlin"};
-    (function() {
-      var ds = document.createElement('script');
-      ds.type = 'text/javascript';ds.async = true;
-      ds.id = 'duoshuo-script';
-      ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
-      ds.charset = 'UTF-8';
-      (document.getElementsByTagName('head')[0]
-      || document.getElementsByTagName('body')[0]).appendChild(ds);
-    })();
-  </script>
 
-  
-    
-    
-    <script src="/lib/ua-parser-js/dist/ua-parser.min.js?v=0.7.9"></script>
-    <script src="/js/src/hook-duoshuo.js"></script>
   
 
 
 
 
+	
 
 
 

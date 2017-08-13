@@ -154,6 +154,18 @@
 
 
 
+  <div style="display: none;">
+    <script src="//s95.cnzz.com/z_stat.php?id=1259167020&web_id=1259167020" language="JavaScript"></script>
+
+	<!--
+<script type="text/javascript">var cnzz_protocol = (("https:" == document.location.protocol) ? " https://" : " http://");document.write(unescape("%3Cspan id='cnzz_stat_icon_1259167020'%3E%3C/span%3E%3Cscript src='" + cnzz_protocol + "s4.cnzz.com/z_stat.php%3Fid%3D1259167020%26show%3Dpic' type='text/javascript'%3E%3C/script%3E"));</script>
+    -->
+
+
+  </div>
+
+
+
 
 
   
@@ -343,13 +355,6 @@
 
           
             
-              <span class="post-comments-count">
-                <span class="post-meta-divider">|</span>
-                <a href="/2016/02/22/oracle-archive-err-01/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/02/22/oracle-archive-err-01/" itemprop="commentCount"></span>
-                </a>
-              </span>
-            
           
 
           
@@ -387,11 +392,7 @@
       
         <p>本篇分享下Oracle异常问题的处理方法<br><a id="more"></a></p>
 <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>前段时间发现测试环境Oracle数据库连接不上了，到后台看日志输出：’问题：ORA-00257: 归档程序错误。在释放之前仅限于内部连接’，经分析是归档日志文件占满FLASH_RECOVERY_AREA的空间，下面就该问题分析下具体的解决方法。</p>
-<h2 id="解决方法"><a href="#解决方法" class="headerlink" title="解决方法"></a>解决方法</h2><h3 id="1、查询FLASH-RECOVERY-AREA空间大小"><a href="#1、查询FLASH-RECOVERY-AREA空间大小" class="headerlink" title="1、查询FLASH_RECOVERY_AREA空间大小"></a>1、查询FLASH_RECOVERY_AREA空间大小</h3><pre><code class="sql">//查看恢复区各文件占用百分比情况
-select * from v$flash_recovery_area_usage;
-//查看恢复区总大小
-show parameter db_recovery_file_dest;
-</code></pre>
+<h2 id="解决方法"><a href="#解决方法" class="headerlink" title="解决方法"></a>解决方法</h2><h3 id="1、查询FLASH-RECOVERY-AREA空间大小"><a href="#1、查询FLASH-RECOVERY-AREA空间大小" class="headerlink" title="1、查询FLASH_RECOVERY_AREA空间大小"></a>1、查询FLASH_RECOVERY_AREA空间大小</h3><figure class="highlight sql"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">//查看恢复区各文件占用百分比情况</div><div class="line"><span class="keyword">select</span> * <span class="keyword">from</span> v$flash_recovery_area_usage;</div><div class="line">//查看恢复区总大小</div><div class="line"><span class="keyword">show</span> parameter db_recovery_file_dest;</div></pre></td></tr></table></figure>
 <h3 id="2、扩大FLASH-RECOVERY-AREA的空间或删除归档日志"><a href="#2、扩大FLASH-RECOVERY-AREA的空间或删除归档日志" class="headerlink" title="2、扩大FLASH_RECOVERY_AREA的空间或删除归档日志"></a>2、扩大FLASH_RECOVERY_AREA的空间或删除归档日志</h3><p>A.扩大FLASH_RECOVERY_AREA的空间<br>执行<code>alter system set db_recovery_file_dest_size=扩容大小 scope=both;</code></p>
 <p>B.删除归档日志</p>
 <ul>
@@ -503,9 +504,25 @@ show parameter db_recovery_file_dest;
           
   <div class="comments" id="comments">
     
-      <div class="ds-thread" data-thread-key="2016/02/22/oracle-archive-err-01/"
-           data-title="问题：ORA-00257: 归档程序错误。在释放之前仅限于内部连接" data-url="http://www.linmuxi.com/2016/02/22/oracle-archive-err-01/">
+      <!-- 来必力City版安装代码 -->
+      <div id="lv-container" data-id="city" data-uid="MTAyMC8zMDE0NS82NzAw">
+        <script type="text/javascript">
+         (function(d, s) {
+             var j, e = d.getElementsByTagName(s)[0];
+
+             if (typeof LivereTower === 'function') { return; }
+
+             j = d.createElement(s);
+             j.src = 'https://cdn-city.livere.com/js/embed.dist.js';
+             j.async = true;
+
+             e.parentNode.insertBefore(j, e);
+         })(document, 'script');
+        </script>
+      <noscript> 为正常使用来必力评论功能请激活JavaScript</noscript>
       </div>
+      <!-- City版安装代码已完成 -->
+
     
   </div>
 
@@ -729,33 +746,14 @@ show parameter db_recovery_file_dest;
 
   
 
-  
-    
-  
 
-  <script type="text/javascript">
-    var duoshuoQuery = {short_name:"hunterlin"};
-    (function() {
-      var ds = document.createElement('script');
-      ds.type = 'text/javascript';ds.async = true;
-      ds.id = 'duoshuo-script';
-      ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
-      ds.charset = 'UTF-8';
-      (document.getElementsByTagName('head')[0]
-      || document.getElementsByTagName('body')[0]).appendChild(ds);
-    })();
-  </script>
 
-  
-    
-    
-    <script src="/lib/ua-parser-js/dist/ua-parser.min.js?v=0.7.9"></script>
-    <script src="/js/src/hook-duoshuo.js"></script>
   
 
 
 
 
+	
 
 
 

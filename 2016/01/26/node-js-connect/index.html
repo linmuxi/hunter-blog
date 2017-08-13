@@ -154,6 +154,18 @@
 
 
 
+  <div style="display: none;">
+    <script src="//s95.cnzz.com/z_stat.php?id=1259167020&web_id=1259167020" language="JavaScript"></script>
+
+	<!--
+<script type="text/javascript">var cnzz_protocol = (("https:" == document.location.protocol) ? " https://" : " http://");document.write(unescape("%3Cspan id='cnzz_stat_icon_1259167020'%3E%3C/span%3E%3Cscript src='" + cnzz_protocol + "s4.cnzz.com/z_stat.php%3Fid%3D1259167020%26show%3Dpic' type='text/javascript'%3E%3C/script%3E"));</script>
+    -->
+
+
+  </div>
+
+
+
 
 
   
@@ -343,13 +355,6 @@
 
           
             
-              <span class="post-comments-count">
-                <span class="post-meta-divider">|</span>
-                <a href="/2016/01/26/node-js-connect/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/01/26/node-js-connect/" itemprop="commentCount"></span>
-                </a>
-              </span>
-            
           
 
           
@@ -414,29 +419,7 @@
 </ol>
 <p>当然还有很多<a href="https://github.com/senchalabs/connect/wiki" target="_blank" rel="external">第三方中间件</a></p>
 <p>关于内置中间件的具体用法可以参考：<a href="http://blog.fens.me/nodejs-connect/" target="_blank" rel="external">Nodejs内置中间件用法</a> <a href="https://github.com/senchalabs/connect#middleware" target="_blank" rel="external">Nodejs内置中间件API</a></p>
-<p>这里，我们主要分享下如何实现自定义中间件,下面我们定义了一个中间件，处理逻辑是禁止早上9点以前的访问：</p>
-<pre><code class="js">var connect = require(&quot;connect&quot;);
-var app = connect();
-
-//注册自定义中间件(将中间件添加到中间件队列中，等待事件触发执行)
-app.use(access).use(test);
-
-function access(req,res,next){
-    var hour = new Date().getHours();
-    if(hour &lt; 9){
-        res.writeHead(503,{&quot;Content-Type&quot;:&quot;text/plain;charset=utf-8&quot;});
-        res.end(&quot;禁止访问&quot;);
-    }else{
-        next();//转入下一个中间件处理
-    }
-}
-
-function test(req,res,next){
-    res.writeHead(200,{&quot;Content-Type&quot;:&quot;text/plain&quot;});
-    res.end(&quot;Hello World !!!&quot;);
-}
-app.listen(3000);
-</code></pre>
+<p>这里，我们主要分享下如何实现自定义中间件,下面我们定义了一个中间件，处理逻辑是禁止早上9点以前的访问：<br><figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> connect = <span class="built_in">require</span>(<span class="string">"connect"</span>);</div><div class="line"><span class="keyword">var</span> app = connect();</div><div class="line"></div><div class="line"><span class="comment">//注册自定义中间件(将中间件添加到中间件队列中，等待事件触发执行)</span></div><div class="line">app.use(access).use(test);</div><div class="line"></div><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">access</span>(<span class="params">req,res,next</span>)</span>&#123;</div><div class="line">	<span class="keyword">var</span> hour = <span class="keyword">new</span> <span class="built_in">Date</span>().getHours();</div><div class="line">	<span class="keyword">if</span>(hour &lt; <span class="number">9</span>)&#123;</div><div class="line">		res.writeHead(<span class="number">503</span>,&#123;<span class="string">"Content-Type"</span>:<span class="string">"text/plain;charset=utf-8"</span>&#125;);</div><div class="line">		res.end(<span class="string">"禁止访问"</span>);</div><div class="line">	&#125;<span class="keyword">else</span>&#123;</div><div class="line">		next();<span class="comment">//转入下一个中间件处理</span></div><div class="line">	&#125;</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">test</span>(<span class="params">req,res,next</span>)</span>&#123;</div><div class="line">	res.writeHead(<span class="number">200</span>,&#123;<span class="string">"Content-Type"</span>:<span class="string">"text/plain"</span>&#125;);</div><div class="line">	res.end(<span class="string">"Hello World !!!"</span>);</div><div class="line">&#125;</div><div class="line">app.listen(<span class="number">3000</span>);</div></pre></td></tr></table></figure></p>
 <p>其实我对中间件的理解就是，定义一个函数对象并注册到中间件队列中，然后等待事件触发进行回调该函数对象。</p>
 
       
@@ -531,9 +514,25 @@ app.listen(3000);
           
   <div class="comments" id="comments">
     
-      <div class="ds-thread" data-thread-key="2016/01/26/node-js-connect/"
-           data-title="Node.js基础中间件Connect" data-url="http://www.linmuxi.com/2016/01/26/node-js-connect/">
+      <!-- 来必力City版安装代码 -->
+      <div id="lv-container" data-id="city" data-uid="MTAyMC8zMDE0NS82NzAw">
+        <script type="text/javascript">
+         (function(d, s) {
+             var j, e = d.getElementsByTagName(s)[0];
+
+             if (typeof LivereTower === 'function') { return; }
+
+             j = d.createElement(s);
+             j.src = 'https://cdn-city.livere.com/js/embed.dist.js';
+             j.async = true;
+
+             e.parentNode.insertBefore(j, e);
+         })(document, 'script');
+        </script>
+      <noscript> 为正常使用来必力评论功能请激活JavaScript</noscript>
       </div>
+      <!-- City版安装代码已完成 -->
+
     
   </div>
 
@@ -732,33 +731,14 @@ app.listen(3000);
 
   
 
-  
-    
-  
 
-  <script type="text/javascript">
-    var duoshuoQuery = {short_name:"hunterlin"};
-    (function() {
-      var ds = document.createElement('script');
-      ds.type = 'text/javascript';ds.async = true;
-      ds.id = 'duoshuo-script';
-      ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
-      ds.charset = 'UTF-8';
-      (document.getElementsByTagName('head')[0]
-      || document.getElementsByTagName('body')[0]).appendChild(ds);
-    })();
-  </script>
 
-  
-    
-    
-    <script src="/lib/ua-parser-js/dist/ua-parser.min.js?v=0.7.9"></script>
-    <script src="/js/src/hook-duoshuo.js"></script>
   
 
 
 
 
+	
 
 
 

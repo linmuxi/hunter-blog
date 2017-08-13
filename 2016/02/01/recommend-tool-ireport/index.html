@@ -158,6 +158,18 @@
 
 
 
+  <div style="display: none;">
+    <script src="//s95.cnzz.com/z_stat.php?id=1259167020&web_id=1259167020" language="JavaScript"></script>
+
+	<!--
+<script type="text/javascript">var cnzz_protocol = (("https:" == document.location.protocol) ? " https://" : " http://");document.write(unescape("%3Cspan id='cnzz_stat_icon_1259167020'%3E%3C/span%3E%3Cscript src='" + cnzz_protocol + "s4.cnzz.com/z_stat.php%3Fid%3D1259167020%26show%3Dpic' type='text/javascript'%3E%3C/script%3E"));</script>
+    -->
+
+
+  </div>
+
+
+
 
 
   
@@ -358,13 +370,6 @@
 
           
             
-              <span class="post-comments-count">
-                <span class="post-meta-divider">|</span>
-                <a href="/2016/02/01/recommend-tool-ireport/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/02/01/recommend-tool-ireport/" itemprop="commentCount"></span>
-                </a>
-              </span>
-            
           
 
           
@@ -405,43 +410,7 @@
 <p><img src="http://7xqlat.com1.z0.glb.clouddn.com/ireport_01.png" alt="可视化报表设计工具"></p>
 <p><strong> 下面是在项目中设计的报表模版：</strong> </p>
 <p><img src="http://7xqlat.com1.z0.glb.clouddn.com/ireport_02.png" alt="报表设计模版"><br><img src="http://7xqlat.com1.z0.glb.clouddn.com/ireport_03.png" alt="报表设计模版"></p>
-<p><strong> 利用提供的API导出报表到PDF </strong></p>
-<pre><code class="java">// 可视化工具设计的模版文件
-String filePath = &quot;E:\\demo\\iReport\\myReport.jasper&quot;;
-
-// 通过模版文件实例化报表对象
-JasperReport report = (JasperReport) JRLoader.loadObjectFromFile(filePath);
-report.setWhenNoDataType(WhenNoDataTypeEnum.ALL_SECTIONS_NO_DETAIL);
-
-// 下面是封装的数据实体对象
-Map&lt;String, Object&gt; params = new HashMap&lt;String, Object&gt;();
-// list集合对象
-params.put(&quot;repaymentDetailDS&quot;, new JRBeanCollectionDataSource(getRepaymentDetailList()));
-// 实体VO对象,可以直接在报表模版中通过vo对象来调用
-params.put(&quot;vo&quot;, getParams());
-
-// 利用提供的数据填充报表对象
-JasperPrint print4 = JasperFillManager.fillReport(report, params,new JREmptyDataSource());
-
-List&lt;JasperPrint&gt; printList = new ArrayList&lt;JasperPrint&gt;();
-printList.add(print4);
-
-// 设置导出格式为PDF
-JRPdfExporter pdfExporter = new JRPdfExporter();
-// 导入源
-pdfExporter.setExporterInput(SimpleExporterInput.getInstance(printList));
-// 导出源
-pdfExporter.setExporterOutput(new SimpleOutputStreamExporterOutput(&quot;E:/myReport.pdf&quot;));
-
-// 可以进行PDF参数配置
-SimplePdfExporterConfiguration spec = new SimplePdfExporterConfiguration();
-/*spec.setEncrypted(true);
-spec.setUserPassword(&quot;123456&quot;);*/
-
-pdfExporter.setConfiguration(spec);
-// 导出PDF对象
-pdfExporter.exportReport();
-</code></pre>
+<p><strong> 利用提供的API导出报表到PDF </strong><br><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// 可视化工具设计的模版文件</span></div><div class="line">String filePath = <span class="string">"E:\\demo\\iReport\\myReport.jasper"</span>;</div><div class="line"></div><div class="line"><span class="comment">// 通过模版文件实例化报表对象</span></div><div class="line">JasperReport report = (JasperReport) JRLoader.loadObjectFromFile(filePath);</div><div class="line">report.setWhenNoDataType(WhenNoDataTypeEnum.ALL_SECTIONS_NO_DETAIL);</div><div class="line"></div><div class="line"><span class="comment">// 下面是封装的数据实体对象</span></div><div class="line">Map&lt;String, Object&gt; params = <span class="keyword">new</span> HashMap&lt;String, Object&gt;();</div><div class="line"><span class="comment">// list集合对象</span></div><div class="line">params.put(<span class="string">"repaymentDetailDS"</span>, <span class="keyword">new</span> JRBeanCollectionDataSource(getRepaymentDetailList()));</div><div class="line"><span class="comment">// 实体VO对象,可以直接在报表模版中通过vo对象来调用</span></div><div class="line">params.put(<span class="string">"vo"</span>, getParams());</div><div class="line"></div><div class="line"><span class="comment">// 利用提供的数据填充报表对象</span></div><div class="line">JasperPrint print4 = JasperFillManager.fillReport(report, params,<span class="keyword">new</span> JREmptyDataSource());</div><div class="line"></div><div class="line">List&lt;JasperPrint&gt; printList = <span class="keyword">new</span> ArrayList&lt;JasperPrint&gt;();</div><div class="line">printList.add(print4);</div><div class="line"></div><div class="line"><span class="comment">// 设置导出格式为PDF</span></div><div class="line">JRPdfExporter pdfExporter = <span class="keyword">new</span> JRPdfExporter();</div><div class="line"><span class="comment">// 导入源</span></div><div class="line">pdfExporter.setExporterInput(SimpleExporterInput.getInstance(printList));</div><div class="line"><span class="comment">// 导出源</span></div><div class="line">pdfExporter.setExporterOutput(<span class="keyword">new</span> SimpleOutputStreamExporterOutput(<span class="string">"E:/myReport.pdf"</span>));</div><div class="line"></div><div class="line"><span class="comment">// 可以进行PDF参数配置</span></div><div class="line">SimplePdfExporterConfiguration spec = <span class="keyword">new</span> SimplePdfExporterConfiguration();</div><div class="line"><span class="comment">/*spec.setEncrypted(true);</span></div><div class="line">spec.setUserPassword("123456");*/</div><div class="line"></div><div class="line">pdfExporter.setConfiguration(spec);</div><div class="line"><span class="comment">// 导出PDF对象</span></div><div class="line">pdfExporter.exportReport();</div></pre></td></tr></table></figure></p>
 
       
     </div>
@@ -539,9 +508,25 @@ pdfExporter.exportReport();
           
   <div class="comments" id="comments">
     
-      <div class="ds-thread" data-thread-key="2016/02/01/recommend-tool-ireport/"
-           data-title="[推荐]报表设计工具iReport" data-url="http://www.linmuxi.com/2016/02/01/recommend-tool-ireport/">
+      <!-- 来必力City版安装代码 -->
+      <div id="lv-container" data-id="city" data-uid="MTAyMC8zMDE0NS82NzAw">
+        <script type="text/javascript">
+         (function(d, s) {
+             var j, e = d.getElementsByTagName(s)[0];
+
+             if (typeof LivereTower === 'function') { return; }
+
+             j = d.createElement(s);
+             j.src = 'https://cdn-city.livere.com/js/embed.dist.js';
+             j.async = true;
+
+             e.parentNode.insertBefore(j, e);
+         })(document, 'script');
+        </script>
+      <noscript> 为正常使用来必力评论功能请激活JavaScript</noscript>
       </div>
+      <!-- City版安装代码已完成 -->
+
     
   </div>
 
@@ -740,33 +725,14 @@ pdfExporter.exportReport();
 
   
 
-  
-    
-  
 
-  <script type="text/javascript">
-    var duoshuoQuery = {short_name:"hunterlin"};
-    (function() {
-      var ds = document.createElement('script');
-      ds.type = 'text/javascript';ds.async = true;
-      ds.id = 'duoshuo-script';
-      ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
-      ds.charset = 'UTF-8';
-      (document.getElementsByTagName('head')[0]
-      || document.getElementsByTagName('body')[0]).appendChild(ds);
-    })();
-  </script>
 
-  
-    
-    
-    <script src="/lib/ua-parser-js/dist/ua-parser.min.js?v=0.7.9"></script>
-    <script src="/js/src/hook-duoshuo.js"></script>
   
 
 
 
 
+	
 
 
 

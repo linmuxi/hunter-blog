@@ -154,6 +154,18 @@
 
 
 
+  <div style="display: none;">
+    <script src="//s95.cnzz.com/z_stat.php?id=1259167020&web_id=1259167020" language="JavaScript"></script>
+
+	<!--
+<script type="text/javascript">var cnzz_protocol = (("https:" == document.location.protocol) ? " https://" : " http://");document.write(unescape("%3Cspan id='cnzz_stat_icon_1259167020'%3E%3C/span%3E%3Cscript src='" + cnzz_protocol + "s4.cnzz.com/z_stat.php%3Fid%3D1259167020%26show%3Dpic' type='text/javascript'%3E%3C/script%3E"));</script>
+    -->
+
+
+  </div>
+
+
+
 
 
   
@@ -343,13 +355,6 @@
 
           
             
-              <span class="post-comments-count">
-                <span class="post-meta-divider">|</span>
-                <a href="/2016/02/22/oracle-recycle-bin/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/02/22/oracle-recycle-bin/" itemprop="commentCount"></span>
-                </a>
-              </span>
-            
           
 
           
@@ -389,21 +394,9 @@
 <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>回收站(Recycle Bin）从原理上来说就是一个数据字典表，放置用户删除（drop）掉的数据库对象信息。用户进行删除操作的对象并没有被数据库删除，仍然会占用空间。除非是由于用户手工进行Purge或者因为存储空间不够而被数据库清掉。</p>
 <p>除非拥有sysdba权限，每个用户只能看到属于自己的对象。所以，对于用户来说，好像每个人都拥有自己的回收站。即使用户有删除其它schema对象的权限，也只能在recyclebin中看到属于自己的对象</p>
 <h2 id="操作"><a href="#操作" class="headerlink" title="操作"></a>操作</h2><p>启动和关闭<br><code>SELECT Value FROM V$parameter WHERE Name = &#39;recyclebin&#39;;</code><br>或<br><code>show parameter recyclebin;</code><br>如果返回值为“on”表明回收站是启动的，“off”表明是关闭的。</p>
-<p>当然，你可以启动或者关闭回收站里的每个会话（session）和系统（system），代码如下：</p>
-<pre><code>ALTER SYSTEM SET recyclebin = ON; 
-
-ALTER SESSION SET recyclebin = ON; 
-
-ALTER SYSTEM SET recyclebin = OFF; 
-
-ALTER SESSION SET recyclebin = OFF;
-</code></pre><p>获取回收站里的内容</p>
-<pre><code>SELECT * FROM RECYCLEBIN; 
-
-SELECT * FROM USER_RECYCLEBIN; 
-
-SELECT * FROM DBA_RECYCLEBIN;
-</code></pre><p>还原被Drop的表<br><code>flashback table &lt;droped_table_name&gt; to before drop [rename &lt;new_table_name&gt;]</code></p>
+<p>当然，你可以启动或者关闭回收站里的每个会话（session）和系统（system），代码如下：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">ALTER SYSTEM SET recyclebin = ON; </div><div class="line"></div><div class="line">ALTER SESSION SET recyclebin = ON; </div><div class="line"></div><div class="line">ALTER SYSTEM SET recyclebin = OFF; </div><div class="line"></div><div class="line">ALTER SESSION SET recyclebin = OFF;</div></pre></td></tr></table></figure></p>
+<p>获取回收站里的内容<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">SELECT * FROM RECYCLEBIN; </div><div class="line"></div><div class="line">SELECT * FROM USER_RECYCLEBIN; </div><div class="line"> </div><div class="line">SELECT * FROM DBA_RECYCLEBIN;</div></pre></td></tr></table></figure></p>
+<p>还原被Drop的表<br><code>flashback table &lt;droped_table_name&gt; to before drop [rename &lt;new_table_name&gt;]</code></p>
 <p>利用flashback将删除的表闪回，不过这个flashback并不是100%将删除的表还原，具体下篇再介绍。</p>
 <p>清空回收站<br>a.清空一个特定的表：purge table <table_name><br>b.清空一个特定的索引：purge index <index_name><br>c.清空与该表空间有关联的对象：purge tablespace <tablespace_name><br>d.清空一个特定用户的表空间对象：purge tablespace <tablespace_name> user <user_name><br>e.清空回收站：purge recyclebin<br>f.当一个表被删除（drop）时就直接从回收站中清空:drop table <table_name> purge;</table_name></user_name></tablespace_name></tablespace_name></index_name></table_name></p>
 <p>注意：<br>以下几种drop不会将相关对象放进RecycleBin：<br>drop tablespace：会将RecycleBin中所有属于该tablespace的对象清除<br>drop user：会将RecycleBin中所有属于该用户的对象清除<br>drop cluster：会将RecycleBin中所有属于该cluster的成员对象清除<br>drop type：会将RecycleBin中所有依赖该type的对象清除</p>
@@ -501,9 +494,25 @@ SELECT * FROM DBA_RECYCLEBIN;
           
   <div class="comments" id="comments">
     
-      <div class="ds-thread" data-thread-key="2016/02/22/oracle-recycle-bin/"
-           data-title="Oracle回收站(Recycle Bin)的使用" data-url="http://www.linmuxi.com/2016/02/22/oracle-recycle-bin/">
+      <!-- 来必力City版安装代码 -->
+      <div id="lv-container" data-id="city" data-uid="MTAyMC8zMDE0NS82NzAw">
+        <script type="text/javascript">
+         (function(d, s) {
+             var j, e = d.getElementsByTagName(s)[0];
+
+             if (typeof LivereTower === 'function') { return; }
+
+             j = d.createElement(s);
+             j.src = 'https://cdn-city.livere.com/js/embed.dist.js';
+             j.async = true;
+
+             e.parentNode.insertBefore(j, e);
+         })(document, 'script');
+        </script>
+      <noscript> 为正常使用来必力评论功能请激活JavaScript</noscript>
       </div>
+      <!-- City版安装代码已完成 -->
+
     
   </div>
 
@@ -727,33 +736,14 @@ SELECT * FROM DBA_RECYCLEBIN;
 
   
 
-  
-    
-  
 
-  <script type="text/javascript">
-    var duoshuoQuery = {short_name:"hunterlin"};
-    (function() {
-      var ds = document.createElement('script');
-      ds.type = 'text/javascript';ds.async = true;
-      ds.id = 'duoshuo-script';
-      ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
-      ds.charset = 'UTF-8';
-      (document.getElementsByTagName('head')[0]
-      || document.getElementsByTagName('body')[0]).appendChild(ds);
-    })();
-  </script>
 
-  
-    
-    
-    <script src="/lib/ua-parser-js/dist/ua-parser.min.js?v=0.7.9"></script>
-    <script src="/js/src/hook-duoshuo.js"></script>
   
 
 
 
 
+	
 
 
 

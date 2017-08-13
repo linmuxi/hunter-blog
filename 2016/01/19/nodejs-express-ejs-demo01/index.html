@@ -154,6 +154,18 @@
 
 
 
+  <div style="display: none;">
+    <script src="//s95.cnzz.com/z_stat.php?id=1259167020&web_id=1259167020" language="JavaScript"></script>
+
+	<!--
+<script type="text/javascript">var cnzz_protocol = (("https:" == document.location.protocol) ? " https://" : " http://");document.write(unescape("%3Cspan id='cnzz_stat_icon_1259167020'%3E%3C/span%3E%3Cscript src='" + cnzz_protocol + "s4.cnzz.com/z_stat.php%3Fid%3D1259167020%26show%3Dpic' type='text/javascript'%3E%3C/script%3E"));</script>
+    -->
+
+
+  </div>
+
+
+
 
 
   
@@ -343,13 +355,6 @@
 
           
             
-              <span class="post-comments-count">
-                <span class="post-meta-divider">|</span>
-                <a href="/2016/01/19/nodejs-express-ejs-demo01/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/01/19/nodejs-express-ejs-demo01/" itemprop="commentCount"></span>
-                </a>
-              </span>
-            
           
 
           
@@ -385,177 +390,9 @@
       
 
       
-        <p>学习Nodejs、express做的一个简单分页查询，前端分页控件用的是bootstrap-paginator<br><a id="more"></a><br><strong> dbhelper </strong></p>
-<pre><code class="js">var mysql = require(&quot;mysql&quot;);
-var pool = mysql.createPool({
-    host:&quot;localhost&quot;,
-    user:&quot;root&quot;,
-    password:&quot;root&quot;,
-    database:&quot;mydb&quot;,
-    port:&quot;3306&quot;,
-    connectionLimit:10
-});
-
-var helper = function(){
-    this.query = function(sql,callback){
-        pool.getConnection(function(err,conn){
-            if(err)console.log(&quot;获取连接失败,%s&quot;,err);
-
-            conn.query(sql,function(err,rows,fields){
-                if(err)console.log(&quot;查询失败,%s&quot;,err);
-                callback(rows);
-            });
-
-            conn.release();
-        });
-    };
-    this.insert = function(sql,callback){
-        pool.getConnection(function(err,conn){
-            if(err)console.log(&quot;获取连接失败,%s&quot;,err);
-
-            conn.query(sql,function(err,res){
-                if(err)console.log(&quot;新增失败,%s&quot;,err);                
-                callback(res.insertId);
-            });
-
-            conn.release();
-        });
-    };
-    this.update = function(sql,callback){
-        pool.getConnection(function(err,conn){
-            if(err)console.log(&quot;获取连接失败,%s&quot;,err);
-
-            conn.query(sql,function(err,res){
-                if(err)console.log(&quot;修改失败,%s&quot;,err);            
-                //callback(res.changedRows);
-                callback(res.affectedRows);
-            });
-
-            conn.release();
-        })
-    };
-    this.delete = function(sql,callback){
-        pool.getConnection(function(err,conn){
-            if(err)console.log(&quot;获取连接失败,%s&quot;,err);
-
-            conn.query(sql,function(err,res){
-                if(err)console.log(&quot;删除失败,%s&quot;,err);
-                callback(res.affectedRows);
-            });
-
-            conn.release();
-        })
-    }
-}
-
-exports.helper = helper;
-</code></pre>
-<p><strong> Controller </strong></p>
-<pre><code class="js">var fs = require(&quot;fs&quot;);
-
-var express = require(&quot;express&quot;);
-var app = express();
-app.set(&quot;view engine&quot;,&quot;ejs&quot;);
-app.set(&quot;views&quot;,&quot;../views&quot;);
-
-var dbhelper = require(&quot;./dbhelper&quot;);
-var helper = new dbhelper.helper();
-
-var rootContext = &quot;/test&quot;;
-
-function wrapRootContextUrl(url){
-    return rootContext+url;
-}
-
-//静态资源托管
-app.use(wrapRootContextUrl(&quot;/user&quot;),express.static(&quot;../../nodejs-paginator&quot;));
-
-app.get(&#39;/(test)?&#39;,function(req,res,next){
-    res.send(&quot;welcome!&quot;);
-});
-
-app.get(wrapRootContextUrl(&quot;/user/userList&quot;),function(req,res,next){
-    var p = req.query.p;
-    var limit = req.query.limit;
-
-    var data = {currentPage:p,totalPages:0};
-    helper.query(&quot;select count(1) count from user_info&quot;,function(result){
-        if(result){
-            data.totalPages = Math.ceil(result[0].count/limit);
-            //console.log(&quot;获取总数：&quot;+data.totalPages);
-        }
-
-        helper.query(&quot;SELECT id,user_name userName,PASSWORD password FROM user_info LIMIT &quot;+(p-1)*limit+&quot;,&quot;+limit,function(result){
-            data.items = result;
-            //console.log(&quot;返回前获取：&quot;+data.totalPages);
-            res.render(&quot;index&quot;,data);
-        });
-    });
-
-});
-
-app.listen(3000,function(){
-    console.log(&quot;服务启动&quot;);
-});
-</code></pre>
-<p><strong> Ejs模版 </strong></p>
-<pre><code class="html">&lt;!DOCTYPE html&gt;
-&lt;html lang=&quot;en&quot;&gt;
-&lt;head&gt;
-    &lt;meta charset=&quot;UTF-8&quot;&gt;
-    &lt;title&gt;用户列表&lt;/title&gt;
-
-    &lt;link rel=&quot;stylesheet&quot; href=&quot;css/bootstrap-responsive.css&quot;&gt;
-    &lt;link rel=&quot;stylesheet&quot; href=&quot;css/bootstrap.css&quot;&gt;
-    &lt;link rel=&quot;stylesheet&quot; href=&quot;css/documentation.css&quot;&gt;
-    &lt;link rel=&quot;stylesheet&quot; href=&quot;css/highlight.js/sunburst.css&quot;&gt;
-
-    &lt;script src=&quot;lib/jquery.min.js&quot;&gt;&lt;/script&gt;
-    &lt;script src=&quot;lib/bootstrap.min.js&quot;&gt;&lt;/script&gt;
-    &lt;script src=&quot;lib/bootstrap-paginator.js&quot;&gt;&lt;/script&gt;
-&lt;/head&gt;
-&lt;body&gt;
-    &lt;table border=&quot;1&quot; style=&quot;width:300px;margin:0 auto;margin-top:10px;&quot;&gt;
-        &lt;tr&gt;
-            &lt;td&gt;ID&lt;/td&gt;
-            &lt;td&gt;UserName&lt;/td&gt;
-            &lt;td&gt;Password&lt;/td&gt;
-        &lt;/tr&gt;
-        &lt;%for(var i = 0;i&lt;items.length;i++){ %&gt;
-            &lt;tr&gt;
-                &lt;td&gt;&lt;%=items[i].id%&gt;&lt;/td&gt;
-                &lt;td&gt;&lt;%=items[i].userName%&gt;&lt;/td&gt;
-                &lt;td&gt;&lt;%=items[i].password%&gt;&lt;/td&gt;
-            &lt;/tr&gt;
-        &lt;%}%&gt;
-    &lt;/table&gt;
-
-    &lt;div id=&quot;example&quot;&gt;&lt;/div&gt;
-    &lt;script type=&quot;text/javascript&quot;&gt;
-        var options = {
-            currentPage:&quot;&lt;%=currentPage%&gt;&quot;,
-            totalPages:&quot;&lt;%=totalPages%&gt;&quot;,
-            size:&quot;large&quot;,
-            alignment:&quot;center&quot;,
-            itemContainerClass: function (type, page, current) {
-                return (page === current) ? &quot;active&quot; : &quot;pointer-cursor&quot;;
-            },
-            onPageClicked: function(e,originalEvent,type,page){
-                //alert(&quot;Page item clicked, type: &quot;+type+&quot; page: &quot;+page);
-            },
-            onPageChanged: function(e,oldPage,newPage){
-                //alert(&quot;Current page changed, old: &quot;+oldPage+&quot; new: &quot;+newPage);
-            },
-            pageUrl:function(type,page,current){
-                return &quot;/Test/user/userlist?p=&quot;+page+&quot;&amp;limit=5&quot;;
-            }
-        }
-
-        $(&quot;#example&quot;).bootstrapPaginator(options);
-    &lt;/script&gt;
-&lt;/body&gt;
-&lt;/html&gt;
-</code></pre>
+        <p>学习Nodejs、express做的一个简单分页查询，前端分页控件用的是bootstrap-paginator<br><a id="more"></a><br><strong> dbhelper </strong><br><figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> mysql = <span class="built_in">require</span>(<span class="string">"mysql"</span>);</div><div class="line"><span class="keyword">var</span> pool = mysql.createPool(&#123;</div><div class="line">	<span class="attr">host</span>:<span class="string">"localhost"</span>,</div><div class="line">	<span class="attr">user</span>:<span class="string">"root"</span>,</div><div class="line">	<span class="attr">password</span>:<span class="string">"root"</span>,</div><div class="line">	<span class="attr">database</span>:<span class="string">"mydb"</span>,</div><div class="line">	<span class="attr">port</span>:<span class="string">"3306"</span>,</div><div class="line">	<span class="attr">connectionLimit</span>:<span class="number">10</span></div><div class="line">&#125;);</div><div class="line"></div><div class="line"><span class="keyword">var</span> helper = <span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</div><div class="line">	<span class="keyword">this</span>.query = <span class="function"><span class="keyword">function</span>(<span class="params">sql,callback</span>)</span>&#123;</div><div class="line">		pool.getConnection(<span class="function"><span class="keyword">function</span>(<span class="params">err,conn</span>)</span>&#123;</div><div class="line">			<span class="keyword">if</span>(err)<span class="built_in">console</span>.log(<span class="string">"获取连接失败,%s"</span>,err);</div><div class="line"></div><div class="line">			conn.query(sql,<span class="function"><span class="keyword">function</span>(<span class="params">err,rows,fields</span>)</span>&#123;</div><div class="line">				<span class="keyword">if</span>(err)<span class="built_in">console</span>.log(<span class="string">"查询失败,%s"</span>,err);</div><div class="line">				callback(rows);</div><div class="line">			&#125;);</div><div class="line"></div><div class="line">			conn.release();</div><div class="line">		&#125;);</div><div class="line">	&#125;;</div><div class="line">	<span class="keyword">this</span>.insert = <span class="function"><span class="keyword">function</span>(<span class="params">sql,callback</span>)</span>&#123;</div><div class="line">		pool.getConnection(<span class="function"><span class="keyword">function</span>(<span class="params">err,conn</span>)</span>&#123;</div><div class="line">			<span class="keyword">if</span>(err)<span class="built_in">console</span>.log(<span class="string">"获取连接失败,%s"</span>,err);</div><div class="line"></div><div class="line">			conn.query(sql,<span class="function"><span class="keyword">function</span>(<span class="params">err,res</span>)</span>&#123;</div><div class="line">				<span class="keyword">if</span>(err)<span class="built_in">console</span>.log(<span class="string">"新增失败,%s"</span>,err);				</div><div class="line">				callback(res.insertId);</div><div class="line">			&#125;);</div><div class="line"></div><div class="line">			conn.release();</div><div class="line">		&#125;);</div><div class="line">	&#125;;</div><div class="line">	<span class="keyword">this</span>.update = <span class="function"><span class="keyword">function</span>(<span class="params">sql,callback</span>)</span>&#123;</div><div class="line">		pool.getConnection(<span class="function"><span class="keyword">function</span>(<span class="params">err,conn</span>)</span>&#123;</div><div class="line">			<span class="keyword">if</span>(err)<span class="built_in">console</span>.log(<span class="string">"获取连接失败,%s"</span>,err);</div><div class="line"></div><div class="line">			conn.query(sql,<span class="function"><span class="keyword">function</span>(<span class="params">err,res</span>)</span>&#123;</div><div class="line">				<span class="keyword">if</span>(err)<span class="built_in">console</span>.log(<span class="string">"修改失败,%s"</span>,err);			</div><div class="line">				<span class="comment">//callback(res.changedRows);</span></div><div class="line">				callback(res.affectedRows);</div><div class="line">			&#125;);</div><div class="line"></div><div class="line">			conn.release();</div><div class="line">		&#125;)</div><div class="line">	&#125;;</div><div class="line">	<span class="keyword">this</span>.delete = <span class="function"><span class="keyword">function</span>(<span class="params">sql,callback</span>)</span>&#123;</div><div class="line">		pool.getConnection(<span class="function"><span class="keyword">function</span>(<span class="params">err,conn</span>)</span>&#123;</div><div class="line">			<span class="keyword">if</span>(err)<span class="built_in">console</span>.log(<span class="string">"获取连接失败,%s"</span>,err);</div><div class="line"></div><div class="line">			conn.query(sql,<span class="function"><span class="keyword">function</span>(<span class="params">err,res</span>)</span>&#123;</div><div class="line">				<span class="keyword">if</span>(err)<span class="built_in">console</span>.log(<span class="string">"删除失败,%s"</span>,err);</div><div class="line">				callback(res.affectedRows);</div><div class="line">			&#125;);</div><div class="line"></div><div class="line">			conn.release();</div><div class="line">		&#125;)</div><div class="line">	&#125;</div><div class="line">&#125;</div><div class="line"></div><div class="line">exports.helper = helper;</div></pre></td></tr></table></figure></p>
+<p><strong> Controller </strong><br><figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> fs = <span class="built_in">require</span>(<span class="string">"fs"</span>);</div><div class="line"></div><div class="line"><span class="keyword">var</span> express = <span class="built_in">require</span>(<span class="string">"express"</span>);</div><div class="line"><span class="keyword">var</span> app = express();</div><div class="line">app.set(<span class="string">"view engine"</span>,<span class="string">"ejs"</span>);</div><div class="line">app.set(<span class="string">"views"</span>,<span class="string">"../views"</span>);</div><div class="line"></div><div class="line"><span class="keyword">var</span> dbhelper = <span class="built_in">require</span>(<span class="string">"./dbhelper"</span>);</div><div class="line"><span class="keyword">var</span> helper = <span class="keyword">new</span> dbhelper.helper();</div><div class="line"></div><div class="line"><span class="keyword">var</span> rootContext = <span class="string">"/test"</span>;</div><div class="line"></div><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">wrapRootContextUrl</span>(<span class="params">url</span>)</span>&#123;</div><div class="line">	<span class="keyword">return</span> rootContext+url;</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="comment">//静态资源托管</span></div><div class="line">app.use(wrapRootContextUrl(<span class="string">"/user"</span>),express.static(<span class="string">"../../nodejs-paginator"</span>));</div><div class="line"></div><div class="line">app.get(<span class="string">'/(test)?'</span>,<span class="function"><span class="keyword">function</span>(<span class="params">req,res,next</span>)</span>&#123;</div><div class="line">	res.send(<span class="string">"welcome!"</span>);</div><div class="line">&#125;);</div><div class="line"></div><div class="line">app.get(wrapRootContextUrl(<span class="string">"/user/userList"</span>),<span class="function"><span class="keyword">function</span>(<span class="params">req,res,next</span>)</span>&#123;</div><div class="line">	<span class="keyword">var</span> p = req.query.p;</div><div class="line">	<span class="keyword">var</span> limit = req.query.limit;</div><div class="line"></div><div class="line">	<span class="keyword">var</span> data = &#123;<span class="attr">currentPage</span>:p,<span class="attr">totalPages</span>:<span class="number">0</span>&#125;;</div><div class="line">	helper.query(<span class="string">"select count(1) count from user_info"</span>,<span class="function"><span class="keyword">function</span>(<span class="params">result</span>)</span>&#123;</div><div class="line">		<span class="keyword">if</span>(result)&#123;</div><div class="line">			data.totalPages = <span class="built_in">Math</span>.ceil(result[<span class="number">0</span>].count/limit);</div><div class="line">			<span class="comment">//console.log("获取总数："+data.totalPages);</span></div><div class="line">		&#125;</div><div class="line"></div><div class="line">		helper.query(<span class="string">"SELECT id,user_name userName,PASSWORD password FROM user_info LIMIT "</span>+(p<span class="number">-1</span>)*limit+<span class="string">","</span>+limit,<span class="function"><span class="keyword">function</span>(<span class="params">result</span>)</span>&#123;</div><div class="line">			data.items = result;</div><div class="line">			<span class="comment">//console.log("返回前获取："+data.totalPages);</span></div><div class="line">			res.render(<span class="string">"index"</span>,data);</div><div class="line">		&#125;);</div><div class="line">	&#125;);</div><div class="line"></div><div class="line">&#125;);</div><div class="line"></div><div class="line">app.listen(<span class="number">3000</span>,<span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</div><div class="line">	<span class="built_in">console</span>.log(<span class="string">"服务启动"</span>);</div><div class="line">&#125;);</div></pre></td></tr></table></figure></p>
+<p><strong> Ejs模版 </strong><br><figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div></pre></td><td class="code"><pre><div class="line">&lt;!DOCTYPE html&gt;</div><div class="line">&lt;html lang="en"&gt;</div><div class="line">&lt;head&gt;</div><div class="line">	&lt;meta charset="UTF-8"&gt;</div><div class="line">	&lt;title&gt;用户列表&lt;/title&gt;</div><div class="line"></div><div class="line">    &lt;link rel="stylesheet" href="css/bootstrap-responsive.css"&gt;</div><div class="line">    &lt;link rel="stylesheet" href="css/bootstrap.css"&gt;</div><div class="line">    &lt;link rel="stylesheet" href="css/documentation.css"&gt;</div><div class="line">    &lt;link rel="stylesheet" href="css/highlight.js/sunburst.css"&gt;</div><div class="line"></div><div class="line">    &lt;script src="lib/jquery.min.js"&gt;&lt;/script&gt;</div><div class="line">    &lt;script src="lib/bootstrap.min.js"&gt;&lt;/script&gt;</div><div class="line">    &lt;script src="lib/bootstrap-paginator.js"&gt;&lt;/script&gt;</div><div class="line">&lt;/head&gt;</div><div class="line">&lt;body&gt;</div><div class="line">    &lt;table border="1" style="width:300px;margin:0 auto;margin-top:10px;"&gt;</div><div class="line">        &lt;tr&gt;</div><div class="line">            &lt;td&gt;ID&lt;/td&gt;</div><div class="line">            &lt;td&gt;UserName&lt;/td&gt;</div><div class="line">            &lt;td&gt;Password&lt;/td&gt;</div><div class="line">        &lt;/tr&gt;</div><div class="line">        &lt;%for(var i = 0;i&lt;items.length;i++)&#123; %&gt;</div><div class="line">            &lt;tr&gt;</div><div class="line">                &lt;td&gt;&lt;%=items[i].id%&gt;&lt;/td&gt;</div><div class="line">                &lt;td&gt;&lt;%=items[i].userName%&gt;&lt;/td&gt;</div><div class="line">                &lt;td&gt;&lt;%=items[i].password%&gt;&lt;/td&gt;</div><div class="line">            &lt;/tr&gt;</div><div class="line">        &lt;%&#125;%&gt;</div><div class="line">    &lt;/table&gt;</div><div class="line"></div><div class="line">	&lt;div id="example"&gt;&lt;/div&gt;</div><div class="line">	&lt;script type="text/javascript"&gt;</div><div class="line">		var options = &#123;</div><div class="line">			currentPage:"&lt;%=currentPage%&gt;",</div><div class="line">			totalPages:"&lt;%=totalPages%&gt;",</div><div class="line">            size:"large",</div><div class="line">            alignment:"center",</div><div class="line">            itemContainerClass: function (type, page, current) &#123;</div><div class="line">                return (page === current) ? "active" : "pointer-cursor";</div><div class="line">            &#125;,</div><div class="line">            onPageClicked: function(e,originalEvent,type,page)&#123;</div><div class="line">				//alert("Page item clicked, type: "+type+" page: "+page);</div><div class="line">            &#125;,</div><div class="line">            onPageChanged: function(e,oldPage,newPage)&#123;</div><div class="line">                //alert("Current page changed, old: "+oldPage+" new: "+newPage);</div><div class="line">            &#125;,</div><div class="line">            pageUrl:function(type,page,current)&#123;</div><div class="line">            	return "/Test/user/userlist?p="+page+"&amp;limit=5";</div><div class="line">            &#125;</div><div class="line">		&#125;</div><div class="line"></div><div class="line">		$("#example").bootstrapPaginator(options);</div><div class="line">	&lt;/script&gt;</div><div class="line">&lt;/body&gt;</div><div class="line">&lt;/html&gt;</div></pre></td></tr></table></figure></p>
 
       
     </div>
@@ -649,9 +486,25 @@ app.listen(3000,function(){
           
   <div class="comments" id="comments">
     
-      <div class="ds-thread" data-thread-key="2016/01/19/nodejs-express-ejs-demo01/"
-           data-title="Node.js+Express+ejs基础入门" data-url="http://www.linmuxi.com/2016/01/19/nodejs-express-ejs-demo01/">
+      <!-- 来必力City版安装代码 -->
+      <div id="lv-container" data-id="city" data-uid="MTAyMC8zMDE0NS82NzAw">
+        <script type="text/javascript">
+         (function(d, s) {
+             var j, e = d.getElementsByTagName(s)[0];
+
+             if (typeof LivereTower === 'function') { return; }
+
+             j = d.createElement(s);
+             j.src = 'https://cdn-city.livere.com/js/embed.dist.js';
+             j.async = true;
+
+             e.parentNode.insertBefore(j, e);
+         })(document, 'script');
+        </script>
+      <noscript> 为正常使用来必力评论功能请激活JavaScript</noscript>
       </div>
+      <!-- City版安装代码已完成 -->
+
     
   </div>
 
@@ -850,33 +703,14 @@ app.listen(3000,function(){
 
   
 
-  
-    
-  
 
-  <script type="text/javascript">
-    var duoshuoQuery = {short_name:"hunterlin"};
-    (function() {
-      var ds = document.createElement('script');
-      ds.type = 'text/javascript';ds.async = true;
-      ds.id = 'duoshuo-script';
-      ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
-      ds.charset = 'UTF-8';
-      (document.getElementsByTagName('head')[0]
-      || document.getElementsByTagName('body')[0]).appendChild(ds);
-    })();
-  </script>
 
-  
-    
-    
-    <script src="/lib/ua-parser-js/dist/ua-parser.min.js?v=0.7.9"></script>
-    <script src="/js/src/hook-duoshuo.js"></script>
   
 
 
 
 
+	
 
 
 

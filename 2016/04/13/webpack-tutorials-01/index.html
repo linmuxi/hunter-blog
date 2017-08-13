@@ -154,6 +154,18 @@
 
 
 
+  <div style="display: none;">
+    <script src="//s95.cnzz.com/z_stat.php?id=1259167020&web_id=1259167020" language="JavaScript"></script>
+
+	<!--
+<script type="text/javascript">var cnzz_protocol = (("https:" == document.location.protocol) ? " https://" : " http://");document.write(unescape("%3Cspan id='cnzz_stat_icon_1259167020'%3E%3C/span%3E%3Cscript src='" + cnzz_protocol + "s4.cnzz.com/z_stat.php%3Fid%3D1259167020%26show%3Dpic' type='text/javascript'%3E%3C/script%3E"));</script>
+    -->
+
+
+  </div>
+
+
+
 
 
   
@@ -343,13 +355,6 @@
 
           
             
-              <span class="post-comments-count">
-                <span class="post-meta-divider">|</span>
-                <a href="/2016/04/13/webpack-tutorials-01/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/04/13/webpack-tutorials-01/" itemprop="commentCount"></span>
-                </a>
-              </span>
-            
           
 
           
@@ -392,46 +397,19 @@
 <li>使用loaders</li>
 <li>使用developement server</li>
 </ul>
-<h2 id="安装webpack"><a href="#安装webpack" class="headerlink" title="安装webpack"></a><strong>安装webpack</strong></h2><p>前提是需要已经安装了node.js</p>
-<pre><code class="js">npm install webpack -g
-</code></pre>
+<h2 id="安装webpack"><a href="#安装webpack" class="headerlink" title="安装webpack"></a><strong>安装webpack</strong></h2><p>前提是需要已经安装了node.js<br><figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">npm install webpack -g</div></pre></td></tr></table></figure></p>
 <p>进行全局安装，这样webpack命令就可以正常使用了</p>
-<h2 id="使用webpack"><a href="#使用webpack" class="headerlink" title="使用webpack"></a><strong>使用webpack</strong></h2><p>先创建一个空目录<br>在目录下创建如下文件：<br>add entry.js</p>
-<pre><code class="js">document.write(&quot;hello world&quot;);
-</code></pre>
-<p>add index.html</p>
-<pre><code class="html">&lt;html&gt;
-    &lt;head&gt;
-        &lt;meta charset=&quot;utf-8&quot;&gt;
-    &lt;/head&gt;
-    &lt;body&gt;
-        &lt;script type=&quot;text/javascript&quot; src=&quot;bundle.js&quot; charset=&quot;utf-8&quot;&gt;&lt;/script&gt;
-    &lt;/body&gt;
-&lt;/html&gt;
-</code></pre>
-<p>接下来运行程序:</p>
-<pre><code>webpack ./entry.js bundle.js
-</code></pre><p>程序会完成编译并创建一个bundle.js文件.<br>如果程序运行成功你就能看到如下显示：</p>
-<pre><code>Hash: ac9248475027b987a559
-Version: webpack 1.12.15
-Time: 39ms
-    Asset     Size  Chunks             Chunk Names
-bundle.js  1.42 kB       0  [emitted]  main
-   [0] ./entry.js 30 bytes {0} [built]
-</code></pre><p>在浏览器中打开index.html，页面会显示</p>
+<h2 id="使用webpack"><a href="#使用webpack" class="headerlink" title="使用webpack"></a><strong>使用webpack</strong></h2><p>先创建一个空目录<br>在目录下创建如下文件：<br>add entry.js<br><figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">document</span>.write(<span class="string">"hello world"</span>);</div></pre></td></tr></table></figure></p>
+<p>add index.html<br><figure class="highlight html"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line"><span class="tag">&lt;<span class="name">html</span>&gt;</span></div><div class="line">    <span class="tag">&lt;<span class="name">head</span>&gt;</span></div><div class="line">        <span class="tag">&lt;<span class="name">meta</span> <span class="attr">charset</span>=<span class="string">"utf-8"</span>&gt;</span></div><div class="line">    <span class="tag">&lt;/<span class="name">head</span>&gt;</span></div><div class="line">    <span class="tag">&lt;<span class="name">body</span>&gt;</span></div><div class="line">        <span class="tag">&lt;<span class="name">script</span> <span class="attr">type</span>=<span class="string">"text/javascript"</span> <span class="attr">src</span>=<span class="string">"bundle.js"</span> <span class="attr">charset</span>=<span class="string">"utf-8"</span>&gt;</span><span class="undefined"></span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></div><div class="line">    <span class="tag">&lt;/<span class="name">body</span>&gt;</span></div><div class="line"><span class="tag">&lt;/<span class="name">html</span>&gt;</span></div></pre></td></tr></table></figure></p>
+<p>接下来运行程序:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">webpack ./entry.js bundle.js</div></pre></td></tr></table></figure></p>
+<p>程序会完成编译并创建一个bundle.js文件.<br>如果程序运行成功你就能看到如下显示：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">Hash: ac9248475027b987a559</div><div class="line">Version: webpack 1.12.15</div><div class="line">Time: 39ms</div><div class="line">    Asset     Size  Chunks             Chunk Names</div><div class="line">bundle.js  1.42 kB       0  [emitted]  main</div><div class="line">   [0] ./entry.js 30 bytes &#123;0&#125; [built]</div></pre></td></tr></table></figure></p>
+<p>在浏览器中打开index.html，页面会显示</p>
 <blockquote>
 <p>hello world</p>
 </blockquote>
-<p>接下来，我们将一部分代码移到外部文件中.<br>add content.js</p>
-<pre><code class="js">module.exports = &quot;hello world from content.js&quot;;
-</code></pre>
-<p>update entry.js</p>
-<pre><code class="js">- document.write(&quot;hello world&quot;);
-+ document.write(require(&quot;./content.js&quot;));
-</code></pre>
-<p>接着重新编译：</p>
-<pre><code class="js">webpack ./entry.js bundle.js
-</code></pre>
+<p>接下来，我们将一部分代码移到外部文件中.<br>add content.js<br><figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">module</span>.exports = <span class="string">"hello world from content.js"</span>;</div></pre></td></tr></table></figure></p>
+<p>update entry.js<br><figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">- <span class="built_in">document</span>.write(<span class="string">"hello world"</span>);</div><div class="line">+ <span class="built_in">document</span>.write(<span class="built_in">require</span>(<span class="string">"./content.js"</span>));</div></pre></td></tr></table></figure></p>
+<p>接着重新编译：<br><figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">webpack ./entry.js bundle.js</div></pre></td></tr></table></figure></p>
 <p>刷新浏览器你应该能看到：</p>
 <blockquote>
 <p>hello world from content.js</p>
@@ -439,68 +417,27 @@ bundle.js  1.42 kB       0  [emitted]  main
 <h2 id="使用loaders"><a href="#使用loaders" class="headerlink" title="使用loaders"></a><strong>使用loaders</strong></h2><p>接下来我们想添加一个css文件到我们的程序中。</p>
 <p>webpack默认只能处理JavaScript文件，所以我们需要使用<code>css-loader</code>和<code>style-loader</code>来处理css文件。</p>
 <p>运行<code>npm install css-loader style-loader</code>进行安装加载器。</p>
-<p>接下来我们做如下操作：<br>add style.css</p>
-<pre><code class="css">body{
-    background:#FF0000;
-}
-</code></pre>
-<p>update entry.js</p>
-<pre><code class="js">+ require(&quot;!style!css!./style.css&quot;);
-  document.write(require(&quot;./content.js&quot;));
-</code></pre>
+<p>接下来我们做如下操作：<br>add style.css<br><figure class="highlight css"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="selector-tag">body</span>&#123;</div><div class="line">	<span class="attribute">background</span>:<span class="number">#FF0000</span>;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>update entry.js<br><figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">+ <span class="built_in">require</span>(<span class="string">"!style!css!./style.css"</span>);</div><div class="line">  <span class="built_in">document</span>.write(<span class="built_in">require</span>(<span class="string">"./content.js"</span>));</div></pre></td></tr></table></figure></p>
 <p>重新运行编译并刷新浏览器，你应该能看到浏览器输出<code>hello world from content.js</code>并且背景是红色;</p>
 <p>在上面entry.js文件中<code>require(&quot;!style!css!./style.css&quot;);</code>表示使用style和css加载器来加载style.css文件,如果我们不想在文件中指定加载器，可以这样做：</p>
-<p>update entry.js</p>
-<pre><code class="js">- require(&quot;!style!css!./style.css&quot;);
-+ require(&quot;./style.css&quot;);
-  document.write(require(&quot;./content.js&quot;));
-</code></pre>
-<p>运行编译：</p>
-<pre><code class="js">webpack ./entry.js bundle.js --module-bind &quot;css=style!css&quot;
-</code></pre>
+<p>update entry.js<br><figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">- <span class="built_in">require</span>(<span class="string">"!style!css!./style.css"</span>);</div><div class="line">+ <span class="built_in">require</span>(<span class="string">"./style.css"</span>);</div><div class="line">  <span class="built_in">document</span>.write(<span class="built_in">require</span>(<span class="string">"./content.js"</span>));</div></pre></td></tr></table></figure></p>
+<p>运行编译：<br><figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">webpack ./entry.js bundle.js --<span class="built_in">module</span>-bind <span class="string">"css=style!css"</span></div></pre></td></tr></table></figure></p>
 <blockquote>
 <p>注意上面必须是双引号</p>
 </blockquote>
 <p>运行的结果和之前是一样的</p>
-<p>接下来我们将配置项移到一个配置文件中：<br>add webpack.config.js</p>
-<pre><code class="js">module.exports = {
-    entry: &quot;./entry.js&quot;,
-    output: {
-        path: __dirname,
-        filename: &quot;bundle.js&quot;
-    },
-    module: {
-        loaders: [
-            { test: /\.css$/, loader: &quot;style!css&quot; }
-        ]
-    }
-};
-</code></pre>
-<p>现在我们运行编译：</p>
-<pre><code class="js">webpack
-</code></pre>
-<p>编译输出：</p>
-<pre><code>Hash: ac9248475027b987a559
-Version: webpack 1.12.15
-Time: 39ms
-    Asset     Size  Chunks             Chunk Names
-bundle.js  1.42 kB       0  [emitted]  main
-   [0] ./entry.js 30 bytes {0} [built]
-   ...
-</code></pre><blockquote>
+<p>接下来我们将配置项移到一个配置文件中：<br>add webpack.config.js<br><figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">module</span>.exports = &#123;</div><div class="line">    <span class="attr">entry</span>: <span class="string">"./entry.js"</span>,</div><div class="line">    <span class="attr">output</span>: &#123;</div><div class="line">        <span class="attr">path</span>: __dirname,</div><div class="line">        <span class="attr">filename</span>: <span class="string">"bundle.js"</span></div><div class="line">    &#125;,</div><div class="line">    <span class="attr">module</span>: &#123;</div><div class="line">        <span class="attr">loaders</span>: [</div><div class="line">            &#123; <span class="attr">test</span>: <span class="regexp">/\.css$/</span>, <span class="attr">loader</span>: <span class="string">"style!css"</span> &#125;</div><div class="line">        ]</div><div class="line">    &#125;</div><div class="line">&#125;;</div></pre></td></tr></table></figure></p>
+<p>现在我们运行编译：<br><figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">webpack</div></pre></td></tr></table></figure></p>
+<p>编译输出：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">Hash: ac9248475027b987a559</div><div class="line">Version: webpack 1.12.15</div><div class="line">Time: 39ms</div><div class="line">    Asset     Size  Chunks             Chunk Names</div><div class="line">bundle.js  1.42 kB       0  [emitted]  main</div><div class="line">   [0] ./entry.js 30 bytes &#123;0&#125; [built]</div><div class="line">   ...</div></pre></td></tr></table></figure></p>
+<blockquote>
 <p>webpack命令会尝试在当前目录加载<strong>webpack.config.js</strong>文件</p>
 </blockquote>
-<h3 id="输出设置"><a href="#输出设置" class="headerlink" title="输出设置"></a>输出设置</h3><p>如果项目编译是时间比较长，我们想显示进度条，可以通过如下配置：</p>
-<pre><code class="js">webpack --progress --colors
-</code></pre>
-<h3 id="监视模式"><a href="#监视模式" class="headerlink" title="监视模式"></a>监视模式</h3><p>我们不想当文件发生改变每次都要重新进行编译。可以通过如下配置：</p>
-<pre><code class="js">webpack --progress --colors --watch
-</code></pre>
-<h2 id="使用developement-server"><a href="#使用developement-server" class="headerlink" title="使用developement server"></a><strong>使用developement server</strong></h2><p>先安装</p>
-<pre><code>npm install webpack-dev-server -g
-</code></pre><p>然后运行</p>
-<pre><code>webpack-dev-server --progress --colors
-</code></pre><p>通过<a href="http://localhost:8080/webpack-dev-server/bundle" target="_blank" rel="external">http://localhost:8080/webpack-dev-server/bundle</a> 来访问；</p>
+<h3 id="输出设置"><a href="#输出设置" class="headerlink" title="输出设置"></a>输出设置</h3><p>如果项目编译是时间比较长，我们想显示进度条，可以通过如下配置：<br><figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">webpack --progress --colors</div></pre></td></tr></table></figure></p>
+<h3 id="监视模式"><a href="#监视模式" class="headerlink" title="监视模式"></a>监视模式</h3><p>我们不想当文件发生改变每次都要重新进行编译。可以通过如下配置：<br><figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">webpack --progress --colors --watch</div></pre></td></tr></table></figure></p>
+<h2 id="使用developement-server"><a href="#使用developement-server" class="headerlink" title="使用developement server"></a><strong>使用developement server</strong></h2><p>先安装<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">npm install webpack-dev-server -g</div></pre></td></tr></table></figure></p>
+<p>然后运行<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">webpack-dev-server --progress --colors</div></pre></td></tr></table></figure></p>
+<p>通过<a href="http://localhost:8080/webpack-dev-server/bundle" target="_blank" rel="external">http://localhost:8080/webpack-dev-server/bundle</a> 来访问；</p>
 <blockquote>
 <p>服务以监控模式在运行。</p>
 </blockquote>
@@ -598,9 +535,25 @@ bundle.js  1.42 kB       0  [emitted]  main
           
   <div class="comments" id="comments">
     
-      <div class="ds-thread" data-thread-key="2016/04/13/webpack-tutorials-01/"
-           data-title="webpack入门教程" data-url="http://www.linmuxi.com/2016/04/13/webpack-tutorials-01/">
+      <!-- 来必力City版安装代码 -->
+      <div id="lv-container" data-id="city" data-uid="MTAyMC8zMDE0NS82NzAw">
+        <script type="text/javascript">
+         (function(d, s) {
+             var j, e = d.getElementsByTagName(s)[0];
+
+             if (typeof LivereTower === 'function') { return; }
+
+             j = d.createElement(s);
+             j.src = 'https://cdn-city.livere.com/js/embed.dist.js';
+             j.async = true;
+
+             e.parentNode.insertBefore(j, e);
+         })(document, 'script');
+        </script>
+      <noscript> 为正常使用来必力评论功能请激活JavaScript</noscript>
       </div>
+      <!-- City版安装代码已完成 -->
+
     
   </div>
 
@@ -824,33 +777,14 @@ bundle.js  1.42 kB       0  [emitted]  main
 
   
 
-  
-    
-  
 
-  <script type="text/javascript">
-    var duoshuoQuery = {short_name:"hunterlin"};
-    (function() {
-      var ds = document.createElement('script');
-      ds.type = 'text/javascript';ds.async = true;
-      ds.id = 'duoshuo-script';
-      ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
-      ds.charset = 'UTF-8';
-      (document.getElementsByTagName('head')[0]
-      || document.getElementsByTagName('body')[0]).appendChild(ds);
-    })();
-  </script>
 
-  
-    
-    
-    <script src="/lib/ua-parser-js/dist/ua-parser.min.js?v=0.7.9"></script>
-    <script src="/js/src/hook-duoshuo.js"></script>
   
 
 
 
 
+	
 
 
 

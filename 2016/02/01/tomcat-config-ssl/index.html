@@ -154,6 +154,18 @@
 
 
 
+  <div style="display: none;">
+    <script src="//s95.cnzz.com/z_stat.php?id=1259167020&web_id=1259167020" language="JavaScript"></script>
+
+	<!--
+<script type="text/javascript">var cnzz_protocol = (("https:" == document.location.protocol) ? " https://" : " http://");document.write(unescape("%3Cspan id='cnzz_stat_icon_1259167020'%3E%3C/span%3E%3Cscript src='" + cnzz_protocol + "s4.cnzz.com/z_stat.php%3Fid%3D1259167020%26show%3Dpic' type='text/javascript'%3E%3C/script%3E"));</script>
+    -->
+
+
+  </div>
+
+
+
 
 
   
@@ -343,13 +355,6 @@
 
           
             
-              <span class="post-comments-count">
-                <span class="post-meta-divider">|</span>
-                <a href="/2016/02/01/tomcat-config-ssl/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/02/01/tomcat-config-ssl/" itemprop="commentCount"></span>
-                </a>
-              </span>
-            
           
 
           
@@ -386,23 +391,9 @@
 
       
         <p>这篇主要分享在Tomcat上配置SSL，开启HTTPS访问。<br><a id="more"></a><br>第一步：通过keytools生成秘钥<br>输入命令：keytool -genkey -alias hunter -keyalg RSA<br>会在用户目录下面创建一个.keystore的文件</p>
-<p>第二步：修改tomcat\config\server.xml文件</p>
-<pre><code class="xml">&lt;Connector port=&quot;8443&quot; protocol=&quot;org.apache.coyote.http11.Http11Protocol&quot;
-maxThreads=&quot;150&quot; SSLEnabled=&quot;true&quot; scheme=&quot;https&quot; secure=&quot;true&quot;
-clientAuth=&quot;false&quot; sslProtocol=&quot;TLS&quot; keystorePass=&quot;这里是第一步配置的是keystore密码&quot; /&gt;
-</code></pre>
+<p>第二步：修改tomcat\config\server.xml文件<br><figure class="highlight xml"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="tag">&lt;<span class="name">Connector</span> <span class="attr">port</span>=<span class="string">"8443"</span> <span class="attr">protocol</span>=<span class="string">"org.apache.coyote.http11.Http11Protocol"</span></span></div><div class="line"><span class="attr">maxThreads</span>=<span class="string">"150"</span> <span class="attr">SSLEnabled</span>=<span class="string">"true"</span> <span class="attr">scheme</span>=<span class="string">"https"</span> <span class="attr">secure</span>=<span class="string">"true"</span></div><div class="line"><span class="attr">clientAuth</span>=<span class="string">"false"</span> <span class="attr">sslProtocol</span>=<span class="string">"TLS"</span> <span class="attr">keystorePass</span>=<span class="string">"这里是第一步配置的是keystore密码"</span> /&gt;</div></pre></td></tr></table></figure></p>
 <p>到这里，就可以通过<a href="https://localhost:8443/" target="_blank" rel="external">https://localhost:8443/</a> 进行访问了，当然也还是可以通过<a href="http://localhost:8080/" target="_blank" rel="external">http://localhost:8080/</a> 进行访问,不过通过后者访问就不是基于https协议了。</p>
-<p>通过下面的配置，能让http访问自动转换到https协议上去进行访问:<br>修改应用服务web.xml文件</p>
-<pre><code class="xml">&lt;security-constraint&gt;
-    &lt;web-resource-collection&gt;
-        &lt;web-resource-name&gt;securedapp&lt;/web-resource-name&gt;
-        &lt;url-pattern&gt;/*&lt;/url-pattern&gt;
-    &lt;/web-resource-collection&gt;
-    &lt;user-data-constraint&gt;
-        &lt;transport-guarantee&gt;CONFIDENTIAL&lt;/transport-guarantee&gt;
-    &lt;/user-data-constraint&gt;
-&lt;/security-constraint&gt;
-</code></pre>
+<p>通过下面的配置，能让http访问自动转换到https协议上去进行访问:<br>修改应用服务web.xml文件<br><figure class="highlight xml"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line"><span class="tag">&lt;<span class="name">security-constraint</span>&gt;</span></div><div class="line">    <span class="tag">&lt;<span class="name">web-resource-collection</span>&gt;</span></div><div class="line">        <span class="tag">&lt;<span class="name">web-resource-name</span>&gt;</span>securedapp<span class="tag">&lt;/<span class="name">web-resource-name</span>&gt;</span></div><div class="line">        <span class="tag">&lt;<span class="name">url-pattern</span>&gt;</span>/*<span class="tag">&lt;/<span class="name">url-pattern</span>&gt;</span></div><div class="line">    <span class="tag">&lt;/<span class="name">web-resource-collection</span>&gt;</span></div><div class="line">    <span class="tag">&lt;<span class="name">user-data-constraint</span>&gt;</span></div><div class="line">        <span class="tag">&lt;<span class="name">transport-guarantee</span>&gt;</span>CONFIDENTIAL<span class="tag">&lt;/<span class="name">transport-guarantee</span>&gt;</span></div><div class="line">    <span class="tag">&lt;/<span class="name">user-data-constraint</span>&gt;</span></div><div class="line"><span class="tag">&lt;/<span class="name">security-constraint</span>&gt;</span></div></pre></td></tr></table></figure></p>
 <p>将 URL 映射设为 /* ，这样整个应用都要求是 HTTPS 访问，而 transport-guarantee 标签设置为 CONFIDENTIAL 以便使应用支持 SSL。<br>如果你希望关闭 SSL ，只需要将 CONFIDENTIAL 改为 NONE 即可。</p>
 <p>最后，让http访问自动转换到https协议，据说还有一种配置服务器响应strict-transport-security报文，还未测试，可以<a href="http://www.2cto.com/Article/201505/398588.html" target="_blank" rel="external">参考</a>说明</p>
 <!-- 
@@ -510,9 +501,25 @@ http://www.2cto.com/Article/201505/398588.html
           
   <div class="comments" id="comments">
     
-      <div class="ds-thread" data-thread-key="2016/02/01/tomcat-config-ssl/"
-           data-title="Tomcat配置SSL,支持HTTPS访问" data-url="http://www.linmuxi.com/2016/02/01/tomcat-config-ssl/">
+      <!-- 来必力City版安装代码 -->
+      <div id="lv-container" data-id="city" data-uid="MTAyMC8zMDE0NS82NzAw">
+        <script type="text/javascript">
+         (function(d, s) {
+             var j, e = d.getElementsByTagName(s)[0];
+
+             if (typeof LivereTower === 'function') { return; }
+
+             j = d.createElement(s);
+             j.src = 'https://cdn-city.livere.com/js/embed.dist.js';
+             j.async = true;
+
+             e.parentNode.insertBefore(j, e);
+         })(document, 'script');
+        </script>
+      <noscript> 为正常使用来必力评论功能请激活JavaScript</noscript>
       </div>
+      <!-- City版安装代码已完成 -->
+
     
   </div>
 
@@ -711,33 +718,14 @@ http://www.2cto.com/Article/201505/398588.html
 
   
 
-  
-    
-  
 
-  <script type="text/javascript">
-    var duoshuoQuery = {short_name:"hunterlin"};
-    (function() {
-      var ds = document.createElement('script');
-      ds.type = 'text/javascript';ds.async = true;
-      ds.id = 'duoshuo-script';
-      ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
-      ds.charset = 'UTF-8';
-      (document.getElementsByTagName('head')[0]
-      || document.getElementsByTagName('body')[0]).appendChild(ds);
-    })();
-  </script>
 
-  
-    
-    
-    <script src="/lib/ua-parser-js/dist/ua-parser.min.js?v=0.7.9"></script>
-    <script src="/js/src/hook-duoshuo.js"></script>
   
 
 
 
 
+	
 
 
 

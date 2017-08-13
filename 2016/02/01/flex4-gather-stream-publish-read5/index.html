@@ -154,6 +154,18 @@
 
 
 
+  <div style="display: none;">
+    <script src="//s95.cnzz.com/z_stat.php?id=1259167020&web_id=1259167020" language="JavaScript"></script>
+
+	<!--
+<script type="text/javascript">var cnzz_protocol = (("https:" == document.location.protocol) ? " https://" : " http://");document.write(unescape("%3Cspan id='cnzz_stat_icon_1259167020'%3E%3C/span%3E%3Cscript src='" + cnzz_protocol + "s4.cnzz.com/z_stat.php%3Fid%3D1259167020%26show%3Dpic' type='text/javascript'%3E%3C/script%3E"));</script>
+    -->
+
+
+  </div>
+
+
+
 
 
   
@@ -343,13 +355,6 @@
 
           
             
-              <span class="post-comments-count">
-                <span class="post-meta-divider">|</span>
-                <a href="/2016/02/01/flex4-gather-stream-publish-read5/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/02/01/flex4-gather-stream-publish-read5/" itemprop="commentCount"></span>
-                </a>
-              </span>
-            
           
 
           
@@ -386,75 +391,7 @@
 
       
         <p>这篇主要分享如何通过Flex4进行本地视频流采集并实时发布到Red5服务器上去。<br><a id="more"></a><br>关于Flex环境搭建和Red5服务器的部署和操作，不在本篇介绍范围内。</p>
-<p>具体操作代码比较简单，关键点都有中文注释，Flex代码如下：</p>
-<pre><code class="xml">&lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot;?&gt;
-&lt;s:Application xmlns:fx=&quot;http://ns.adobe.com/mxml/2009&quot; 
-               xmlns:s=&quot;library://ns.adobe.com/flex/spark&quot; 
-               xmlns:mx=&quot;library://ns.adobe.com/flex/mx&quot; minWidth=&quot;955&quot; minHeight=&quot;600&quot;&gt;
-    &lt;fx:Declarations&gt;
-        &lt;!-- 将非可视元素（例如服务、值对象）放在此处 --&gt;
-    &lt;/fx:Declarations&gt;
-    &lt;fx:Script&gt;
-        &lt;![CDATA[
-            var con:NetConnection = new NetConnection();
-            //Red5服务器流地址
-            var rtmpURL:String = &quot;rtmp://192.168.1.103/mystream&quot;;
-            var netStream:NetStream;
-            var video:Video = new Video();
-
-            //以实时流形式发布视频流到red5上去
-            private function netStatus(e:NetStatusEvent):void{
-                if(e.info.code == &#39;NetConnection.Connect.Success&#39;){
-                    //通过netconnection构建netstream
-                    netStream = new NetStream(con);
-                    //附加视频和音频数据到netstream中
-                    netStream.attachCamera(Camera.getCamera());
-                    netStream.attachAudio(Microphone.getMicrophone());
-                    //以记录方式发布名称为hunter的实时流到Red5流媒体服务器上
-                    netStream.publish(&quot;hunter&quot;,&quot;live&quot;);
-                    //发布之后red5下mystream/streams/下面就会生成hunter.flv文件
-                }
-            } 
-            //打开本地摄像头
-            private function openVideo(e:MouseEvent):void{
-                //获取本地摄像头数据并附加在video对象上
-                video.attachCamera(Camera.getCamera());
-                video.width = 300;
-                video.height = 200;
-                //video附加在videoDisplay上显示
-                vd.addChild(video);
-            }
-
-            private function publishRed5Server(e:MouseEvent):void{
-                //连接到Red5服务器上
-                con.connect(rtmpURL);
-                //监听连接状态
-                con.addEventListener(NetStatusEvent.NET_STATUS,netStatus);
-            }
-
-            //进行录像
-            private function recordVideo(e:MouseEvent):void{
-                //先停止以前实时流模式，重启发布记录流模式
-                netStream.close();
-                netStream.publish(&quot;hunter&quot;,&quot;record&quot;);
-            }
-
-            private function stopPublish(e:MouseEvent):void{
-                netStream.close();
-            }
-        ]]&gt;
-    &lt;/fx:Script&gt;
-    &lt;s:Button x=&quot;11&quot; y=&quot;10&quot; label=&quot;打开视频&quot; click=&quot;this.openVideo(event)&quot; /&gt;
-    &lt;s:Button x=&quot;89&quot; y=&quot;10&quot; label=&quot;发布视频&quot; click=&quot;this.publishRed5Server(event)&quot;/&gt;
-    &lt;s:Button x=&quot;167&quot; y=&quot;10&quot; label=&quot;录制视频&quot; click=&quot;this.recordVideo(event)&quot;/&gt;
-    &lt;s:Button x=&quot;254&quot; y=&quot;10&quot; label=&quot;停止发布&quot; click=&quot;this.stopPublish(event)&quot; /&gt;
-    &lt;s:VideoDisplay id=&quot;vd&quot; x=&quot;11&quot; y=&quot;52&quot; width=&quot;300&quot; height=&quot;200&quot; /&gt;
-    &lt;!--    
-    &lt;mx:UIComponent id=&quot;videoCan&quot; x=&quot;10&quot; y=&quot;258&quot; width=&quot;300&quot; height=&quot;200&quot;&gt;
-    &lt;/mx:UIComponent&gt;
-    --&gt;
-&lt;/s:Application&gt;
-</code></pre>
+<p>具体操作代码比较简单，关键点都有中文注释，Flex代码如下：<br><figure class="highlight xml"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div></pre></td><td class="code"><pre><div class="line">&lt;?xml version="1.0" encoding="utf-8"?&gt;</div><div class="line"><span class="tag">&lt;<span class="name">s:Application</span> <span class="attr">xmlns:fx</span>=<span class="string">"http://ns.adobe.com/mxml/2009"</span> </span></div><div class="line">               <span class="attr">xmlns:s</span>=<span class="string">"library://ns.adobe.com/flex/spark"</span> </div><div class="line">               <span class="attr">xmlns:mx</span>=<span class="string">"library://ns.adobe.com/flex/mx"</span> <span class="attr">minWidth</span>=<span class="string">"955"</span> <span class="attr">minHeight</span>=<span class="string">"600"</span>&gt;</div><div class="line">    <span class="tag">&lt;<span class="name">fx:Declarations</span>&gt;</span></div><div class="line">        <span class="comment">&lt;!-- 将非可视元素（例如服务、值对象）放在此处 --&gt;</span></div><div class="line">    <span class="tag">&lt;/<span class="name">fx:Declarations</span>&gt;</span></div><div class="line">    <span class="tag">&lt;<span class="name">fx:Script</span>&gt;</span></div><div class="line">        &lt;![CDATA[</div><div class="line">            var con:NetConnection = new NetConnection();</div><div class="line">            //Red5服务器流地址</div><div class="line">            var rtmpURL:String = "rtmp://192.168.1.103/mystream";</div><div class="line">            var netStream:NetStream;</div><div class="line">            var video:Video = new Video();</div><div class="line">            </div><div class="line">            //以实时流形式发布视频流到red5上去</div><div class="line">            private function netStatus(e:NetStatusEvent):void&#123;</div><div class="line">                if(e.info.code == 'NetConnection.Connect.Success')&#123;</div><div class="line">                    //通过netconnection构建netstream</div><div class="line">                    netStream = new NetStream(con);</div><div class="line">                    //附加视频和音频数据到netstream中</div><div class="line">                    netStream.attachCamera(Camera.getCamera());</div><div class="line">                    netStream.attachAudio(Microphone.getMicrophone());</div><div class="line">                    //以记录方式发布名称为hunter的实时流到Red5流媒体服务器上</div><div class="line">                    netStream.publish("hunter","live");</div><div class="line">                    //发布之后red5下mystream/streams/下面就会生成hunter.flv文件</div><div class="line">                &#125;</div><div class="line">            &#125; </div><div class="line">            //打开本地摄像头</div><div class="line">            private function openVideo(e:MouseEvent):void&#123;</div><div class="line">                //获取本地摄像头数据并附加在video对象上</div><div class="line">                video.attachCamera(Camera.getCamera());</div><div class="line">                video.width = 300;</div><div class="line">                video.height = 200;</div><div class="line">                //video附加在videoDisplay上显示</div><div class="line">                vd.addChild(video);</div><div class="line">            &#125;</div><div class="line">            </div><div class="line">            private function publishRed5Server(e:MouseEvent):void&#123;</div><div class="line">            	//连接到Red5服务器上</div><div class="line">                con.connect(rtmpURL);</div><div class="line">                //监听连接状态</div><div class="line">                con.addEventListener(NetStatusEvent.NET_STATUS,netStatus);</div><div class="line">            &#125;</div><div class="line">            </div><div class="line">            //进行录像</div><div class="line">            private function recordVideo(e:MouseEvent):void&#123;</div><div class="line">                //先停止以前实时流模式，重启发布记录流模式</div><div class="line">                netStream.close();</div><div class="line">                netStream.publish("hunter","record");</div><div class="line">            &#125;</div><div class="line">            </div><div class="line">            private function stopPublish(e:MouseEvent):void&#123;</div><div class="line">                netStream.close();</div><div class="line">            &#125;</div><div class="line">        ]]&gt;</div><div class="line">    <span class="tag">&lt;/<span class="name">fx:Script</span>&gt;</span></div><div class="line">    <span class="tag">&lt;<span class="name">s:Button</span> <span class="attr">x</span>=<span class="string">"11"</span> <span class="attr">y</span>=<span class="string">"10"</span> <span class="attr">label</span>=<span class="string">"打开视频"</span> <span class="attr">click</span>=<span class="string">"this.openVideo(event)"</span> /&gt;</span></div><div class="line">    <span class="tag">&lt;<span class="name">s:Button</span> <span class="attr">x</span>=<span class="string">"89"</span> <span class="attr">y</span>=<span class="string">"10"</span> <span class="attr">label</span>=<span class="string">"发布视频"</span> <span class="attr">click</span>=<span class="string">"this.publishRed5Server(event)"</span>/&gt;</span></div><div class="line">    <span class="tag">&lt;<span class="name">s:Button</span> <span class="attr">x</span>=<span class="string">"167"</span> <span class="attr">y</span>=<span class="string">"10"</span> <span class="attr">label</span>=<span class="string">"录制视频"</span> <span class="attr">click</span>=<span class="string">"this.recordVideo(event)"</span>/&gt;</span></div><div class="line">    <span class="tag">&lt;<span class="name">s:Button</span> <span class="attr">x</span>=<span class="string">"254"</span> <span class="attr">y</span>=<span class="string">"10"</span> <span class="attr">label</span>=<span class="string">"停止发布"</span> <span class="attr">click</span>=<span class="string">"this.stopPublish(event)"</span> /&gt;</span></div><div class="line">    <span class="tag">&lt;<span class="name">s:VideoDisplay</span> <span class="attr">id</span>=<span class="string">"vd"</span> <span class="attr">x</span>=<span class="string">"11"</span> <span class="attr">y</span>=<span class="string">"52"</span> <span class="attr">width</span>=<span class="string">"300"</span> <span class="attr">height</span>=<span class="string">"200"</span> /&gt;</span></div><div class="line">    <span class="comment">&lt;!--    </span></div><div class="line">    &lt;mx:UIComponent id="videoCan" x="10" y="258" width="300" height="200"&gt;</div><div class="line">    &lt;/mx:UIComponent&gt;</div><div class="line">    --&gt;</div><div class="line"><span class="tag">&lt;/<span class="name">s:Application</span>&gt;</span></div></pre></td></tr></table></figure></p>
 
       
     </div>
@@ -550,9 +487,25 @@
           
   <div class="comments" id="comments">
     
-      <div class="ds-thread" data-thread-key="2016/02/01/flex4-gather-stream-publish-read5/"
-           data-title="使用Flex4进行视频流采集并发布到Red5服务器上" data-url="http://www.linmuxi.com/2016/02/01/flex4-gather-stream-publish-read5/">
+      <!-- 来必力City版安装代码 -->
+      <div id="lv-container" data-id="city" data-uid="MTAyMC8zMDE0NS82NzAw">
+        <script type="text/javascript">
+         (function(d, s) {
+             var j, e = d.getElementsByTagName(s)[0];
+
+             if (typeof LivereTower === 'function') { return; }
+
+             j = d.createElement(s);
+             j.src = 'https://cdn-city.livere.com/js/embed.dist.js';
+             j.async = true;
+
+             e.parentNode.insertBefore(j, e);
+         })(document, 'script');
+        </script>
+      <noscript> 为正常使用来必力评论功能请激活JavaScript</noscript>
       </div>
+      <!-- City版安装代码已完成 -->
+
     
   </div>
 
@@ -751,33 +704,14 @@
 
   
 
-  
-    
-  
 
-  <script type="text/javascript">
-    var duoshuoQuery = {short_name:"hunterlin"};
-    (function() {
-      var ds = document.createElement('script');
-      ds.type = 'text/javascript';ds.async = true;
-      ds.id = 'duoshuo-script';
-      ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
-      ds.charset = 'UTF-8';
-      (document.getElementsByTagName('head')[0]
-      || document.getElementsByTagName('body')[0]).appendChild(ds);
-    })();
-  </script>
 
-  
-    
-    
-    <script src="/lib/ua-parser-js/dist/ua-parser.min.js?v=0.7.9"></script>
-    <script src="/js/src/hook-duoshuo.js"></script>
   
 
 
 
 
+	
 
 
 

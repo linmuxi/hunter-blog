@@ -156,6 +156,18 @@
 
 
 
+  <div style="display: none;">
+    <script src="//s95.cnzz.com/z_stat.php?id=1259167020&web_id=1259167020" language="JavaScript"></script>
+
+	<!--
+<script type="text/javascript">var cnzz_protocol = (("https:" == document.location.protocol) ? " https://" : " http://");document.write(unescape("%3Cspan id='cnzz_stat_icon_1259167020'%3E%3C/span%3E%3Cscript src='" + cnzz_protocol + "s4.cnzz.com/z_stat.php%3Fid%3D1259167020%26show%3Dpic' type='text/javascript'%3E%3C/script%3E"));</script>
+    -->
+
+
+  </div>
+
+
+
 
 
   
@@ -345,13 +357,6 @@
 
           
             
-              <span class="post-comments-count">
-                <span class="post-meta-divider">|</span>
-                <a href="/2016/02/19/node-js-publish-to-npm/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/02/19/node-js-publish-to-npm/" itemprop="commentCount"></span>
-                </a>
-              </span>
-            
           
 
           
@@ -390,54 +395,12 @@
         <p>本篇主要分享下如何将Node.js应用发布到NPM<br><a id="more"></a></p>
 <p><strong>前言</strong><br>前提NPM和Node.js环境已经安装完成。</p>
 <p><strong>发布到Npm</strong><br>首页你得有一个NPM账户，没有大家可以自行到NPM官网上去<a href="https://www.npmjs.com/signup" target="_blank" rel="external">注册</a>。</p>
-<p>1、通过npm初始化package.json文件<br><!-- ![](http://7xqlat.com1.z0.glb.clouddn.com/npm_init_01.png) --></p>
-<pre><code>hunter@hunter-ubuntu:~/hello-hunter$ npm init
-...
-Press ^C at any time to quit.
-name: (hello-hunter) 
-version: (1.0.0) 
-description: this is node demo
-entry point: (index.js) 
-test command: 
-git repository: 
-keywords: test
-author: hunter
-license: (ISC) MIT
-About to write to /home/hunter/hello-hunter/package.json:
-
-{
-  &quot;name&quot;: &quot;hello-hunter&quot;,
-  &quot;version&quot;: &quot;1.0.0&quot;,
-  &quot;description&quot;: &quot;this is node demo&quot;,
-  &quot;main&quot;: &quot;index.js&quot;,
-  &quot;scripts&quot;: {
-    &quot;test&quot;: &quot;echo \&quot;Error: no test specified\&quot; &amp;&amp; exit 1&quot;
-  },
-  &quot;keywords&quot;: [
-    &quot;test&quot;
-  ],
-  &quot;author&quot;: &quot;hunter&quot;,
-  &quot;license&quot;: &quot;MIT&quot;
-}
-
-
-Is this ok? (yes) yes
-</code></pre><p>2、在目录下面新增index.js文件，内容如下：</p>
-<pre><code class="js">module.exports = function(){
-    console.log(&quot;hello hunter&quot;);
-}
-</code></pre>
-<p>3、登录npm<br><!-- ![](http://7xqlat.com1.z0.glb.clouddn.com/npm_login_01.png) --></p>
-<pre><code>hunter@hunter-ubuntu:~/hello-hunter$ npm login
-Username: hunterlin
-Password: 
-Email: (this IS public) ***
-Logged in as hunterlin on https://registry.npmjs.org/.
-</code></pre><p>注意：创建的账户要到邮箱中激活才可以使用。</p>
-<p>4、发布应用到npm<br><!-- ![](http://7xqlat.com1.z0.glb.clouddn.com/npm_publish_01.png) --></p>
-<pre><code>hunter@hunter-ubuntu:~/hello-hunter$ npm publish
-+ hello-hunter@3.0.0
-</code></pre><p>到这里我们的node应用就发布到npm上面去了，我们可以在官网查询到我们发布的应用<br><img src="http://7xqlat.com1.z0.glb.clouddn.com/npm_search_01.png" alt=""></p>
+<p>1、通过npm初始化package.json文件<br><!-- ![](http://7xqlat.com1.z0.glb.clouddn.com/npm_init_01.png) --><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div></pre></td><td class="code"><pre><div class="line">hunter@hunter-ubuntu:~/hello-hunter$ npm init</div><div class="line">...</div><div class="line">Press ^C at any time to quit.</div><div class="line">name: (hello-hunter) </div><div class="line">version: (1.0.0) </div><div class="line">description: this is node demo</div><div class="line">entry point: (index.js) </div><div class="line">test command: </div><div class="line">git repository: </div><div class="line">keywords: test</div><div class="line">author: hunter</div><div class="line">license: (ISC) MIT</div><div class="line">About to write to /home/hunter/hello-hunter/package.json:</div><div class="line"></div><div class="line">&#123;</div><div class="line">  &quot;name&quot;: &quot;hello-hunter&quot;,</div><div class="line">  &quot;version&quot;: &quot;1.0.0&quot;,</div><div class="line">  &quot;description&quot;: &quot;this is node demo&quot;,</div><div class="line">  &quot;main&quot;: &quot;index.js&quot;,</div><div class="line">  &quot;scripts&quot;: &#123;</div><div class="line">    &quot;test&quot;: &quot;echo \&quot;Error: no test specified\&quot; &amp;&amp; exit 1&quot;</div><div class="line">  &#125;,</div><div class="line">  &quot;keywords&quot;: [</div><div class="line">    &quot;test&quot;</div><div class="line">  ],</div><div class="line">  &quot;author&quot;: &quot;hunter&quot;,</div><div class="line">  &quot;license&quot;: &quot;MIT&quot;</div><div class="line">&#125;</div><div class="line"></div><div class="line"></div><div class="line">Is this ok? (yes) yes</div></pre></td></tr></table></figure></p>
+<p>2、在目录下面新增index.js文件，内容如下：<br><figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">module</span>.exports = <span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</div><div class="line">	<span class="built_in">console</span>.log(<span class="string">"hello hunter"</span>);</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>3、登录npm<br><!-- ![](http://7xqlat.com1.z0.glb.clouddn.com/npm_login_01.png) --><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">hunter@hunter-ubuntu:~/hello-hunter$ npm login</div><div class="line">Username: hunterlin</div><div class="line">Password: </div><div class="line">Email: (this IS public) ***</div><div class="line">Logged in as hunterlin on https://registry.npmjs.org/.</div></pre></td></tr></table></figure></p>
+<p>注意：创建的账户要到邮箱中激活才可以使用。</p>
+<p>4、发布应用到npm<br><!-- ![](http://7xqlat.com1.z0.glb.clouddn.com/npm_publish_01.png) --><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">hunter@hunter-ubuntu:~/hello-hunter$ npm publish</div><div class="line">+ hello-hunter@3.0.0</div></pre></td></tr></table></figure></p>
+<p>到这里我们的node应用就发布到npm上面去了，我们可以在官网查询到我们发布的应用<br><img src="http://7xqlat.com1.z0.glb.clouddn.com/npm_search_01.png" alt=""></p>
 <p>5、从npm下载应用<br>构建如下目录结构：</p>
 <ul>
 <li>hello-nodejs<ul>
@@ -446,19 +409,11 @@ Logged in as hunterlin on https://registry.npmjs.org/.
 </ul>
 </li>
 </ul>
-<p>index.js文件内容如下：</p>
-<pre><code>&#39;use strict&#39;;
-// 引入hello-hunter模块并调用
-require(&#39;hello-hunter&#39;)();
-</code></pre><p>package.json文件内容通过npm init来生成。</p>
-<p>通过npm下载hello-hunter模块<br><!-- ![](http://7xqlat.com1.z0.glb.clouddn.com/npm_install_01.png) --></p>
-<pre><code>hunter@hunter-ubuntu:~/test-nodejs$ npm install hello-hunter --save
-test-nodejs@1.0.0 /home/hunter/test-nodejs
-└── hello-hunter@1.0.0
-</code></pre><p>运行node程序<br><!-- ![](http://7xqlat.com1.z0.glb.clouddn.com/npm_node_run_01.png) --></p>
-<pre><code>hunter@hunter-ubuntu:~/test-nodejs$ node index.js 
-hello hunter
-</code></pre>
+<p>index.js文件内容如下：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">&apos;use strict&apos;;</div><div class="line">// 引入hello-hunter模块并调用</div><div class="line">require(&apos;hello-hunter&apos;)();</div></pre></td></tr></table></figure></p>
+<p>package.json文件内容通过npm init来生成。</p>
+<p>通过npm下载hello-hunter模块<br><!-- ![](http://7xqlat.com1.z0.glb.clouddn.com/npm_install_01.png) --><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">hunter@hunter-ubuntu:~/test-nodejs$ npm install hello-hunter --save</div><div class="line">test-nodejs@1.0.0 /home/hunter/test-nodejs</div><div class="line">└── hello-hunter@1.0.0</div></pre></td></tr></table></figure></p>
+<p>运行node程序<br><!-- ![](http://7xqlat.com1.z0.glb.clouddn.com/npm_node_run_01.png) --><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">hunter@hunter-ubuntu:~/test-nodejs$ node index.js </div><div class="line">hello hunter</div></pre></td></tr></table></figure></p>
+
       
     </div>
 
@@ -553,9 +508,25 @@ hello hunter
           
   <div class="comments" id="comments">
     
-      <div class="ds-thread" data-thread-key="2016/02/19/node-js-publish-to-npm/"
-           data-title="发布Node.js应用到NPM" data-url="http://www.linmuxi.com/2016/02/19/node-js-publish-to-npm/">
+      <!-- 来必力City版安装代码 -->
+      <div id="lv-container" data-id="city" data-uid="MTAyMC8zMDE0NS82NzAw">
+        <script type="text/javascript">
+         (function(d, s) {
+             var j, e = d.getElementsByTagName(s)[0];
+
+             if (typeof LivereTower === 'function') { return; }
+
+             j = d.createElement(s);
+             j.src = 'https://cdn-city.livere.com/js/embed.dist.js';
+             j.async = true;
+
+             e.parentNode.insertBefore(j, e);
+         })(document, 'script');
+        </script>
+      <noscript> 为正常使用来必力评论功能请激活JavaScript</noscript>
       </div>
+      <!-- City版安装代码已完成 -->
+
     
   </div>
 
@@ -754,33 +725,14 @@ hello hunter
 
   
 
-  
-    
-  
 
-  <script type="text/javascript">
-    var duoshuoQuery = {short_name:"hunterlin"};
-    (function() {
-      var ds = document.createElement('script');
-      ds.type = 'text/javascript';ds.async = true;
-      ds.id = 'duoshuo-script';
-      ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
-      ds.charset = 'UTF-8';
-      (document.getElementsByTagName('head')[0]
-      || document.getElementsByTagName('body')[0]).appendChild(ds);
-    })();
-  </script>
 
-  
-    
-    
-    <script src="/lib/ua-parser-js/dist/ua-parser.min.js?v=0.7.9"></script>
-    <script src="/js/src/hook-duoshuo.js"></script>
   
 
 
 
 
+	
 
 
 

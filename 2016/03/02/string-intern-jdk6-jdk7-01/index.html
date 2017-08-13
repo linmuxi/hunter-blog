@@ -157,6 +157,18 @@
 
 
 
+  <div style="display: none;">
+    <script src="//s95.cnzz.com/z_stat.php?id=1259167020&web_id=1259167020" language="JavaScript"></script>
+
+	<!--
+<script type="text/javascript">var cnzz_protocol = (("https:" == document.location.protocol) ? " https://" : " http://");document.write(unescape("%3Cspan id='cnzz_stat_icon_1259167020'%3E%3C/span%3E%3Cscript src='" + cnzz_protocol + "s4.cnzz.com/z_stat.php%3Fid%3D1259167020%26show%3Dpic' type='text/javascript'%3E%3C/script%3E"));</script>
+    -->
+
+
+  </div>
+
+
+
 
 
   
@@ -346,13 +358,6 @@
 
           
             
-              <span class="post-comments-count">
-                <span class="post-meta-divider">|</span>
-                <a href="/2016/03/02/string-intern-jdk6-jdk7-01/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/03/02/string-intern-jdk6-jdk7-01/" itemprop="commentCount"></span>
-                </a>
-              </span>
-            
           
 
           
@@ -389,13 +394,7 @@
 
       
         <p>在读《深入理解Java虚拟机》第2.4.3节的时候，作者讨论了String.intern方法在jdk6、7中的不同表现，当时看到觉得挺有意思，自己也下来实验了一把，确实如同作者提到的那样，在JDK1.6、1.7中intern方法执行的结果不一样。<br><a id="more"></a></p>
-<h2 id="实例代码"><a href="#实例代码" class="headerlink" title="实例代码"></a><strong>实例代码</strong></h2><pre><code class="java">public class RuntimeConstantPoolOOM {
-    public static void main(String[] args) {
-        String str1 = new StringBuffer(&quot;计算机&quot;).append(&quot;软件&quot;).toString();
-        System.out.println(str1.intern() == str1);
-    }
-}
-</code></pre>
+<h2 id="实例代码"><a href="#实例代码" class="headerlink" title="实例代码"></a><strong>实例代码</strong></h2><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">RuntimeConstantPoolOOM</span> </span>&#123;</div><div class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</div><div class="line">		String str1 = <span class="keyword">new</span> StringBuffer(<span class="string">"计算机"</span>).append(<span class="string">"软件"</span>).toString();</div><div class="line">		System.out.println(str1.intern() == str1);</div><div class="line">	&#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
 <p>以上代码在JDK1.6中运行结果是false，在JDK1.7中运行结果是true。作者的解释是在JDK1.6中intern方法会把首次遇到的字符串实例复制到永久代中，返回的也是永久代中的这个字符串实例的引用，而JDK1.7中intern方法实现不会再复制实例，只是在常量池中记录首次出现的实例引用。</p>
 <p>我们再看下官网api关于intern方法的介绍<br><img src="http://7xqlat.com1.z0.glb.clouddn.com/jdk1.6_string_intern.png" alt="JDK1.6">;<br><img src="http://7xqlat.com1.z0.glb.clouddn.com/jdk1.7_string_intern.png" alt="JDK1.7">;</p>
 <p>两个版本关于intern的描述居然都是一样的：</p>
@@ -405,14 +404,7 @@
 <p>明明intern方法在这两个版本中的表现不一样，文档这里为什么没有一点点体现呢？</p>
 <h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a><strong>总结</strong></h2><p>JDK1.6<br>调用intern方法如果常量池中包含该字符串则返回该字符串引用地址，如果不包括则将该字符串添加到常量池中再返回新的引用地址。所以当调用str1.intern方法时，”计算机软件”在常量池中是不存在的，所以会将该字符串添加到常量池中并返回新的引用地址，所以结果为false。</p>
 <p>JDK1.7<br>调用intern方法只是在常量池中记录该字符串的实例引用地址，如果该字符串在常量池中存在，则返回该实例引用地址，不存在则记录实例引用后返回地址。所以当调用str1.intern方法时，“计算机软件”在常量池中不存在，所以常量池中会记录该字符串实例引用并返回引用地址，所以返回的引用地址和str1是同一个实例引用，最后结果为true。</p>
-<h2 id="说明"><a href="#说明" class="headerlink" title="说明"></a><strong>说明</strong></h2><p>最后需要说明一点的是，常量池中会有一些已经存在的字符串常量，看下面的例子：</p>
-<pre><code class="java">public class RuntimeConstantPoolOOM {
-    public static void main(String[] args) {
-        String str1 = new StringBuffer(&quot;ma&quot;).append(&quot;in&quot;).toString();
-        System.out.println(str1.intern() == str1);
-    }
-}
-</code></pre>
+<h2 id="说明"><a href="#说明" class="headerlink" title="说明"></a><strong>说明</strong></h2><p>最后需要说明一点的是，常量池中会有一些已经存在的字符串常量，看下面的例子：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">RuntimeConstantPoolOOM</span> </span>&#123;</div><div class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</div><div class="line">		String str1 = <span class="keyword">new</span> StringBuffer(<span class="string">"ma"</span>).append(<span class="string">"in"</span>).toString();</div><div class="line">		System.out.println(str1.intern() == str1);</div><div class="line">	&#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
 <p>上面代码在JDK7中执行的结果为false，因为在调用intern方法的时候，常量池中已经存在main，所以返回的是main的引用地址，和str1是不同的实例对象，所以结果为false。</p>
 
       
@@ -507,9 +499,25 @@
           
   <div class="comments" id="comments">
     
-      <div class="ds-thread" data-thread-key="2016/03/02/string-intern-jdk6-jdk7-01/"
-           data-title="关于String.intern方法在JDK1.6、1.7中的表现" data-url="http://www.linmuxi.com/2016/03/02/string-intern-jdk6-jdk7-01/">
+      <!-- 来必力City版安装代码 -->
+      <div id="lv-container" data-id="city" data-uid="MTAyMC8zMDE0NS82NzAw">
+        <script type="text/javascript">
+         (function(d, s) {
+             var j, e = d.getElementsByTagName(s)[0];
+
+             if (typeof LivereTower === 'function') { return; }
+
+             j = d.createElement(s);
+             j.src = 'https://cdn-city.livere.com/js/embed.dist.js';
+             j.async = true;
+
+             e.parentNode.insertBefore(j, e);
+         })(document, 'script');
+        </script>
+      <noscript> 为正常使用来必力评论功能请激活JavaScript</noscript>
       </div>
+      <!-- City版安装代码已完成 -->
+
     
   </div>
 
@@ -733,33 +741,14 @@
 
   
 
-  
-    
-  
 
-  <script type="text/javascript">
-    var duoshuoQuery = {short_name:"hunterlin"};
-    (function() {
-      var ds = document.createElement('script');
-      ds.type = 'text/javascript';ds.async = true;
-      ds.id = 'duoshuo-script';
-      ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
-      ds.charset = 'UTF-8';
-      (document.getElementsByTagName('head')[0]
-      || document.getElementsByTagName('body')[0]).appendChild(ds);
-    })();
-  </script>
 
-  
-    
-    
-    <script src="/lib/ua-parser-js/dist/ua-parser.min.js?v=0.7.9"></script>
-    <script src="/js/src/hook-duoshuo.js"></script>
   
 
 
 
 
+	
 
 
 

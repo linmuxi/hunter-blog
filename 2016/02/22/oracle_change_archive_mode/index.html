@@ -154,6 +154,18 @@
 
 
 
+  <div style="display: none;">
+    <script src="//s95.cnzz.com/z_stat.php?id=1259167020&web_id=1259167020" language="JavaScript"></script>
+
+	<!--
+<script type="text/javascript">var cnzz_protocol = (("https:" == document.location.protocol) ? " https://" : " http://");document.write(unescape("%3Cspan id='cnzz_stat_icon_1259167020'%3E%3C/span%3E%3Cscript src='" + cnzz_protocol + "s4.cnzz.com/z_stat.php%3Fid%3D1259167020%26show%3Dpic' type='text/javascript'%3E%3C/script%3E"));</script>
+    -->
+
+
+  </div>
+
+
+
 
 
   
@@ -343,13 +355,6 @@
 
           
             
-              <span class="post-comments-count">
-                <span class="post-meta-divider">|</span>
-                <a href="/2016/02/22/oracle_change_archive_mode/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/02/22/oracle_change_archive_mode/" itemprop="commentCount"></span>
-                </a>
-              </span>
-            
           
 
           
@@ -387,91 +392,25 @@
       
         <p>本篇分享下如何更改ORACLE归档路径及归档模式<br><a id="more"></a></p>
 <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>在ORACLE10g和11g版本，ORACLE默认的日志归档路径为闪回恢复区 （$ORACLE_BASE/flash_recovery_area）。对于这个路径，ORACLE有一个限制，就是默认只有2G的空间，而且不只是归 档日志的默认路径，也是备份文件和闪回日志的默认地址，这样的话归档日志锁使用的空间就达不到2G，在没有设置好这个路径大小的情况下，很多系统都遇到过 归档日志满而无法归档导致数据库夯住的问题。</p>
-<h2 id="操作"><a href="#操作" class="headerlink" title="操作"></a>操作</h2><p>可以使用下面的SQL语句去查看归档信息。</p>
-<pre><code class="bash">SQL&gt; archive log list
-数据库日志模式             非存档模式
-自动存档             禁用
-存档终点            USE_DB_RECOVERY_FILE_DEST
-最早的联机日志序列     321
-当前日志序列           326。
-</code></pre>
-<p>上面的存档终点USE_DB_RECOVERY_FILE_DEST默认就是闪回恢复区（$ORACLE_BASE/flash_recovery_area），可以通过下面的SQL查看闪回恢复区的信息。</p>
-<pre><code class="cmd">SQL&gt; show parameter db_recover
-NAME                        TYPE         VALUE
---------------------------  ----------- ----------------------------
-db_recovery_file_dest       string      D:\oracle\flash_recovery_area
-db_recovery_file_dest_size  big integer   2G
-</code></pre>
-<p>通过上面的SQL结果可以看到，闪回恢复区为D:\oracle\flash_recovery_area，大小为2G，也可以通过查询v$recovery_file_dest视图查看闪回恢复的限制信息。</p>
-<pre><code class="cmd">SQL&gt; select name,SPACE_LIMIT,SPACE_USED from v$recovery_file_dest;
-NAME                           SPACE_LIMIT SPACE_USED
------------------------------- ----------- ----------
-D:\oracle\flash_recovery_area   2147483648   21225472
-</code></pre>
-<p>默认情况下，归档日志会存放到闪回恢复区（D:\oracle\flash_recovery_area）内，如果闪回恢复区已经使用到2G，归档日志就有可能无法继续归档，数据库夯住，通常的解决方法是增大闪回恢复区，可以用以下SQL实现。</p>
-<pre><code class="sql">SQL&gt; alter system set db_recovery_file_dest_size=3G;
-系统已更改。
-</code></pre>
-<p>即使用这种方法解决的当前燃眉之急，但是如果备份策略不是很完善，数据库非常繁忙的情况下，还有可能遇到这种情况，通常需要修改归档日志的路径，将归档日志放到其他不受限制的路径下来解决这个问题，可通过下面的SQL来修改归档日志的存放路径。</p>
-<pre><code class="sql">SQL&gt; alter system set log_archive_dest_1=&#39;location=D:\arch&#39;;
-系统已更改。
-</code></pre>
+<h2 id="操作"><a href="#操作" class="headerlink" title="操作"></a>操作</h2><p>可以使用下面的SQL语句去查看归档信息。<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">SQL&gt; archive <span class="built_in">log</span> list</div><div class="line">数据库日志模式             非存档模式</div><div class="line">自动存档             禁用</div><div class="line">存档终点            USE_DB_RECOVERY_FILE_DEST</div><div class="line">最早的联机日志序列     321</div><div class="line">当前日志序列           326。</div></pre></td></tr></table></figure></p>
+<p>上面的存档终点USE_DB_RECOVERY_FILE_DEST默认就是闪回恢复区（$ORACLE_BASE/flash_recovery_area），可以通过下面的SQL查看闪回恢复区的信息。<br><figure class="highlight cmd"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">SQL&gt; show parameter db_recover</div><div class="line">NAME                        <span class="built_in">TYPE</span>         VALUE</div><div class="line">--------------------------  ----------- ----------------------------</div><div class="line">db_recovery_file_dest       string      D:\oracle\flash_recovery_area</div><div class="line">db_recovery_file_dest_size  big integer   <span class="number">2</span>G</div></pre></td></tr></table></figure></p>
+<p>通过上面的SQL结果可以看到，闪回恢复区为D:\oracle\flash_recovery_area，大小为2G，也可以通过查询v$recovery_file_dest视图查看闪回恢复的限制信息。<br><figure class="highlight cmd"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">SQL&gt; select name,SPACE_LIMIT,SPACE_USED from v$recovery_file_dest;</div><div class="line">NAME                           SPACE_LIMIT SPACE_USED</div><div class="line">------------------------------ ----------- ----------</div><div class="line"><span class="function">D:\<span class="title">oracle</span>\<span class="title">flash_recovery_area</span>   2147483648   21225472</span></div></pre></td></tr></table></figure></p>
+<p>默认情况下，归档日志会存放到闪回恢复区（D:\oracle\flash_recovery_area）内，如果闪回恢复区已经使用到2G，归档日志就有可能无法继续归档，数据库夯住，通常的解决方法是增大闪回恢复区，可以用以下SQL实现。<br><figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">SQL&gt; alter system set db_recovery_file_dest_size=3G;</div><div class="line">系统已更改。</div></pre></td></tr></table></figure></p>
+<p>即使用这种方法解决的当前燃眉之急，但是如果备份策略不是很完善，数据库非常繁忙的情况下，还有可能遇到这种情况，通常需要修改归档日志的路径，将归档日志放到其他不受限制的路径下来解决这个问题，可通过下面的SQL来修改归档日志的存放路径。<br><figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">SQL&gt; alter system set log_archive_dest_1='location=D:\arch';</div><div class="line">系统已更改。</div></pre></td></tr></table></figure></p>
 <p>然后将数据库启动到MOUNT状态，将数据库修改为归档模式后建数据库启动到OPEN状态。</p>
-<pre><code class="cmd">SQL&gt; shutdown immediate
-数据库已经关闭。
-已经卸载数据库。
-ORACLE 例程已经关闭。
-SQL&gt; startup mount
-ORACLE 例程已经启动。
-数据库装载完毕。
-SQL&gt; alter database archivelog;
-数据库已更改。
-SQL&gt; alter database open;
-数据库已更改。
-</code></pre>
+<figure class="highlight cmd"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line">SQL&gt; shutdown immediate</div><div class="line">数据库已经关闭。</div><div class="line">已经卸载数据库。</div><div class="line">ORACLE 例程已经关闭。</div><div class="line">SQL&gt; startup mount</div><div class="line">ORACLE 例程已经启动。</div><div class="line">数据库装载完毕。</div><div class="line">SQL&gt; alter database archivelog;</div><div class="line">数据库已更改。</div><div class="line">SQL&gt; alter database open;</div><div class="line">数据库已更改。</div></pre></td></tr></table></figure>
 <p>再次查看数据库的归档情况。</p>
-<pre><code class="cmd">SQL&gt; archive log list
-数据库日志模式            存档模式
-自动存档             启用
-存档终点            D:\arch
-最早的联机日志序列     321
-下一个存档日志序列   326
-当前日志序列           326
-</code></pre>
+<figure class="highlight cmd"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">SQL&gt; archive log list</div><div class="line">数据库日志模式            存档模式</div><div class="line">自动存档             启用</div><div class="line">存档终点            D:\arch</div><div class="line">最早的联机日志序列     <span class="number">321</span></div><div class="line">下一个存档日志序列   <span class="number">326</span></div><div class="line">当前日志序列           <span class="number">326</span></div></pre></td></tr></table></figure>
 <p>可以通过切换日志，查看归档路径下是否有归档日志产生来验证归档路径设置是否正确，可以通过下面的命令切换日志。</p>
-<pre><code class="sql">SQL&gt; alter system switch logfile;
-系统已更改。
-</code></pre>
+<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">SQL&gt; alter system switch logfile;</div><div class="line">系统已更改。</div></pre></td></tr></table></figure>
 <p>查看归档路径（D:\arch）下是否有归档路径产生。</p>
-<pre><code class="cmd">D:\arch&gt;dir/b
-ARC0000000326_0764368160.0001
-</code></pre>
+<figure class="highlight cmd"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="function">D:\<span class="title">arch</span>&gt;<span class="title">dir</span>/<span class="title">b</span></span></div><div class="line"><span class="title">ARC0000000326_0764368160</span>.0001</div></pre></td></tr></table></figure>
 <p>可以看到在D:\arch路径下已经产生了归档日志，归档日志的名字受log_archive_format参数限制，可以通过下面的命令查看。</p>
-<pre><code class="cmd">SQL&gt; show parameter log_archive_format
-NAME                   TYPE         VALUE
----------------------- ------------ ------------
-log_archive_format     string       ARC%S_%R.%T
-</code></pre>
+<figure class="highlight cmd"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">SQL&gt; show parameter log_archive_format</div><div class="line">NAME                   <span class="built_in">TYPE</span>         VALUE</div><div class="line">---------------------- ------------ ------------</div><div class="line">log_archive_format     string       ARC<span class="variable">%S_%</span>R.%T</div></pre></td></tr></table></figure>
 <p>上面产生的归档文件名字为ARC0000000326_0764368160.0001，%S也就是0000000326是日志切换号，也就是上文archive log list中的当前日志序列，%R是场景号，%T是线程号，可以理解成是节点号，如果不是RAC环境，%T都是1，还可以在log_archive_format参数值中加上%D，%D是16进制标识的DBID，如下演示：</p>
-<pre><code class="cmd">SQL&gt; alter system set log_archive_format=&#39;ARC%S_%R.%T_%D.log&#39; scope=spfile;
-系统已更改。  
-SQL&gt; shutdown immediate
-数据库已经关闭。
-已经卸载数据库。
-ORACLE 例程已经关闭。
-SQL&gt; startup
-ORACLE 例程已经启动。
-数据库装载完毕。
-数据库已经打开。
-SQL&gt; alter system switch logfile;
-系统已更改。
-</code></pre>
+<figure class="highlight cmd"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line">SQL&gt; alter system <span class="built_in">set</span> log_archive_format='ARC<span class="variable">%S_%</span>R.<span class="variable">%T_%</span>D.log' scope=spfile;</div><div class="line">系统已更改。  </div><div class="line">SQL&gt; shutdown immediate</div><div class="line">数据库已经关闭。</div><div class="line">已经卸载数据库。</div><div class="line">ORACLE 例程已经关闭。</div><div class="line">SQL&gt; startup</div><div class="line">ORACLE 例程已经启动。</div><div class="line">数据库装载完毕。</div><div class="line">数据库已经打开。</div><div class="line">SQL&gt; alter system switch logfile;</div><div class="line">系统已更改。</div></pre></td></tr></table></figure>
 <p>查看归档日志的名字，5AA14A62就是16进制的DBID。</p>
-<pre><code class="cmd">D:\arch&gt;dir/b
-ARC0000000326_0764368160.0001
-ARC0000000327_0764368160.0001_5AA14A62.LOG
-</code></pre>
-
+<figure class="highlight cmd"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="function">D:\<span class="title">arch</span>&gt;<span class="title">dir</span>/<span class="title">b</span></span></div><div class="line"><span class="title">ARC0000000326_0764368160</span>.0001</div><div class="line"><span class="title">ARC0000000327_0764368160</span>.0001<span class="title">_5AA14A62.LOG</span></div></pre></td></tr></table></figure>
       
     </div>
 
@@ -564,9 +503,25 @@ ARC0000000327_0764368160.0001_5AA14A62.LOG
           
   <div class="comments" id="comments">
     
-      <div class="ds-thread" data-thread-key="2016/02/22/oracle_change_archive_mode/"
-           data-title="更改ORACLE归档路径及归档模式" data-url="http://www.linmuxi.com/2016/02/22/oracle_change_archive_mode/">
+      <!-- 来必力City版安装代码 -->
+      <div id="lv-container" data-id="city" data-uid="MTAyMC8zMDE0NS82NzAw">
+        <script type="text/javascript">
+         (function(d, s) {
+             var j, e = d.getElementsByTagName(s)[0];
+
+             if (typeof LivereTower === 'function') { return; }
+
+             j = d.createElement(s);
+             j.src = 'https://cdn-city.livere.com/js/embed.dist.js';
+             j.async = true;
+
+             e.parentNode.insertBefore(j, e);
+         })(document, 'script');
+        </script>
+      <noscript> 为正常使用来必力评论功能请激活JavaScript</noscript>
       </div>
+      <!-- City版安装代码已完成 -->
+
     
   </div>
 
@@ -790,33 +745,14 @@ ARC0000000327_0764368160.0001_5AA14A62.LOG
 
   
 
-  
-    
-  
 
-  <script type="text/javascript">
-    var duoshuoQuery = {short_name:"hunterlin"};
-    (function() {
-      var ds = document.createElement('script');
-      ds.type = 'text/javascript';ds.async = true;
-      ds.id = 'duoshuo-script';
-      ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
-      ds.charset = 'UTF-8';
-      (document.getElementsByTagName('head')[0]
-      || document.getElementsByTagName('body')[0]).appendChild(ds);
-    })();
-  </script>
 
-  
-    
-    
-    <script src="/lib/ua-parser-js/dist/ua-parser.min.js?v=0.7.9"></script>
-    <script src="/js/src/hook-duoshuo.js"></script>
   
 
 
 
 
+	
 
 
 

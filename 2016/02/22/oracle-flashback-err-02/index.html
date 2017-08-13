@@ -154,6 +154,18 @@
 
 
 
+  <div style="display: none;">
+    <script src="//s95.cnzz.com/z_stat.php?id=1259167020&web_id=1259167020" language="JavaScript"></script>
+
+	<!--
+<script type="text/javascript">var cnzz_protocol = (("https:" == document.location.protocol) ? " https://" : " http://");document.write(unescape("%3Cspan id='cnzz_stat_icon_1259167020'%3E%3C/span%3E%3Cscript src='" + cnzz_protocol + "s4.cnzz.com/z_stat.php%3Fid%3D1259167020%26show%3Dpic' type='text/javascript'%3E%3C/script%3E"));</script>
+    -->
+
+
+  </div>
+
+
+
 
 
   
@@ -343,13 +355,6 @@
 
           
             
-              <span class="post-comments-count">
-                <span class="post-meta-divider">|</span>
-                <a href="/2016/02/22/oracle-flashback-err-02/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/02/22/oracle-flashback-err-02/" itemprop="commentCount"></span>
-                </a>
-              </span>
-            
           
 
           
@@ -388,12 +393,8 @@
         <p>前篇介绍了利用闪回查询可以将误删的数据恢复，但该操作并不能100%进行数据恢复。本篇就该问题进行分享下。<br><a id="more"></a></p>
 <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>该异常的原因是UNDO表空间(System表空间或UNDOTBS1表空间)的数据已经被覆盖或是保留时间过期。因为闪回查询是基于UNDO数据来执行的。</p>
 <h2 id="分析"><a href="#分析" class="headerlink" title="分析"></a>分析</h2><p>有两种方式可以解决该问题<br>1、增大UNDO表空间大小<br>2、或者修改undo_retention的时间</p>
-<p>通过show parameter undo 查询UNDO的信息;</p>
-<pre><code>sql&gt; show parameter undo
-undo_management string AUTO
-undo_retention integer 86400  (默认为分钟)
-undo_tablespace string UNDOTBS1
-</code></pre><h2 id="说明"><a href="#说明" class="headerlink" title="说明"></a>说明</h2><p>undo表空间用于存放undo数据，当执行DML操作（insert、update、delete）时，oracle会将这些操作的旧数据写入到undo段。</p>
+<p>通过show parameter undo 查询UNDO的信息;<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">sql&gt; show parameter undo</div><div class="line">undo_management string AUTO</div><div class="line">undo_retention integer 86400  (默认为分钟)</div><div class="line">undo_tablespace string UNDOTBS1</div></pre></td></tr></table></figure></p>
+<h2 id="说明"><a href="#说明" class="headerlink" title="说明"></a>说明</h2><p>undo表空间用于存放undo数据，当执行DML操作（insert、update、delete）时，oracle会将这些操作的旧数据写入到undo段。</p>
 <p>ora-01555快照过旧就是因为undo空间不够大，其中一部分undo数据被覆盖了，用户无法获得修改前的数据或是保留时间过期。</p>
 <p>undo数据分为三种：<br>活动的undo：未提交事务的undo数据，这些undo数据永远不能覆盖，用于回滚rollback事务。<br>过期的undo：已提交事务的undo数据，这些undo数据可以覆盖。<br>未过期的undo：事务已提交，但事务提交前，有些查询正在进行，它要读取的是提交前的数据，这部分数据就是未过期数据。如果这部分undo数据被覆盖了，就会发生ora-01555错误。</p>
 
@@ -489,9 +490,25 @@ undo_tablespace string UNDOTBS1
           
   <div class="comments" id="comments">
     
-      <div class="ds-thread" data-thread-key="2016/02/22/oracle-flashback-err-02/"
-           data-title="ORA-01555：快照过旧，回滚段号10(名称为“_SYSSMU10$”)过小" data-url="http://www.linmuxi.com/2016/02/22/oracle-flashback-err-02/">
+      <!-- 来必力City版安装代码 -->
+      <div id="lv-container" data-id="city" data-uid="MTAyMC8zMDE0NS82NzAw">
+        <script type="text/javascript">
+         (function(d, s) {
+             var j, e = d.getElementsByTagName(s)[0];
+
+             if (typeof LivereTower === 'function') { return; }
+
+             j = d.createElement(s);
+             j.src = 'https://cdn-city.livere.com/js/embed.dist.js';
+             j.async = true;
+
+             e.parentNode.insertBefore(j, e);
+         })(document, 'script');
+        </script>
+      <noscript> 为正常使用来必力评论功能请激活JavaScript</noscript>
       </div>
+      <!-- City版安装代码已完成 -->
+
     
   </div>
 
@@ -715,33 +732,14 @@ undo_tablespace string UNDOTBS1
 
   
 
-  
-    
-  
 
-  <script type="text/javascript">
-    var duoshuoQuery = {short_name:"hunterlin"};
-    (function() {
-      var ds = document.createElement('script');
-      ds.type = 'text/javascript';ds.async = true;
-      ds.id = 'duoshuo-script';
-      ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
-      ds.charset = 'UTF-8';
-      (document.getElementsByTagName('head')[0]
-      || document.getElementsByTagName('body')[0]).appendChild(ds);
-    })();
-  </script>
 
-  
-    
-    
-    <script src="/lib/ua-parser-js/dist/ua-parser.min.js?v=0.7.9"></script>
-    <script src="/js/src/hook-duoshuo.js"></script>
   
 
 
 
 
+	
 
 
 

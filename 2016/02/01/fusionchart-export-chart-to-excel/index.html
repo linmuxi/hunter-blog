@@ -154,6 +154,18 @@
 
 
 
+  <div style="display: none;">
+    <script src="//s95.cnzz.com/z_stat.php?id=1259167020&web_id=1259167020" language="JavaScript"></script>
+
+	<!--
+<script type="text/javascript">var cnzz_protocol = (("https:" == document.location.protocol) ? " https://" : " http://");document.write(unescape("%3Cspan id='cnzz_stat_icon_1259167020'%3E%3C/span%3E%3Cscript src='" + cnzz_protocol + "s4.cnzz.com/z_stat.php%3Fid%3D1259167020%26show%3Dpic' type='text/javascript'%3E%3C/script%3E"));</script>
+    -->
+
+
+  </div>
+
+
+
 
 
   
@@ -343,13 +355,6 @@
 
           
             
-              <span class="post-comments-count">
-                <span class="post-meta-divider">|</span>
-                <a href="/2016/02/01/fusionchart-export-chart-to-excel/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/02/01/fusionchart-export-chart-to-excel/" itemprop="commentCount"></span>
-                </a>
-              </span>
-            
           
 
           
@@ -386,56 +391,11 @@
 
       
         <p>本篇主要分享下如何将Fusionchart图表导出到Excel中，导出到Excel中的仅仅为一张图形图片，并不具备Excel图表编辑功能<br><a id="more"></a><br>第一步：将fcexporter.jar、fcexporthandler.jar导入lib下</p>
-<p>第二步：在classs下新建导出配置文件fusioncharts_export.properties</p>
-<pre><code class="prolog">#Please specify the path to a folder with write permissions relative to web application root
-SAVEPATH=./images/
-#This constant HTTP_URI stores the HTTP reference to 
-#the folder where exported charts will be saved. 
-#Please enter the HTTP representation of that folder 
-#in this constant e.g., http://www.yourdomain.com/images/
-HTTP_URI=http://www.yourdomain.com/images/
-#OVERWRITEFILE sets whether the export handler will overwrite an existing file 
-#the newly created exported file. If it is set to false the export handler will
-#not overwrite. In this case if INTELLIGENTFILENAMING is set to true the handler
-#will add a suffix to the new file name. The suffix is a randomly generated UUID.
-#Additionally, you can add a timestamp or random number as additional prefix.
-OVERWRITEFILE=false
-INTELLIGENTFILENAMING=true
-FILESUFFIXFORMAT=TIMESTAMP
-</code></pre>
-<p>第三步：修改web.xml</p>
-<pre><code class="xml">&lt;servlet&gt;
-    &lt;display-name&gt;FCExporter&lt;/display-name&gt;
-    &lt;servlet-name&gt;FCExporter&lt;/servlet-name&gt;
-    &lt;servlet-class&gt;com.fusioncharts.exporter.servlet.FCExporter&lt;/servlet-class&gt;
-    &lt;load-on-startup&gt;1&lt;/load-on-startup&gt;
-&lt;/servlet&gt;
-&lt;servlet-mapping&gt;
-    &lt;servlet-name&gt;FCExporter&lt;/servlet-name&gt;
-    &lt;url-pattern&gt;/JSP/ExportExample/FCExporter&lt;/url-pattern&gt;  &lt;!-- 这里配置根据自己应用需求来(请求jsp所在的文件目录) --&gt;
-&lt;/servlet-mapping&gt;
-</code></pre>
-<p>第四步：编辑报表属性</p>
-<pre><code class="xml">&lt;chart exportEnabled=&quot;1&quot; exportAction=&quot;save&quot; exportAtClient=&quot;0&quot; exportFileName=&quot;fileName&quot; exporthandler=&quot;FCExporter&quot;&gt;
-</code></pre>
-<p>第五步：调用JS函数</p>
-<pre><code class="js">var chartObject = getChartFromId(&#39;myChart&#39;);
-if( chartObject.hasRendered()) chartObject.exportChart();
-</code></pre>
-<p>第六步：将图片写入Excel中</p>
-<pre><code class="java">ByteArrayOutputStream allOutputStream = new ByteArrayOutputStream();
-ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
-Workbook book = WorkbookFactory.create(fileTransfer.getInputStream());
-File file = new File(FusionChartsExportHelper.SAVEPATH+imageName+&quot;.jpg&quot;);
-BufferedImage bufferImg = ImageIO.read(file);
-ImageIO.write(bufferImg, &quot;jpg&quot;, outputStream);
-HSSFSheet sheet1 = (HSSFSheet) book.getSheetAt(0);
-HSSFPatriarch patriarch = sheet1.createDrawingPatriarch();
-HSSFClientAnchor anchor = new HSSFClientAnchor(0, 0, 500, 255,(short) 0, 9, (short) 9, 23);
-patriarch.createPicture(anchor, book.addPicture(outputStream.toByteArray(),HSSFWorkbook.PICTURE_TYPE_JPEG));
-book.write(allOutputStream);
-return new FileTransfer(new String(&quot;Excel标题.xls&quot;.getBytes(&quot;GBK&quot;), &quot;iso8859-1&quot;), &quot;application/xls&quot;, allOutputStream.toByteArray());
-</code></pre>
+<p>第二步：在classs下新建导出配置文件fusioncharts_export.properties<br><figure class="highlight prolog"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line">#<span class="symbol">Please</span> specify the path to a folder with write permissions relative to web application root</div><div class="line"><span class="symbol">SAVEPATH</span>=./images/</div><div class="line">#<span class="symbol">This</span> constant <span class="symbol">HTTP_URI</span> stores the <span class="symbol">HTTP</span> reference to </div><div class="line">#the folder where exported charts will be saved. </div><div class="line">#<span class="symbol">Please</span> enter the <span class="symbol">HTTP</span> representation of that folder </div><div class="line">#in this constant e.g., http://www.yourdomain.com/images/</div><div class="line"><span class="symbol">HTTP_URI</span>=http://www.yourdomain.com/images/</div><div class="line">#<span class="symbol">OVERWRITEFILE</span> sets whether the export handler will overwrite an existing file </div><div class="line">#the newly created exported file. <span class="symbol">If</span> it is set to false the export handler will</div><div class="line">#not overwrite. <span class="symbol">In</span> this case if <span class="symbol">INTELLIGENTFILENAMING</span> is set to true the handler</div><div class="line">#will add a suffix to the new file name. <span class="symbol">The</span> suffix is a randomly generated <span class="symbol">UUID</span>.</div><div class="line">#<span class="symbol">Additionally</span>, you can add a timestamp or random number as additional prefix.</div><div class="line"><span class="symbol">OVERWRITEFILE</span>=false</div><div class="line"><span class="symbol">INTELLIGENTFILENAMING</span>=true</div><div class="line"><span class="symbol">FILESUFFIXFORMAT</span>=<span class="symbol">TIMESTAMP</span></div></pre></td></tr></table></figure></p>
+<p>第三步：修改web.xml<br><figure class="highlight xml"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line"><span class="tag">&lt;<span class="name">servlet</span>&gt;</span></div><div class="line">	<span class="tag">&lt;<span class="name">display-name</span>&gt;</span>FCExporter<span class="tag">&lt;/<span class="name">display-name</span>&gt;</span></div><div class="line">	<span class="tag">&lt;<span class="name">servlet-name</span>&gt;</span>FCExporter<span class="tag">&lt;/<span class="name">servlet-name</span>&gt;</span></div><div class="line">	<span class="tag">&lt;<span class="name">servlet-class</span>&gt;</span>com.fusioncharts.exporter.servlet.FCExporter<span class="tag">&lt;/<span class="name">servlet-class</span>&gt;</span></div><div class="line">	<span class="tag">&lt;<span class="name">load-on-startup</span>&gt;</span>1<span class="tag">&lt;/<span class="name">load-on-startup</span>&gt;</span></div><div class="line"><span class="tag">&lt;/<span class="name">servlet</span>&gt;</span></div><div class="line"><span class="tag">&lt;<span class="name">servlet-mapping</span>&gt;</span></div><div class="line">	<span class="tag">&lt;<span class="name">servlet-name</span>&gt;</span>FCExporter<span class="tag">&lt;/<span class="name">servlet-name</span>&gt;</span></div><div class="line">	<span class="tag">&lt;<span class="name">url-pattern</span>&gt;</span>/JSP/ExportExample/FCExporter<span class="tag">&lt;/<span class="name">url-pattern</span>&gt;</span>  <span class="comment">&lt;!-- 这里配置根据自己应用需求来(请求jsp所在的文件目录) --&gt;</span></div><div class="line"><span class="tag">&lt;/<span class="name">servlet-mapping</span>&gt;</span></div></pre></td></tr></table></figure></p>
+<p>第四步：编辑报表属性<br><figure class="highlight xml"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="tag">&lt;<span class="name">chart</span> <span class="attr">exportEnabled</span>=<span class="string">"1"</span> <span class="attr">exportAction</span>=<span class="string">"save"</span> <span class="attr">exportAtClient</span>=<span class="string">"0"</span> <span class="attr">exportFileName</span>=<span class="string">"fileName"</span> <span class="attr">exporthandler</span>=<span class="string">"FCExporter"</span>&gt;</span></div></pre></td></tr></table></figure></p>
+<p>第五步：调用JS函数<br><figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> chartObject = getChartFromId(<span class="string">'myChart'</span>);</div><div class="line"><span class="keyword">if</span>( chartObject.hasRendered()) chartObject.exportChart();</div></pre></td></tr></table></figure></p>
+<p>第六步：将图片写入Excel中<br><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line">ByteArrayOutputStream allOutputStream = <span class="keyword">new</span> ByteArrayOutputStream();</div><div class="line">ByteArrayOutputStream outputStream = <span class="keyword">new</span> ByteArrayOutputStream();</div><div class="line">Workbook book = WorkbookFactory.create(fileTransfer.getInputStream());</div><div class="line">File file = <span class="keyword">new</span> File(FusionChartsExportHelper.SAVEPATH+imageName+<span class="string">".jpg"</span>);</div><div class="line">BufferedImage bufferImg = ImageIO.read(file);</div><div class="line">ImageIO.write(bufferImg, <span class="string">"jpg"</span>, outputStream);</div><div class="line">HSSFSheet sheet1 = (HSSFSheet) book.getSheetAt(<span class="number">0</span>);</div><div class="line">HSSFPatriarch patriarch = sheet1.createDrawingPatriarch();</div><div class="line">HSSFClientAnchor anchor = <span class="keyword">new</span> HSSFClientAnchor(<span class="number">0</span>, <span class="number">0</span>, <span class="number">500</span>, <span class="number">255</span>,(<span class="keyword">short</span>) <span class="number">0</span>, <span class="number">9</span>, (<span class="keyword">short</span>) <span class="number">9</span>, <span class="number">23</span>);</div><div class="line">patriarch.createPicture(anchor, book.addPicture(outputStream.toByteArray(),HSSFWorkbook.PICTURE_TYPE_JPEG));</div><div class="line">book.write(allOutputStream);</div><div class="line"><span class="keyword">return</span> <span class="keyword">new</span> FileTransfer(<span class="keyword">new</span> String(<span class="string">"Excel标题.xls"</span>.getBytes(<span class="string">"GBK"</span>), <span class="string">"iso8859-1"</span>), <span class="string">"application/xls"</span>, allOutputStream.toByteArray());</div></pre></td></tr></table></figure></p>
 
       
     </div>
@@ -531,9 +491,25 @@ return new FileTransfer(new String(&quot;Excel标题.xls&quot;.getBytes(&quot;GB
           
   <div class="comments" id="comments">
     
-      <div class="ds-thread" data-thread-key="2016/02/01/fusionchart-export-chart-to-excel/"
-           data-title="使用Fusionchart导出图表并写入Excel中" data-url="http://www.linmuxi.com/2016/02/01/fusionchart-export-chart-to-excel/">
+      <!-- 来必力City版安装代码 -->
+      <div id="lv-container" data-id="city" data-uid="MTAyMC8zMDE0NS82NzAw">
+        <script type="text/javascript">
+         (function(d, s) {
+             var j, e = d.getElementsByTagName(s)[0];
+
+             if (typeof LivereTower === 'function') { return; }
+
+             j = d.createElement(s);
+             j.src = 'https://cdn-city.livere.com/js/embed.dist.js';
+             j.async = true;
+
+             e.parentNode.insertBefore(j, e);
+         })(document, 'script');
+        </script>
+      <noscript> 为正常使用来必力评论功能请激活JavaScript</noscript>
       </div>
+      <!-- City版安装代码已完成 -->
+
     
   </div>
 
@@ -732,33 +708,14 @@ return new FileTransfer(new String(&quot;Excel标题.xls&quot;.getBytes(&quot;GB
 
   
 
-  
-    
-  
 
-  <script type="text/javascript">
-    var duoshuoQuery = {short_name:"hunterlin"};
-    (function() {
-      var ds = document.createElement('script');
-      ds.type = 'text/javascript';ds.async = true;
-      ds.id = 'duoshuo-script';
-      ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
-      ds.charset = 'UTF-8';
-      (document.getElementsByTagName('head')[0]
-      || document.getElementsByTagName('body')[0]).appendChild(ds);
-    })();
-  </script>
 
-  
-    
-    
-    <script src="/lib/ua-parser-js/dist/ua-parser.min.js?v=0.7.9"></script>
-    <script src="/js/src/hook-duoshuo.js"></script>
   
 
 
 
 
+	
 
 
 

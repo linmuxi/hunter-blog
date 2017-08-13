@@ -162,6 +162,18 @@
 
 
 
+  <div style="display: none;">
+    <script src="//s95.cnzz.com/z_stat.php?id=1259167020&web_id=1259167020" language="JavaScript"></script>
+
+	<!--
+<script type="text/javascript">var cnzz_protocol = (("https:" == document.location.protocol) ? " https://" : " http://");document.write(unescape("%3Cspan id='cnzz_stat_icon_1259167020'%3E%3C/span%3E%3Cscript src='" + cnzz_protocol + "s4.cnzz.com/z_stat.php%3Fid%3D1259167020%26show%3Dpic' type='text/javascript'%3E%3C/script%3E"));</script>
+    -->
+
+
+  </div>
+
+
+
 
 
   
@@ -351,13 +363,6 @@
 
           
             
-              <span class="post-comments-count">
-                <span class="post-meta-divider">|</span>
-                <a href="/2016/02/01/Linux-deploy-nginx/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/02/01/Linux-deploy-nginx/" itemprop="commentCount"></span>
-                </a>
-              </span>
-            
           
 
           
@@ -418,151 +423,10 @@
 <p>9.验证配置文件是否正确<br>输入命令：<code>./nginx -t</code></p>
 <p>10.关闭ng<br>查询ng进程号,输入命令：<code>ps -ef | grep nginx</code><br>正常停止： <code>kill -quit 进程号</code><br>快速停止：<code>kill -term 进程号</code><br>强制停止：<code>kill -9 进程号</code></p>
 <p><strong> 示例 </strong><br>我们利用Ng为两台应用服务器配置负载均衡,两台服务器的访问地址分别是：<br><a href="http://192.168.100.101:8080" target="_blank" rel="external">http://192.168.100.101:8080</a><br><a href="http://192.168.100.101:8081" target="_blank" rel="external">http://192.168.100.101:8081</a></p>
-<p>第一步：进行nginx.conf文件配置。<br>1、在#gzip on下面新增</p>
-<pre><code class="nginx">upstream local_ng_01{
-    server 192.168.100.101:8080;
-    server 192.168.100.102:8080;
-}
-</code></pre>
-<p>2、修改Server的配置</p>
-<pre><code class="nginx">server {
-    listen       80;
-    server_name  192.168.100.88;
-    location / {
-        root   html;
-        index  index.html index.htm;
-        proxy_pass http://local_ng_01;
-    }
-}
-</code></pre>
+<p>第一步：进行nginx.conf文件配置。<br>1、在#gzip on下面新增<br><figure class="highlight nginx"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="attribute">upstream</span> local_ng_01&#123;</div><div class="line">	<span class="attribute">server</span> <span class="number">192.168.100.101:8080</span>;</div><div class="line">	<span class="attribute">server</span> <span class="number">192.168.100.102:8080</span>;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>2、修改Server的配置<br><figure class="highlight nginx"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line"><span class="section">server</span> &#123;</div><div class="line">    <span class="attribute">listen</span>       <span class="number">80</span>;</div><div class="line">    <span class="attribute">server_name</span>  <span class="number">192.168.100.88</span>;</div><div class="line">	<span class="attribute">location</span> / &#123;</div><div class="line">        <span class="attribute">root</span>   html;</div><div class="line">        <span class="attribute">index</span>  index.html index.htm;</div><div class="line">    	<span class="attribute">proxy_pass</span> http://local_ng_01;</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
 <p>这样我们在访问192.168.100.88的时候，请求会被均衡到101和102两台服务器上去了</p>
-<p>完整nginx.conf配置：</p>
-<pre><code class="nginx">#user  nobody;
-worker_processes  4;
-
-#error_log  logs/error.log;
-#error_log  logs/error.log  notice;
-#error_log  logs/error.log  info;
-
-#pid        logs/nginx.pid;
-
-events {
-    worker_connections  2048;
-}
-
-http {
-    include       mime.types;
-    default_type  application/octet-stream;
-
-    #log_format  main  &#39;$remote_addr - $remote_user [$time_local] &quot;$request&quot; &#39;
-    #                  &#39;$status $body_bytes_sent &quot;$http_referer&quot; &#39;
-    #                  &#39;&quot;$http_user_agent&quot; &quot;$http_x_forwarded_for&quot;&#39;;
-
-    access_log  logs/access.log;
-    client_header_timeout 3m;
-    client_body_timeout 3m;
-    send_timeout 3m;
-
-    client_header_buffer_size 1k;
-
-    sendfile        on;
-    tcp_nopush     on;
-    tcp_nodelay on;
-
-    #keepalive_timeout  0;
-    #keepalive_timeout  65;
-
-    #gzip  on;
-
-    upstream local_ng_01{
-        server 192.168.100.101:8080;
-        server 192.168.100.102:8080;
-    }
-
-    server {
-        listen       80;
-           server_name  192.168.100.88;
-
-        #charset koi8-r;
-
-        #access_log  logs/host.access.log  main;
-
-        location / {
-            root   html;
-            index  index.html index.htm;
-            proxy_pass http://local_ng_01;
-        }
-
-        #error_page  404              /404.html;
-
-        # redirect server error pages to the static page /50x.html
-        #
-        error_page   500 502 503 504  /50x.html;
-        location = /50x.html {
-            root   html;
-        }
-
-        # proxy the PHP scripts to Apache listening on 127.0.0.1:80
-        #
-        #location ~ \.php$ {
-        #    proxy_pass   http://127.0.0.1;
-        # }
-
-        # pass the PHP scripts to FastCGI server listening on 127.0.0.1:9000
-        #
-        #location ~ \.php$ {
-        #    root           html;
-        #    fastcgi_pass   127.0.0.1:9000;
-        #    fastcgi_index  index.php;
-        #    fastcgi_param  SCRIPT_FILENAME  /scripts$fastcgi_script_name;
-        #    include        fastcgi_params;
-        # }
-
-        # deny access to .htaccess files, if Apache&#39;s document root
-        # concurs with nginx&#39;s one
-        #
-        #location ~ /\.ht {
-        #    deny  all;
-        # }
-    }
-
-
-    # another virtual host using mix of IP-, name-, and port-based configuration
-    #
-    #server {
-    #    listen       8000;
-    #    listen       somename:8080;
-    #    server_name  somename  alias  another.alias;
-
-    #    location / {
-    #        root   html;
-    #        index  index.html index.htm;
-    #    }
-    # }
-
-
-    # HTTPS server
-    #
-    #server {
-    #    listen       443 ssl;
-    #    server_name  localhost;
-
-    #    ssl_certificate      cert.pem;
-    #    ssl_certificate_key  cert.key;
-
-    #    ssl_session_cache    shared:SSL:1m;
-    #    ssl_session_timeout  5m;
-
-    #    ssl_ciphers  HIGH:!aNULL:!MD5;
-    #    ssl_prefer_server_ciphers  on;
-
-    #    location / {
-    #        root   html;
-    #        index  index.html index.htm;
-    #    }
-    # }
-}
-</code></pre>
+<p>完整nginx.conf配置：<br><figure class="highlight nginx"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div><div class="line">70</div><div class="line">71</div><div class="line">72</div><div class="line">73</div><div class="line">74</div><div class="line">75</div><div class="line">76</div><div class="line">77</div><div class="line">78</div><div class="line">79</div><div class="line">80</div><div class="line">81</div><div class="line">82</div><div class="line">83</div><div class="line">84</div><div class="line">85</div><div class="line">86</div><div class="line">87</div><div class="line">88</div><div class="line">89</div><div class="line">90</div><div class="line">91</div><div class="line">92</div><div class="line">93</div><div class="line">94</div><div class="line">95</div><div class="line">96</div><div class="line">97</div><div class="line">98</div><div class="line">99</div><div class="line">100</div><div class="line">101</div><div class="line">102</div><div class="line">103</div><div class="line">104</div><div class="line">105</div><div class="line">106</div><div class="line">107</div><div class="line">108</div><div class="line">109</div><div class="line">110</div><div class="line">111</div><div class="line">112</div><div class="line">113</div><div class="line">114</div><div class="line">115</div><div class="line">116</div><div class="line">117</div><div class="line">118</div><div class="line">119</div><div class="line">120</div><div class="line">121</div><div class="line">122</div><div class="line">123</div><div class="line">124</div><div class="line">125</div></pre></td><td class="code"><pre><div class="line"><span class="comment">#user  nobody;</span></div><div class="line"><span class="attribute">worker_processes</span>  <span class="number">4</span>;</div><div class="line"></div><div class="line"><span class="comment">#error_log  logs/error.log;</span></div><div class="line"><span class="comment">#error_log  logs/error.log  notice;</span></div><div class="line"><span class="comment">#error_log  logs/error.log  info;</span></div><div class="line"></div><div class="line"><span class="comment">#pid        logs/nginx.pid;</span></div><div class="line"></div><div class="line"><span class="section">events</span> &#123;</div><div class="line">    <span class="attribute">worker_connections</span>  <span class="number">2048</span>;</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="section">http</span> &#123;</div><div class="line">    <span class="attribute">include</span>       mime.types;</div><div class="line">    <span class="attribute">default_type</span>  application/octet-stream;</div><div class="line"></div><div class="line">    <span class="comment">#log_format  main  '$remote_addr - $remote_user [$time_local] "$request" '</span></div><div class="line">    <span class="comment">#                  '$status $body_bytes_sent "$http_referer" '</span></div><div class="line">    <span class="comment">#                  '"$http_user_agent" "$http_x_forwarded_for"';</span></div><div class="line"></div><div class="line">    <span class="attribute">access_log</span>  logs/access.log;</div><div class="line">    <span class="attribute">client_header_timeout</span> <span class="number">3m</span>;</div><div class="line">    <span class="attribute">client_body_timeout</span> <span class="number">3m</span>;</div><div class="line">    <span class="attribute">send_timeout</span> <span class="number">3m</span>;</div><div class="line"></div><div class="line">    <span class="attribute">client_header_buffer_size</span> <span class="number">1k</span>;</div><div class="line"></div><div class="line">    <span class="attribute">sendfile</span>        <span class="literal">on</span>;</div><div class="line">    <span class="attribute">tcp_nopush</span>     <span class="literal">on</span>;</div><div class="line">    <span class="attribute">tcp_nodelay</span> <span class="literal">on</span>;</div><div class="line"></div><div class="line">    <span class="comment">#keepalive_timeout  0;</span></div><div class="line">    <span class="comment">#keepalive_timeout  65;</span></div><div class="line"></div><div class="line">    <span class="comment">#gzip  on;</span></div><div class="line"></div><div class="line">	<span class="attribute">upstream</span> local_ng_01&#123;</div><div class="line">		<span class="attribute">server</span> <span class="number">192.168.100.101:8080</span>;</div><div class="line">		<span class="attribute">server</span> <span class="number">192.168.100.102:8080</span>;</div><div class="line">	&#125;</div><div class="line"></div><div class="line">    <span class="section">server</span> &#123;</div><div class="line">        <span class="attribute">listen</span>       <span class="number">80</span>;</div><div class="line">   		<span class="attribute">server_name</span>  <span class="number">192.168.100.88</span>;</div><div class="line"></div><div class="line">        <span class="comment">#charset koi8-r;</span></div><div class="line"></div><div class="line">        <span class="comment">#access_log  logs/host.access.log  main;</span></div><div class="line"></div><div class="line">		<span class="attribute">location</span> / &#123;</div><div class="line">	        <span class="attribute">root</span>   html;</div><div class="line">	        <span class="attribute">index</span>  index.html index.htm;</div><div class="line">	    	<span class="attribute">proxy_pass</span> http://local_ng_01;</div><div class="line">	    &#125;</div><div class="line"></div><div class="line">        <span class="comment">#error_page  404              /404.html;</span></div><div class="line"></div><div class="line">        <span class="comment"># redirect server error pages to the static page /50x.html</span></div><div class="line">        <span class="comment">#</span></div><div class="line">        <span class="attribute">error_page</span>   <span class="number">500</span> <span class="number">502</span> <span class="number">503</span> <span class="number">504</span>  /50x.html;</div><div class="line">        <span class="attribute">location</span> = /50x.html &#123;</div><div class="line">            <span class="attribute">root</span>   html;</div><div class="line">        &#125;</div><div class="line"></div><div class="line">        <span class="comment"># proxy the PHP scripts to Apache listening on 127.0.0.1:80</span></div><div class="line">        <span class="comment">#</span></div><div class="line">        <span class="comment">#location ~ \.php$ &#123;</span></div><div class="line">        <span class="comment">#    proxy_pass   http://127.0.0.1;</span></div><div class="line">        <span class="comment"># &#125;</span></div><div class="line"></div><div class="line">        <span class="comment"># pass the PHP scripts to FastCGI server listening on 127.0.0.1:9000</span></div><div class="line">        <span class="comment">#</span></div><div class="line">        <span class="comment">#location ~ \.php$ &#123;</span></div><div class="line">        <span class="comment">#    root           html;</span></div><div class="line">        <span class="comment">#    fastcgi_pass   127.0.0.1:9000;</span></div><div class="line">        <span class="comment">#    fastcgi_index  index.php;</span></div><div class="line">        <span class="comment">#    fastcgi_param  SCRIPT_FILENAME  /scripts$fastcgi_script_name;</span></div><div class="line">        <span class="comment">#    include        fastcgi_params;</span></div><div class="line">        <span class="comment"># &#125;</span></div><div class="line"></div><div class="line">        <span class="comment"># deny access to .htaccess files, if Apache's document root</span></div><div class="line">        <span class="comment"># concurs with nginx's one</span></div><div class="line">        <span class="comment">#</span></div><div class="line">        <span class="comment">#location ~ /\.ht &#123;</span></div><div class="line">        <span class="comment">#    deny  all;</span></div><div class="line">        <span class="comment"># &#125;</span></div><div class="line">    &#125;</div><div class="line"></div><div class="line"></div><div class="line">    <span class="comment"># another virtual host using mix of IP-, name-, and port-based configuration</span></div><div class="line">    <span class="comment">#</span></div><div class="line">    <span class="comment">#server &#123;</span></div><div class="line">    <span class="comment">#    listen       8000;</span></div><div class="line">    <span class="comment">#    listen       somename:8080;</span></div><div class="line">    <span class="comment">#    server_name  somename  alias  another.alias;</span></div><div class="line"></div><div class="line">    <span class="comment">#    location / &#123;</span></div><div class="line">    <span class="comment">#        root   html;</span></div><div class="line">    <span class="comment">#        index  index.html index.htm;</span></div><div class="line">    <span class="comment">#    &#125;</span></div><div class="line">    <span class="comment"># &#125;</span></div><div class="line"></div><div class="line"></div><div class="line">    <span class="comment"># HTTPS server</span></div><div class="line">    <span class="comment">#</span></div><div class="line">    <span class="comment">#server &#123;</span></div><div class="line">    <span class="comment">#    listen       443 ssl;</span></div><div class="line">    <span class="comment">#    server_name  localhost;</span></div><div class="line"></div><div class="line">    <span class="comment">#    ssl_certificate      cert.pem;</span></div><div class="line">    <span class="comment">#    ssl_certificate_key  cert.key;</span></div><div class="line"></div><div class="line">    <span class="comment">#    ssl_session_cache    shared:SSL:1m;</span></div><div class="line">    <span class="comment">#    ssl_session_timeout  5m;</span></div><div class="line"></div><div class="line">    <span class="comment">#    ssl_ciphers  HIGH:!aNULL:!MD5;</span></div><div class="line">    <span class="comment">#    ssl_prefer_server_ciphers  on;</span></div><div class="line"></div><div class="line">    <span class="comment">#    location / &#123;</span></div><div class="line">    <span class="comment">#        root   html;</span></div><div class="line">    <span class="comment">#        index  index.html index.htm;</span></div><div class="line">    <span class="comment">#    &#125;</span></div><div class="line">    <span class="comment"># &#125;</span></div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
 <p>最后，一开始我将Nginx是部署在Windows上的，测试的时候，性能反而比直接访问应用服务器还要慢，不明白为何还要弄个windows版本的ng出来，所以还是让ng静静的运行在linux上吧</p>
 <!-- 切换到root账户
 sudo su
@@ -666,9 +530,25 @@ rm -f -->
           
   <div class="comments" id="comments">
     
-      <div class="ds-thread" data-thread-key="2016/02/01/Linux-deploy-nginx/"
-           data-title="Linux下部署Nginx服务" data-url="http://www.linmuxi.com/2016/02/01/Linux-deploy-nginx/">
+      <!-- 来必力City版安装代码 -->
+      <div id="lv-container" data-id="city" data-uid="MTAyMC8zMDE0NS82NzAw">
+        <script type="text/javascript">
+         (function(d, s) {
+             var j, e = d.getElementsByTagName(s)[0];
+
+             if (typeof LivereTower === 'function') { return; }
+
+             j = d.createElement(s);
+             j.src = 'https://cdn-city.livere.com/js/embed.dist.js';
+             j.async = true;
+
+             e.parentNode.insertBefore(j, e);
+         })(document, 'script');
+        </script>
+      <noscript> 为正常使用来必力评论功能请激活JavaScript</noscript>
       </div>
+      <!-- City版安装代码已完成 -->
+
     
   </div>
 
@@ -867,33 +747,14 @@ rm -f -->
 
   
 
-  
-    
-  
 
-  <script type="text/javascript">
-    var duoshuoQuery = {short_name:"hunterlin"};
-    (function() {
-      var ds = document.createElement('script');
-      ds.type = 'text/javascript';ds.async = true;
-      ds.id = 'duoshuo-script';
-      ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
-      ds.charset = 'UTF-8';
-      (document.getElementsByTagName('head')[0]
-      || document.getElementsByTagName('body')[0]).appendChild(ds);
-    })();
-  </script>
 
-  
-    
-    
-    <script src="/lib/ua-parser-js/dist/ua-parser.min.js?v=0.7.9"></script>
-    <script src="/js/src/hook-duoshuo.js"></script>
   
 
 
 
 
+	
 
 
 

@@ -154,6 +154,18 @@
 
 
 
+  <div style="display: none;">
+    <script src="//s95.cnzz.com/z_stat.php?id=1259167020&web_id=1259167020" language="JavaScript"></script>
+
+	<!--
+<script type="text/javascript">var cnzz_protocol = (("https:" == document.location.protocol) ? " https://" : " http://");document.write(unescape("%3Cspan id='cnzz_stat_icon_1259167020'%3E%3C/span%3E%3Cscript src='" + cnzz_protocol + "s4.cnzz.com/z_stat.php%3Fid%3D1259167020%26show%3Dpic' type='text/javascript'%3E%3C/script%3E"));</script>
+    -->
+
+
+  </div>
+
+
+
 
 
   
@@ -343,13 +355,6 @@
 
           
             
-              <span class="post-comments-count">
-                <span class="post-meta-divider">|</span>
-                <a href="/2016/02/22/oracle-recover-del-data/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/02/22/oracle-recover-del-data/" itemprop="commentCount"></span>
-                </a>
-              </span>
-            
           
 
           
@@ -387,68 +392,14 @@
       
         <p>这篇分享下如何恢复被Delete掉的数据。<br><a id="more"></a></p>
 <p>下面一共介绍三种恢复数据的方法：</p>
-<h2 id="利用闪回"><a href="#利用闪回" class="headerlink" title="利用闪回"></a>利用闪回</h2><pre><code class="sql">// 开启行移动功能
-ALTER TABLE my_test ENABLE ROW MOVEMENT;
-// 闪回表到指定时间点(需要开启行移动功能)
-FLASHBACK TABLE my_test TO TIMESTAMP to_timestamp(&#39;2013-10-17 17:05:00&#39;,&#39;yyyy-mm-dd hh24:mi:ss&#39;)
-</code></pre>
-<h2 id="利用Oracle的快照进行某个时间点的数据查询"><a href="#利用Oracle的快照进行某个时间点的数据查询" class="headerlink" title="利用Oracle的快照进行某个时间点的数据查询"></a>利用Oracle的快照进行某个时间点的数据查询</h2><pre><code class="sql">// 查询在当前时间之前的8分钟时候的数据
-SELECT * FROM my_test AS OF TIMESTAMP (SYSDATE - INTERVAL &#39;8&#39; MINUTE)
-// 查询指定时间点的数据
-SELECT * FROM my_test AS OF TIMESTAMP to_timestamp(&#39;2013-10-17 17:05:00&#39;,&#39;yyyy-mm-dd hh24:mi:ss&#39;);
-</code></pre>
-<h2 id="基于SCN"><a href="#基于SCN" class="headerlink" title="基于SCN"></a>基于SCN</h2><pre><code class="sql">// 查询指定时间点的SCN
-SELECT timestamp_to_scn(to_timestamp(&#39;2013-10-17 17:05:00&#39;,&#39;yyyy-mm-dd hh24:mi:ss&#39;)) FROM dual;
-// 查询指定SCN点的数据
-select * FROM my_test AS OF SCN 10305758694685
-</code></pre>
+<h2 id="利用闪回"><a href="#利用闪回" class="headerlink" title="利用闪回"></a>利用闪回</h2><figure class="highlight sql"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">// 开启行移动功能</div><div class="line"><span class="keyword">ALTER</span> <span class="keyword">TABLE</span> my_test <span class="keyword">ENABLE</span> <span class="keyword">ROW</span> <span class="keyword">MOVEMENT</span>;</div><div class="line">// 闪回表到指定时间点(需要开启行移动功能)</div><div class="line">FLASHBACK TABLE my_test TO TIMESTAMP to_timestamp('2013-10-17 17:05:00','yyyy-mm-dd hh24:mi:ss')</div></pre></td></tr></table></figure>
+<h2 id="利用Oracle的快照进行某个时间点的数据查询"><a href="#利用Oracle的快照进行某个时间点的数据查询" class="headerlink" title="利用Oracle的快照进行某个时间点的数据查询"></a>利用Oracle的快照进行某个时间点的数据查询</h2><figure class="highlight sql"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">// 查询在当前时间之前的8分钟时候的数据</div><div class="line"><span class="keyword">SELECT</span> * <span class="keyword">FROM</span> my_test <span class="keyword">AS</span> <span class="keyword">OF</span> <span class="keyword">TIMESTAMP</span> (<span class="keyword">SYSDATE</span> - <span class="built_in">INTERVAL</span> <span class="string">'8'</span> <span class="keyword">MINUTE</span>)</div><div class="line">// 查询指定时间点的数据</div><div class="line"><span class="keyword">SELECT</span> * <span class="keyword">FROM</span> my_test <span class="keyword">AS</span> <span class="keyword">OF</span> <span class="keyword">TIMESTAMP</span> to_timestamp(<span class="string">'2013-10-17 17:05:00'</span>,<span class="string">'yyyy-mm-dd hh24:mi:ss'</span>);</div></pre></td></tr></table></figure>
+<h2 id="基于SCN"><a href="#基于SCN" class="headerlink" title="基于SCN"></a>基于SCN</h2><figure class="highlight sql"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">// 查询指定时间点的SCN</div><div class="line"><span class="keyword">SELECT</span> timestamp_to_scn(to_timestamp(<span class="string">'2013-10-17 17:05:00'</span>,<span class="string">'yyyy-mm-dd hh24:mi:ss'</span>)) <span class="keyword">FROM</span> dual;</div><div class="line">// 查询指定SCN点的数据</div><div class="line"><span class="keyword">select</span> * <span class="keyword">FROM</span> my_test <span class="keyword">AS</span> <span class="keyword">OF</span> <span class="keyword">SCN</span> <span class="number">10305758694685</span></div></pre></td></tr></table></figure>
 <p><strong> PS:如果是在被删除的第一时间进行数据恢复，则可能性很大，否则可能性会大大减小。</strong><br>因为回滚段可能会被后来的数据覆盖掉(进行快照查询会出现：ORA-01555:快照过旧)。当然，也可以通过增大回滚表空间(UNDOTBS1)的大小来提高回滚数据存放的时间</p>
 <!--
 //指定删除时间、对象名称，返回存储过程或函数的执行sql
-~~~ sql
-CREATE OR REPLACE FUNCTION RECOVE_PROCE(DEL_TIME IN VARCHAR2,PROC_NAME IN VARCHAR2) RETURN VARCHAR2 IS
-/**
-    *
-    * function Name :存储过程或function 删除后恢复方法
-    * del_time 对象被删除时间
-    * proc_Name :被删除对象名称
-    * return :返回重建对象的语句
-    *
-*/
-OBJ_NUM NUMBER;
-STR_PROC VARCHAR2(2000);
-STR_END VARCHAR2(2000) := '';
-STR_SQL VARCHAR2(2000);
-BEGIN
-    SELECT OBJ# INTO OBJ_NUM
-        FROM OBJ$ AS OF TIMESTAMP TO_TIMESTAMP(DEL_TIME, 'YYYY-MM-DD HH24:MI:SS')
-    WHERE NAME = UPPER(PROC_NAME);
-
-    FOR I IN (
-        SELECT ROWID RID, SOURCE FROM SOURCE$ AS OF TIMESTAMP TO_TIMESTAMP(DEL_TIME, 'YYYY-MM-DD HH24:MI:SS')
-        WHERE OBJ# = OBJ_NUM ORDER BY LINE
-            ) LOOP
-
-        SELECT SOURCE INTO STR_PROC 
-            FROM SOURCE$ AS OF TIMESTAMP TO_TIMESTAMP(DEL_TIME, 'YYYY-MM-DD HH24:MI:SS')
-        WHERE OBJ# = OBJ_NUM AND ROWID = I.RID ORDER BY LINE;
-
-        STR_END := STR_END || STR_PROC;
-
-    END LOOP;
-
-    STR_SQL := 'CREATE OR REPLACE ' || STR_END;
-
-    RETURN STR_SQL;
-
-    EXCEPTION
-        WHEN OTHERS THEN
-            DBMS_OUTPUT.PUT_LINE(SQLCODE || SQLERRM);
-
-    RETURN NULL;
-
-END RECOVE_PROCE;
-~~~
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">CREATE</span> <span class="keyword">OR</span> <span class="keyword">REPLACE</span> <span class="keyword">FUNCTION</span> RECOVE_PROCE(DEL_TIME <span class="keyword">IN</span> VARCHAR2,PROC_NAME <span class="keyword">IN</span> VARCHAR2) <span class="keyword">RETURN</span> VARCHAR2 <span class="keyword">IS</span></div><div class="line"><span class="comment">/**</div><div class="line">	*</div><div class="line">	* function Name :存储过程或function 删除后恢复方法</div><div class="line">	* del_time 对象被删除时间</div><div class="line">	* proc_Name :被删除对象名称</div><div class="line">	* return :返回重建对象的语句</div><div class="line">	*</div><div class="line">*/</span></div><div class="line">OBJ_NUM <span class="built_in">NUMBER</span>;</div><div class="line">STR_PROC VARCHAR2(2000);</div><div class="line">STR_END VARCHAR2(2000) := '';</div><div class="line">STR_SQL VARCHAR2(2000);</div><div class="line"><span class="keyword">BEGIN</span></div><div class="line">	<span class="keyword">SELECT</span> OBJ# <span class="keyword">INTO</span> OBJ_NUM</div><div class="line">		<span class="keyword">FROM</span> OBJ$ <span class="keyword">AS</span> <span class="keyword">OF</span> <span class="keyword">TIMESTAMP</span> TO_TIMESTAMP(DEL_TIME, <span class="string">'YYYY-MM-DD HH24:MI:SS'</span>)</div><div class="line">	<span class="keyword">WHERE</span> <span class="keyword">NAME</span> = <span class="keyword">UPPER</span>(PROC_NAME);</div><div class="line"></div><div class="line">	FOR I IN (</div><div class="line">		<span class="keyword">SELECT</span> <span class="keyword">ROWID</span> RID, <span class="keyword">SOURCE</span> <span class="keyword">FROM</span> <span class="keyword">SOURCE</span>$ <span class="keyword">AS</span> <span class="keyword">OF</span> <span class="keyword">TIMESTAMP</span> TO_TIMESTAMP(DEL_TIME, <span class="string">'YYYY-MM-DD HH24:MI:SS'</span>)</div><div class="line">		<span class="keyword">WHERE</span> OBJ# = OBJ_NUM <span class="keyword">ORDER</span> <span class="keyword">BY</span> LINE</div><div class="line">			) <span class="keyword">LOOP</span></div><div class="line">	</div><div class="line">		<span class="keyword">SELECT</span> <span class="keyword">SOURCE</span> <span class="keyword">INTO</span> STR_PROC </div><div class="line">			<span class="keyword">FROM</span> <span class="keyword">SOURCE</span>$ <span class="keyword">AS</span> <span class="keyword">OF</span> <span class="keyword">TIMESTAMP</span> TO_TIMESTAMP(DEL_TIME, <span class="string">'YYYY-MM-DD HH24:MI:SS'</span>)</div><div class="line">		<span class="keyword">WHERE</span> OBJ# = OBJ_NUM <span class="keyword">AND</span> <span class="keyword">ROWID</span> = I.RID <span class="keyword">ORDER</span> <span class="keyword">BY</span> LINE;</div><div class="line">		</div><div class="line">		STR_END := STR_END || STR_PROC;</div><div class="line">	</div><div class="line">	<span class="keyword">END</span> <span class="keyword">LOOP</span>;</div><div class="line"></div><div class="line">	STR_SQL := '<span class="keyword">CREATE</span> <span class="keyword">OR</span> <span class="keyword">REPLACE</span> <span class="string">' || STR_END;</div><div class="line">	</div><div class="line">	RETURN STR_SQL;</div><div class="line">	</div><div class="line">	EXCEPTION</div><div class="line">		WHEN OTHERS THEN</div><div class="line">			DBMS_OUTPUT.PUT_LINE(SQLCODE || SQLERRM);</div><div class="line"></div><div class="line">	RETURN NULL;</div><div class="line"></div><div class="line">END RECOVE_PROCE;</span></div></pre></td></tr></table></figure>
+<p>–&gt;</p>
 -->
       
     </div>
@@ -542,9 +493,25 @@ END RECOVE_PROCE;
           
   <div class="comments" id="comments">
     
-      <div class="ds-thread" data-thread-key="2016/02/22/oracle-recover-del-data/"
-           data-title="Oracle恢复被误删的数据" data-url="http://www.linmuxi.com/2016/02/22/oracle-recover-del-data/">
+      <!-- 来必力City版安装代码 -->
+      <div id="lv-container" data-id="city" data-uid="MTAyMC8zMDE0NS82NzAw">
+        <script type="text/javascript">
+         (function(d, s) {
+             var j, e = d.getElementsByTagName(s)[0];
+
+             if (typeof LivereTower === 'function') { return; }
+
+             j = d.createElement(s);
+             j.src = 'https://cdn-city.livere.com/js/embed.dist.js';
+             j.async = true;
+
+             e.parentNode.insertBefore(j, e);
+         })(document, 'script');
+        </script>
+      <noscript> 为正常使用来必力评论功能请激活JavaScript</noscript>
       </div>
+      <!-- City版安装代码已完成 -->
+
     
   </div>
 
@@ -768,33 +735,14 @@ END RECOVE_PROCE;
 
   
 
-  
-    
-  
 
-  <script type="text/javascript">
-    var duoshuoQuery = {short_name:"hunterlin"};
-    (function() {
-      var ds = document.createElement('script');
-      ds.type = 'text/javascript';ds.async = true;
-      ds.id = 'duoshuo-script';
-      ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
-      ds.charset = 'UTF-8';
-      (document.getElementsByTagName('head')[0]
-      || document.getElementsByTagName('body')[0]).appendChild(ds);
-    })();
-  </script>
 
-  
-    
-    
-    <script src="/lib/ua-parser-js/dist/ua-parser.min.js?v=0.7.9"></script>
-    <script src="/js/src/hook-duoshuo.js"></script>
   
 
 
 
 
+	
 
 
 

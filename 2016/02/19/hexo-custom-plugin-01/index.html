@@ -154,6 +154,18 @@
 
 
 
+  <div style="display: none;">
+    <script src="//s95.cnzz.com/z_stat.php?id=1259167020&web_id=1259167020" language="JavaScript"></script>
+
+	<!--
+<script type="text/javascript">var cnzz_protocol = (("https:" == document.location.protocol) ? " https://" : " http://");document.write(unescape("%3Cspan id='cnzz_stat_icon_1259167020'%3E%3C/span%3E%3Cscript src='" + cnzz_protocol + "s4.cnzz.com/z_stat.php%3Fid%3D1259167020%26show%3Dpic' type='text/javascript'%3E%3C/script%3E"));</script>
+    -->
+
+
+  </div>
+
+
+
 
 
   
@@ -343,13 +355,6 @@
 
           
             
-              <span class="post-comments-count">
-                <span class="post-meta-divider">|</span>
-                <a href="/2016/02/19/hexo-custom-plugin-01/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/02/19/hexo-custom-plugin-01/" itemprop="commentCount"></span>
-                </a>
-              </span>
-            
           
 
           
@@ -403,56 +408,37 @@
 </li>
 </ul>
 </li>
-<li>开始编写插件：<br>在_config.yml中配置插件选项：<pre><code class="yml">test:
-  _target: true
-</code></pre>
-index.js文件内容：<pre><code class="js">&#39;use strict&#39;;
-if(hexo.config.test &amp;&amp; hexo.config.test._target){
-  hexo.extend.filter.register(&quot;after_render:html&quot;,require(&#39;./lib/filter&#39;));
-}
-</code></pre>
-lib\filter.js文件内容：<pre><code class="js">&#39;use strict&#39;;
-var cheerio = require(&#39;cheerio&#39;);
-module.exports = function(source){
-  var $ = cheerio.load(source);
-  $(&quot;a&quot;).each(function(index,element){
-      $(this).attr(&quot;target&quot;,&quot;_blank&quot;);
-  });
-  return $.html();
-}
-</code></pre>
-package.json文件内容：<pre><code class="json">{
-&quot;name&quot;: &quot;hexo-test&quot;,
-&quot;version&quot;: &quot;1.0.0&quot;
-}
-</code></pre>
+<li>开始编写插件：<br>在_config.yml中配置插件选项：<figure class="highlight yml"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="attr">test:</span></div><div class="line">	_target: <span class="literal">true</span></div></pre></td></tr></table></figure>
+</li>
+</ul>
+<p>index.js文件内容：<br><figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="meta">'use strict'</span>;</div><div class="line"><span class="keyword">if</span>(hexo.config.test &amp;&amp; hexo.config.test._target)&#123;</div><div class="line">	hexo.extend.filter.register(<span class="string">"after_render:html"</span>,<span class="built_in">require</span>(<span class="string">'./lib/filter'</span>));</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>lib\filter.js文件内容：<br><figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line"><span class="meta">'use strict'</span>;</div><div class="line"><span class="keyword">var</span> cheerio = <span class="built_in">require</span>(<span class="string">'cheerio'</span>);</div><div class="line"><span class="built_in">module</span>.exports = <span class="function"><span class="keyword">function</span>(<span class="params">source</span>)</span>&#123;</div><div class="line">	<span class="keyword">var</span> $ = cheerio.load(source);</div><div class="line">	$(<span class="string">"a"</span>).each(<span class="function"><span class="keyword">function</span>(<span class="params">index,element</span>)</span>&#123;</div><div class="line">		$(<span class="keyword">this</span>).attr(<span class="string">"target"</span>,<span class="string">"_blank"</span>);</div><div class="line">	&#125;);</div><div class="line">	<span class="keyword">return</span> $.html();</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>package.json文件内容：<br><figure class="highlight json"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">&#123;</div><div class="line">  <span class="attr">"name"</span>: <span class="string">"hexo-test"</span>,</div><div class="line">  <span class="attr">"version"</span>: <span class="string">"1.0.0"</span></div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
 <!-- 将插件依赖添加到博客package.json中：
 ~~~json
 {
-"name": "hunter-blog",
-"version": "1.0.0",
-"private": true,
-"hexo": {
-  "version": "3.1.1"
-},
-"dependencies": {
-  "hexo": "^3.1.0",
-  "hexo-deployer-git": "0.0.4",
-  "hexo-generator-archive": "^0.1.2",
-  "hexo-generator-category": "^0.1.2",
-  "hexo-generator-index": "^0.1.2",
-  "hexo-generator-search": "^1.0.2",
-  "hexo-generator-tag": "^0.1.1",
-  "hexo-renderer-ejs": "^0.1.0",
-  "hexo-renderer-marked": "^0.2.4",
-  "hexo-renderer-stylus": "^0.3.0",
-  "hexo-server": "^0.1.2",
-  "hexo-test": "1.0.0"
-}
+  "name": "hunter-blog",
+  "version": "1.0.0",
+  "private": true,
+  "hexo": {
+    "version": "3.1.1"
+  },
+  "dependencies": {
+    "hexo": "^3.1.0",
+    "hexo-deployer-git": "0.0.4",
+    "hexo-generator-archive": "^0.1.2",
+    "hexo-generator-category": "^0.1.2",
+    "hexo-generator-index": "^0.1.2",
+    "hexo-generator-search": "^1.0.2",
+    "hexo-generator-tag": "^0.1.1",
+    "hexo-renderer-ejs": "^0.1.0",
+    "hexo-renderer-marked": "^0.2.4",
+    "hexo-renderer-stylus": "^0.3.0",
+    "hexo-server": "^0.1.2",
+    "hexo-test": "1.0.0"
+  }
 }
 ~~~ -->
-</li>
-</ul>
 <p>到这里，我们的自定义插件就完成了。</p>
 <p>大家可以参考官网关于自定义插件文档介绍：<a href="https://hexo.io/docs/plugins.html" target="_blank" rel="external">https://hexo.io/docs/plugins.html</a><br>另外官网上也介绍了如何将自定义插件发布到hexo站点供其他小伙伴使用。</p>
 
@@ -548,9 +534,25 @@ package.json文件内容：<pre><code class="json">{
           
   <div class="comments" id="comments">
     
-      <div class="ds-thread" data-thread-key="2016/02/19/hexo-custom-plugin-01/"
-           data-title="如何编写Hexo插件" data-url="http://www.linmuxi.com/2016/02/19/hexo-custom-plugin-01/">
+      <!-- 来必力City版安装代码 -->
+      <div id="lv-container" data-id="city" data-uid="MTAyMC8zMDE0NS82NzAw">
+        <script type="text/javascript">
+         (function(d, s) {
+             var j, e = d.getElementsByTagName(s)[0];
+
+             if (typeof LivereTower === 'function') { return; }
+
+             j = d.createElement(s);
+             j.src = 'https://cdn-city.livere.com/js/embed.dist.js';
+             j.async = true;
+
+             e.parentNode.insertBefore(j, e);
+         })(document, 'script');
+        </script>
+      <noscript> 为正常使用来必力评论功能请激活JavaScript</noscript>
       </div>
+      <!-- City版安装代码已完成 -->
+
     
   </div>
 
@@ -749,33 +751,14 @@ package.json文件内容：<pre><code class="json">{
 
   
 
-  
-    
-  
 
-  <script type="text/javascript">
-    var duoshuoQuery = {short_name:"hunterlin"};
-    (function() {
-      var ds = document.createElement('script');
-      ds.type = 'text/javascript';ds.async = true;
-      ds.id = 'duoshuo-script';
-      ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
-      ds.charset = 'UTF-8';
-      (document.getElementsByTagName('head')[0]
-      || document.getElementsByTagName('body')[0]).appendChild(ds);
-    })();
-  </script>
 
-  
-    
-    
-    <script src="/lib/ua-parser-js/dist/ua-parser.min.js?v=0.7.9"></script>
-    <script src="/js/src/hook-duoshuo.js"></script>
   
 
 
 
 
+	
 
 
 

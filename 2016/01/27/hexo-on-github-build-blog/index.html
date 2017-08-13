@@ -158,6 +158,18 @@
 
 
 
+  <div style="display: none;">
+    <script src="//s95.cnzz.com/z_stat.php?id=1259167020&web_id=1259167020" language="JavaScript"></script>
+
+	<!--
+<script type="text/javascript">var cnzz_protocol = (("https:" == document.location.protocol) ? " https://" : " http://");document.write(unescape("%3Cspan id='cnzz_stat_icon_1259167020'%3E%3C/span%3E%3Cscript src='" + cnzz_protocol + "s4.cnzz.com/z_stat.php%3Fid%3D1259167020%26show%3Dpic' type='text/javascript'%3E%3C/script%3E"));</script>
+    -->
+
+
+  </div>
+
+
+
 
 
   
@@ -347,13 +359,6 @@
 
           
             
-              <span class="post-comments-count">
-                <span class="post-meta-divider">|</span>
-                <a href="/2016/01/27/hexo-on-github-build-blog/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/01/27/hexo-on-github-build-blog/" itemprop="commentCount"></span>
-                </a>
-              </span>
-            
           
 
           
@@ -398,117 +403,19 @@
 <li>Hexo主题</li>
 </ul>
 <p><strong> Hexo介绍 </strong><br>&nbsp;&nbsp;&nbsp;&nbsp;”A fast, simple &amp; powerful blog framework”这是<a href="http://hexo.io" target="_blank" rel="external">Hexo官方</a>上面的介绍，Hexo是基于Node.js的一个静态blog框架，通过Hexo可以仅仅使用几条简短的命令就能方便我们快速创建自己的blog。Hexo可以部署在Node服务器上，也可以部署在github上面。当然部署在github上好处多多，不紧可以省去服务器的成本，还可以免去了相关系统运维方便的事情。</p>
-<p><strong> Hexo安装 </strong></p>
-<pre><code class="bat">#查看Node版本
-E:\demo\nodejs&gt;node -v
-v0.12.7
-
-#查看Npm版本
-E:\demo\nodejs&gt;npm -v
-3.5.3
-
-#全局安装hexo-cli
-E:\demo\nodejs&gt;npm install hexo-cli -g
-
-#查看hexo版本
-E:\demo\nodejs&gt;hexo -v
-hexo-cli: 0.2.0
-os: Windows_NT 6.1.7601 win32 x64
-http_parser: 2.3
-node: 0.12.7
-v8: 3.28.71.19
-uv: 1.6.1
-zlib: 1.2.8
-modules: 14
-openssl: 1.0.1p
-
-#初始化hexo
-E:\demo\nodejs&gt;hexo init blog
-INFO  Cloning hexo-starter to E:\demo\nodejs\blog
-Cloning into &#39;E:\demo\nodejs\blog&#39;...
-remote: Counting objects: 40, done.
-remote: Total 40 (delta 0), reused 0 (delta 0), pack-reused 40
-Unpacking objects: 100% (40/40), done.
-
-#安装hexo
-E:\demo\nodejs&gt;cd blog&amp;npm install
-
-#启动hexo
-E:\demo\nodejs\blog&gt;hexo server
-INFO  Hexo is running at http://0.0.0.0:4000/. Press Ctrl+C to stop.
-</code></pre>
+<p><strong> Hexo安装 </strong><br><figure class="highlight bat"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div></pre></td><td class="code"><pre><div class="line">#查看Node版本</div><div class="line"><span class="function">E:\<span class="title">demo</span>\<span class="title">nodejs</span>&gt;<span class="title">node</span> -<span class="title">v</span></span></div><div class="line"><span class="title">v0</span>.12.7</div><div class="line"></div><div class="line">#查看<span class="title">Npm</span>版本</div><div class="line"><span class="title">E</span>:\<span class="title">demo</span>\<span class="title">nodejs</span>&gt;<span class="title">npm</span> -<span class="title">v</span></div><div class="line">3.5.3</div><div class="line"></div><div class="line">#全局安装<span class="title">hexo</span>-<span class="title">cli</span></div><div class="line"><span class="title">E</span>:\<span class="title">demo</span>\<span class="title">nodejs</span>&gt;<span class="title">npm</span> <span class="title">install</span> <span class="title">hexo</span>-<span class="title">cli</span> -<span class="title">g</span></div><div class="line"></div><div class="line">#查看<span class="title">hexo</span>版本</div><div class="line"><span class="title">E</span>:\<span class="title">demo</span>\<span class="title">nodejs</span>&gt;<span class="title">hexo</span> -<span class="title">v</span></div><div class="line"><span class="title">hexo</span>-<span class="title">cli</span>: 0.2.0</div><div class="line"><span class="title">os</span>: <span class="title">Windows_NT</span> 6.1.7601 <span class="title">win32</span> <span class="title">x64</span></div><div class="line"><span class="title">http_parser</span>: 2.3</div><div class="line"><span class="title">node</span>: 0.12.7</div><div class="line"><span class="title">v8</span>: 3.28.71.19</div><div class="line"><span class="title">uv</span>: 1.6.1</div><div class="line"><span class="title">zlib</span>: 1.2.8</div><div class="line"><span class="title">modules</span>: 14</div><div class="line"><span class="title">openssl</span>: 1.0.1<span class="title">p</span></div><div class="line"></div><div class="line">#初始化<span class="title">hexo</span></div><div class="line"><span class="title">E</span>:\<span class="title">demo</span>\<span class="title">nodejs</span>&gt;<span class="title">hexo</span> <span class="title">init</span> <span class="title">blog</span></div><div class="line"><span class="title">INFO</span>  <span class="title">Cloning</span> <span class="title">hexo</span>-<span class="title">starter</span> <span class="title">to</span> <span class="title">E</span>:\<span class="title">demo</span>\<span class="title">nodejs</span>\<span class="title">blog</span></div><div class="line"><span class="title">Cloning</span> <span class="title">into</span> '<span class="title">E</span>:\<span class="title">demo</span>\<span class="title">nodejs</span>\<span class="title">blog</span>'...</div><div class="line"><span class="title">remote</span>: <span class="title">Counting</span> <span class="title">objects</span>: 40, <span class="title">done</span>.</div><div class="line"><span class="title">remote</span>: <span class="title">Total</span> 40 (<span class="title">delta</span> 0), <span class="title">reused</span> 0 (<span class="title">delta</span> 0), <span class="title">pack</span>-<span class="title">reused</span> 40</div><div class="line"><span class="title">Unpacking</span> <span class="title">objects</span>: 100% (40/40), <span class="title">done</span>.</div><div class="line"></div><div class="line">#安装<span class="title">hexo</span></div><div class="line"><span class="title">E</span>:\<span class="title">demo</span>\<span class="title">nodejs</span>&gt;<span class="title">cd</span> <span class="title">blog</span>&amp;<span class="title">npm</span> <span class="title">install</span></div><div class="line"></div><div class="line">#启动<span class="title">hexo</span></div><div class="line"><span class="title">E</span>:\<span class="title">demo</span>\<span class="title">nodejs</span>\<span class="title">blog</span>&gt;<span class="title">hexo</span> <span class="title">server</span></div><div class="line"><span class="title">INFO</span>  <span class="title">Hexo</span> <span class="title">is</span> <span class="title">running</span> <span class="title">at</span> <span class="title">http</span>://0.0.0.0:4000/. <span class="title">Press</span> <span class="title">Ctrl</span>+<span class="title">C</span> <span class="title">to</span> <span class="title">stop</span>.</div></pre></td></tr></table></figure></p>
 <p>到这里Hexo就搭建好了,打开浏览器访问：<a href="http://localhost:4000" target="_blank" rel="external">http://localhost:4000</a> 正常情况会显示如下<br><img src="http://7xqlat.com1.z0.glb.clouddn.com/hexo.png" alt="Hexo效果"></p>
 <p><strong> Hexo使用 </strong><br>1、Hexo目录和文件<br><img src="http://7xqlat.com1.z0.glb.clouddn.com/hexo_file.png" alt="Hexo目录和文件"><br>node_modules:依赖的nodejs模块文件<br>scaffolds：工具模版文件，文件以md扩展名，语法采用markdown<br>source:存放blog正文内容<br>source_posts:正式发布内容<br>themes:存放blog皮肤样式目录<br>themes\landscape:blog默认样式目录<br>_config.yml:全局配置文件</p>
 <p>2、_config.yml<br>全局配置文件，很多网站的相关信息都在这里面进行配置，例如等会要进行配置的root、deploy等属性。</p>
 <p>3、hexo -h<br>可以通过help查看hexo可以使用的命令，常用的例如有init、generate、clean、publish、new等。 </p>
-<p>4、创建新文章<br>有两种方式创建文章：<br>1：手动在_post目录下面添加md文件<br>2：通过hexo命令创建</p>
-<pre><code class="nodejs">E:\demo\nodejs\blog&gt;hexo new first
-INFO  Created: E:\demo\nodejs\blog\source\_posts\first.md
-</code></pre>
+<p>4、创建新文章<br>有两种方式创建文章：<br>1：手动在_post目录下面添加md文件<br>2：通过hexo命令创建<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">E:\demo\nodejs\blog&gt;hexo new first</div><div class="line">INFO  Created: E:\demo\nodejs\blog\source\_posts\first.md</div></pre></td></tr></table></figure></p>
 <p>可以看到在_post目录下新增了first.md文件<br><img src="http://7xqlat.com1.z0.glb.clouddn.com/hexo_new.png" alt=""><br>再次访问：<a href="http://localhost:4000" target="_blank" rel="external">http://localhost:4000</a> 可以发现我们刚才新加的文章已经发布上去了。</p>
-<p>5、语法<br>关于文章内容采用的语法是有要求的，包括以下三部分：<br>1：基本信息：标题，发布日期，分类目录，标签，类型，固定发布链接<br>2：正文：markdown语法和Swig语法(掌握一个就行)<br>3：特殊标记：引用，链接，图片，代码块，iframe<br>编辑文章内容：</p>
-<pre><code>---
-title: 我的第一篇文章
-date: 2016-01-26 14:45:07
-tags:
-- 第一次
-- 日记
-categories: 
-- 日志
-- 2015
-- 01
-- 26
----
-
-这是**我的第一篇文章**，是用hexo创建的。
-
-# 引用
-** Markdown语法 **
-&gt; Every interaction is both precious and an opportunity to delight.
-
-# 代码块
-** Markdown语法 **
-`compact([0,1,false,2,&#39;&#39;,3]);`
-
-# 链接
-** Markdown语法 **
-[我的日志](http://www.linmuxi.com)
-
-# 图片
-* 图片，对于本地图片，需要在source目录下面新建一个images目录存放图片 *
-
-** Markdown语法 **
-![这是第一张图片](images/1.png)
-
-![这是第一张图片](http://linmuxi.github.io/me/project/realtimeData/images/realtimeData_02.png)
-</code></pre><p><strong> Hexo发布到Github </strong><br>1、静态化处理<br>github只托管静态文件，所以这里我们需要将hexo项目的node剥离出来生成只包括html、js、css文件的静态资源文件。<br>使用hexo提供的命令可以轻松实现:</p>
-<pre><code class="dos">E:\demo\nodejs\blog&gt;hexo generate
-INFO  Files loaded in 314 ms
-INFO  Generated: js/script.js
-INFO  Generated: fancybox/jquery.fancybox.pack.js
-...
-INFO  36 files generated in 907 ms
-</code></pre>
+<p>5、语法<br>关于文章内容采用的语法是有要求的，包括以下三部分：<br>1：基本信息：标题，发布日期，分类目录，标签，类型，固定发布链接<br>2：正文：markdown语法和Swig语法(掌握一个就行)<br>3：特殊标记：引用，链接，图片，代码块，iframe<br>编辑文章内容：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div></pre></td><td class="code"><pre><div class="line">---</div><div class="line">title: 我的第一篇文章</div><div class="line">date: 2016-01-26 14:45:07</div><div class="line">tags:</div><div class="line">- 第一次</div><div class="line">- 日记</div><div class="line">categories: </div><div class="line">- 日志</div><div class="line">- 2015</div><div class="line">- 01</div><div class="line">- 26</div><div class="line">---</div><div class="line"></div><div class="line">这是**我的第一篇文章**，是用hexo创建的。</div><div class="line"></div><div class="line"># 引用</div><div class="line">** Markdown语法 **</div><div class="line">&gt; Every interaction is both precious and an opportunity to delight.</div><div class="line"></div><div class="line"># 代码块</div><div class="line">** Markdown语法 **</div><div class="line">`compact([0,1,false,2,&apos;&apos;,3]);`</div><div class="line"></div><div class="line"># 链接</div><div class="line">** Markdown语法 **</div><div class="line">[我的日志](http://www.linmuxi.com)</div><div class="line"></div><div class="line"># 图片</div><div class="line">* 图片，对于本地图片，需要在source目录下面新建一个images目录存放图片 *</div><div class="line"></div><div class="line">** Markdown语法 **</div><div class="line">![这是第一张图片](images/1.png)</div><div class="line"></div><div class="line">![这是第一张图片](http://linmuxi.github.io/me/project/realtimeData/images/realtimeData_02.png)</div></pre></td></tr></table></figure></p>
+<p><strong> Hexo发布到Github </strong><br>1、静态化处理<br>github只托管静态文件，所以这里我们需要将hexo项目的node剥离出来生成只包括html、js、css文件的静态资源文件。<br>使用hexo提供的命令可以轻松实现:<br><figure class="highlight dos"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line"><span class="function">E:\<span class="title">demo</span>\<span class="title">nodejs</span>\<span class="title">blog</span>&gt;<span class="title">hexo</span> <span class="title">generate</span></span></div><div class="line"><span class="title">INFO</span>  <span class="title">Files</span> <span class="title">loaded</span> <span class="title">in</span> 314 <span class="title">ms</span></div><div class="line"><span class="title">INFO</span>  <span class="title">Generated</span>: <span class="title">js</span>/<span class="title">script.js</span></div><div class="line"><span class="title">INFO</span>  <span class="title">Generated</span>: <span class="title">fancybox</span>/<span class="title">jquery.fancybox.pack.js</span></div><div class="line">...</div><div class="line"><span class="title">INFO</span>  36 <span class="title">files</span> <span class="title">generated</span> <span class="title">in</span> 907 <span class="title">ms</span></div></pre></td></tr></table></figure></p>
 <p>生成的静态文件全部都在更目录下的public文件夹下面。</p>
-<p>2、发布到Github<br>1：在github上新建rep、gh-pages分支<br>这里我的rep命名为：nodejs-hexo<br>2：修改_config.yml</p>
-<pre><code class="html">root: /nodejs-hexo
-deploy:
-  type: git
-  repo: https://github.com/linmuxi/nodejs-hexo.git
-  branch: gh-pages
-</code></pre>
+<p>2、发布到Github<br>1：在github上新建rep、gh-pages分支<br>这里我的rep命名为：nodejs-hexo<br>2：修改_config.yml<br><figure class="highlight html"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">root: /nodejs-hexo</div><div class="line">deploy:</div><div class="line">  type: git</div><div class="line">  repo: https://github.com/linmuxi/nodejs-hexo.git</div><div class="line">  branch: gh-pages</div></pre></td></tr></table></figure></p>
 <p><strong> <span style="color:#FF0000">注意：编辑的时候注意空格问题，冒号后面是有空格的。</span> </strong></p>
-<p><strong> Hexo主题 </strong><br>Hexo默认主题是landscape，我们可以到Hexo网站去下载其他主题并应用到我们的blog上面去。<br>首先，找到我们需要的主题git地址，并下载到Hexo根目录下面的thems文件夹下。</p>
-<pre><code class="dos">E:\demo\nodejs\blog&gt;git clone git://github.com/tommy351/hexo-theme-light.git the
-mes/light
-Cloning into &#39;themes/light&#39;...
-remote: Counting objects: 892, done.
-rRemote: Total 892 (delta 0), reused 0 (delta 0), pack-reused 892eceiving object
-Receiving objects:  94% (839/892), 156.01 KiB | 124.00 KiB/s
-Receiving objects: 100% (892/892), 346.40 KiB | 124.00 KiB/s, done.
-Resolving deltas: 100% (391/391), done.
-Checking connectivity... done.
-</code></pre>
+<p><strong> Hexo主题 </strong><br>Hexo默认主题是landscape，我们可以到Hexo网站去下载其他主题并应用到我们的blog上面去。<br>首先，找到我们需要的主题git地址，并下载到Hexo根目录下面的thems文件夹下。<br><figure class="highlight dos"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line"><span class="function">E:\<span class="title">demo</span>\<span class="title">nodejs</span>\<span class="title">blog</span>&gt;<span class="title">git</span> <span class="title">clone</span> <span class="title">git</span>://<span class="title">github.com</span>/<span class="title">tommy351</span>/<span class="title">hexo</span>-<span class="title">theme</span>-<span class="title">light.git</span> <span class="title">the</span></span></div><div class="line"><span class="title">mes</span>/<span class="title">light</span></div><div class="line"><span class="title">Cloning</span> <span class="title">into</span> '<span class="title">themes</span>/<span class="title">light</span>'...</div><div class="line"><span class="title">remote</span>: <span class="title">Counting</span> <span class="title">objects</span>: 892, <span class="title">done</span>.</div><div class="line"><span class="title">rRemote</span>: <span class="title">Total</span> 892 (<span class="title">delta</span> 0), <span class="title">reused</span> 0 (<span class="title">delta</span> 0), <span class="title">pack</span>-<span class="title">reused</span> 892<span class="title">eceiving</span> <span class="title">object</span></div><div class="line"><span class="title">Receiving</span> <span class="title">objects</span>:  94% (839/892), 156.01 <span class="title">KiB</span> | 124.00 <span class="title">KiB</span>/<span class="title">s</span></div><div class="line"><span class="title">Receiving</span> <span class="title">objects</span>: 100% (892/892), 346.40 <span class="title">KiB</span> | 124.00 <span class="title">KiB</span>/<span class="title">s</span>, <span class="title">done</span>.</div><div class="line"><span class="title">Resolving</span> <span class="title">deltas</span>: 100% (391/391), <span class="title">done</span>.</div><div class="line"><span class="title">Checking</span> <span class="title">connectivity</span>... <span class="title">done</span>.</div></pre></td></tr></table></figure></p>
 <p>这样主题文件就下载好了，然后修改全局配置文件_config.xml,将theme的值改成对应的them文件夹名称，这里我们下载的是light。<br>直接就可以打开浏览器输入：<a href="http://localhost:4000" target="_blank" rel="external">http://localhost:4000</a> 查看应用新主题之后的效果了。</p>
 
       
@@ -603,9 +510,25 @@ Checking connectivity... done.
           
   <div class="comments" id="comments">
     
-      <div class="ds-thread" data-thread-key="2016/01/27/hexo-on-github-build-blog/"
-           data-title="使用Hexo在Github上构建免费Blog应用" data-url="http://www.linmuxi.com/2016/01/27/hexo-on-github-build-blog/">
+      <!-- 来必力City版安装代码 -->
+      <div id="lv-container" data-id="city" data-uid="MTAyMC8zMDE0NS82NzAw">
+        <script type="text/javascript">
+         (function(d, s) {
+             var j, e = d.getElementsByTagName(s)[0];
+
+             if (typeof LivereTower === 'function') { return; }
+
+             j = d.createElement(s);
+             j.src = 'https://cdn-city.livere.com/js/embed.dist.js';
+             j.async = true;
+
+             e.parentNode.insertBefore(j, e);
+         })(document, 'script');
+        </script>
+      <noscript> 为正常使用来必力评论功能请激活JavaScript</noscript>
       </div>
+      <!-- City版安装代码已完成 -->
+
     
   </div>
 
@@ -804,33 +727,14 @@ Checking connectivity... done.
 
   
 
-  
-    
-  
 
-  <script type="text/javascript">
-    var duoshuoQuery = {short_name:"hunterlin"};
-    (function() {
-      var ds = document.createElement('script');
-      ds.type = 'text/javascript';ds.async = true;
-      ds.id = 'duoshuo-script';
-      ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
-      ds.charset = 'UTF-8';
-      (document.getElementsByTagName('head')[0]
-      || document.getElementsByTagName('body')[0]).appendChild(ds);
-    })();
-  </script>
 
-  
-    
-    
-    <script src="/lib/ua-parser-js/dist/ua-parser.min.js?v=0.7.9"></script>
-    <script src="/js/src/hook-duoshuo.js"></script>
   
 
 
 
 
+	
 
 
 

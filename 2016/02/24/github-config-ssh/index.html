@@ -154,6 +154,18 @@
 
 
 
+  <div style="display: none;">
+    <script src="//s95.cnzz.com/z_stat.php?id=1259167020&web_id=1259167020" language="JavaScript"></script>
+
+	<!--
+<script type="text/javascript">var cnzz_protocol = (("https:" == document.location.protocol) ? " https://" : " http://");document.write(unescape("%3Cspan id='cnzz_stat_icon_1259167020'%3E%3C/span%3E%3Cscript src='" + cnzz_protocol + "s4.cnzz.com/z_stat.php%3Fid%3D1259167020%26show%3Dpic' type='text/javascript'%3E%3C/script%3E"));</script>
+    -->
+
+
+  </div>
+
+
+
 
 
   
@@ -343,13 +355,6 @@
 
           
             
-              <span class="post-comments-count">
-                <span class="post-meta-divider">|</span>
-                <a href="/2016/02/24/github-config-ssh/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/02/24/github-config-ssh/" itemprop="commentCount"></span>
-                </a>
-              </span>
-            
           
 
           
@@ -386,73 +391,20 @@
 
       
         <p>虽然github推荐使用https方式进行连接，但是ssh方式咱们也得会，官网上也都有详细的<a href="https://help.github.com/articles/testing-your-ssh-connection/" target="_blank" rel="external">文档介绍</a>，步骤比较简单，记录这篇的目的是给初入门的小伙伴多一个学习的门径，同时也方便日后自己查看。<br><a id="more"></a></p>
-<h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a><strong>前言</strong></h2><p>在没有配置ssh的情况下使用ssh连接操作github库的时候会出现如下异常：</p>
-<pre><code class="bash">$ git clone git@github.com:linmuxi/test-git.git
-Cloning into &#39;test-git&#39;...
-Warning: Permanently added the RSA host key for IP address &#39;192.30.252.129&#39; to the list of known hosts.
-Permission denied (publickey).
-fatal: Could not read from remote repository.
-
-Please make sure you have the correct access rights
-and the repository exists.
-~
-</code></pre>
+<h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a><strong>前言</strong></h2><p>在没有配置ssh的情况下使用ssh连接操作github库的时候会出现如下异常：<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">$ git <span class="built_in">clone</span> git@github.com:linmuxi/<span class="built_in">test</span>-git.git</div><div class="line">Cloning into <span class="string">'test-git'</span>...</div><div class="line">Warning: Permanently added the RSA host key <span class="keyword">for</span> IP address <span class="string">'192.30.252.129'</span> to the list of known hosts.</div><div class="line">Permission denied (publickey).</div><div class="line">fatal: Could not <span class="built_in">read</span> from remote repository.</div><div class="line"></div><div class="line">Please make sure you have the correct access rights</div><div class="line">and the repository exists.</div><div class="line">~</div></pre></td></tr></table></figure></p>
 <h2 id="步骤"><a href="#步骤" class="headerlink" title="步骤"></a><strong>步骤</strong></h2><blockquote>
 <p>前提是我们已经新建好了一个库test-git,ssh路径是：git@github.com:linmuxi/test-git.git</p>
 </blockquote>
-<h3 id="1、检查ssh-keys是否存在"><a href="#1、检查ssh-keys是否存在" class="headerlink" title="1、检查ssh keys是否存在"></a><strong>1、检查ssh keys是否存在</strong></h3><pre><code class="bash">$ ls -al ~/.ssh
-</code></pre>
+<h3 id="1、检查ssh-keys是否存在"><a href="#1、检查ssh-keys是否存在" class="headerlink" title="1、检查ssh keys是否存在"></a><strong>1、检查ssh keys是否存在</strong></h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ ls -al ~/.ssh</div></pre></td></tr></table></figure>
 <p>如果目录下面没有id_rsa、id_rsa.pub则表示key不存在</p>
-<h3 id="2、生成ssh-key"><a href="#2、生成ssh-key" class="headerlink" title="2、生成ssh key"></a><strong>2、生成ssh key</strong></h3><pre><code class="bash">$ ssh-keygen -t rsa -b 4096 -C &quot;your_email@example.com&quot;
-Generating public/private rsa key pair.
-Enter file in which to save the key (/c/Users/Hunter/.ssh/id_rsa):
-Enter passphrase (empty for no passphrase):
-Enter same passphrase again:
-Your identification has been saved in /c/Users/Hunter/.ssh/id_rsa.
-Your public key has been saved in /c/Users/Hunter/.ssh/id_rsa.pub.
-The key fingerprint is:
-SHA256:7KwlOZ4yljBZE2ZJ7dr8QGIyQeiPk49L+01fnC0hAZY your_email@example.com
-The key&#39;s randomart image is:
-+---[RSA 4096]----+
-| o...=.          |
-|. . *Eo          |
-|.  + o .         |
-| .o = o..        |
-|  +* B .S.       |
-| ++.. ++o +      |
-| .+o o+o+= .     |
-|....B..*o .      |
-| ooo ++.         |
-+----[SHA256]-----+
-</code></pre>
-<h3 id="3、将ssh-key添加到ssh-agent"><a href="#3、将ssh-key添加到ssh-agent" class="headerlink" title="3、将ssh key添加到ssh-agent"></a><strong>3、将ssh key添加到ssh-agent</strong></h3><p>先确认ssh-agent是可用的</p>
-<pre><code class="bash">$ eval $(ssh-agent -s)
-Agent pid 20632
-</code></pre>
-<p>将ssh key添加到ssh-agent</p>
-<pre><code class="bash">$ ssh-add ~/.ssh/id_rsa
-Identity added: /c/Users/Hunter/.ssh/id_rsa (/c/Users/Hunter/.ssh/id_rsa)
-</code></pre>
-<h3 id="4、将ssh-key配置到github"><a href="#4、将ssh-key配置到github" class="headerlink" title="4、将ssh key配置到github"></a><strong>4、将ssh key配置到github</strong></h3><p>复制key内容</p>
-<pre><code class="bash">$ clip &lt; ~/.ssh/id_rsa.pub
-</code></pre>
+<h3 id="2、生成ssh-key"><a href="#2、生成ssh-key" class="headerlink" title="2、生成ssh key"></a><strong>2、生成ssh key</strong></h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div></pre></td><td class="code"><pre><div class="line">$ ssh-keygen -t rsa -b 4096 -C <span class="string">"your_email@example.com"</span></div><div class="line">Generating public/private rsa key pair.</div><div class="line">Enter file <span class="keyword">in</span> <span class="built_in">which</span> to save the key (/c/Users/Hunter/.ssh/id_rsa):</div><div class="line">Enter passphrase (empty <span class="keyword">for</span> no passphrase):</div><div class="line">Enter same passphrase again:</div><div class="line">Your identification has been saved <span class="keyword">in</span> /c/Users/Hunter/.ssh/id_rsa.</div><div class="line">Your public key has been saved <span class="keyword">in</span> /c/Users/Hunter/.ssh/id_rsa.pub.</div><div class="line">The key fingerprint is:</div><div class="line">SHA256:7KwlOZ4yljBZE2ZJ7dr8QGIyQeiPk49L+01fnC0hAZY your_email@example.com</div><div class="line">The key<span class="string">'s randomart image is:</span></div><div class="line">+---[RSA 4096]----+</div><div class="line">| o...=.          |</div><div class="line">|. . *Eo          |</div><div class="line">|.  + o .         |</div><div class="line">| .o = o..        |</div><div class="line">|  +* B .S.       |</div><div class="line">| ++.. ++o +      |</div><div class="line">| .+o o+o+= .     |</div><div class="line">|....B..*o .      |</div><div class="line">| ooo ++.         |</div><div class="line">+----[SHA256]-----+</div></pre></td></tr></table></figure>
+<h3 id="3、将ssh-key添加到ssh-agent"><a href="#3、将ssh-key添加到ssh-agent" class="headerlink" title="3、将ssh key添加到ssh-agent"></a><strong>3、将ssh key添加到ssh-agent</strong></h3><p>先确认ssh-agent是可用的<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">$ <span class="built_in">eval</span> $(ssh-agent <span class="_">-s</span>)</div><div class="line">Agent pid 20632</div></pre></td></tr></table></figure></p>
+<p>将ssh key添加到ssh-agent<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">$ ssh-add ~/.ssh/id_rsa</div><div class="line">Identity added: /c/Users/Hunter/.ssh/id_rsa (/c/Users/Hunter/.ssh/id_rsa)</div></pre></td></tr></table></figure></p>
+<h3 id="4、将ssh-key配置到github"><a href="#4、将ssh-key配置到github" class="headerlink" title="4、将ssh key配置到github"></a><strong>4、将ssh key配置到github</strong></h3><p>复制key内容<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ clip &lt; ~/.ssh/id_rsa.pub</div></pre></td></tr></table></figure></p>
 <p>配置key到github<br>登录github-&gt;选择Settings-&gt;SSH keys-&gt;New SSH key</p>
-<p>测试ssh key的配置情况</p>
-<pre><code class="bash">$ ssh -t git@github.com
-Warning: Permanently added the RSA host key for IP address &#39;192.30.252.128&#39; to the list of known hosts.
-PTY allocation request failed on channel 0
-</code></pre>
+<p>测试ssh key的配置情况<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">$ ssh -t git@github.com</div><div class="line">Warning: Permanently added the RSA host key <span class="keyword">for</span> IP address <span class="string">'192.30.252.128'</span> to the list of known hosts.</div><div class="line">PTY allocation request failed on channel 0</div></pre></td></tr></table></figure></p>
 <p>到这里就配置好了</p>
-<p>再次执行clone操作：</p>
-<pre><code class="bash">$ git clone git@github.com:linmuxi/test-git.git
-Cloning into &#39;test-git&#39;...
-remote: Counting objects: 56, done.
-remote: Compressing objects: 100% (34/34), done.
-remote: Total 56 (delta 4), reused 0 (delta 0), pack-reused 8
-Receiving objects: 100% (56/56), 5.42 KiB | 0 bytes/s, done.
-Resolving deltas: 100% (4/4), done.
-Checking connectivity... done.
-</code></pre>
+<p>再次执行clone操作：<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">$ git <span class="built_in">clone</span> git@github.com:linmuxi/<span class="built_in">test</span>-git.git</div><div class="line">Cloning into <span class="string">'test-git'</span>...</div><div class="line">remote: Counting objects: 56, done.</div><div class="line">remote: Compressing objects: 100% (34/34), done.</div><div class="line">remote: Total 56 (delta 4), reused 0 (delta 0), pack-reused 8</div><div class="line">Receiving objects: 100% (56/56), 5.42 KiB | 0 bytes/s, done.</div><div class="line">Resolving deltas: 100% (4/4), done.</div><div class="line">Checking connectivity... done.</div></pre></td></tr></table></figure></p>
 
       
     </div>
@@ -546,9 +498,25 @@ Checking connectivity... done.
           
   <div class="comments" id="comments">
     
-      <div class="ds-thread" data-thread-key="2016/02/24/github-config-ssh/"
-           data-title="Github之SSH连接配置" data-url="http://www.linmuxi.com/2016/02/24/github-config-ssh/">
+      <!-- 来必力City版安装代码 -->
+      <div id="lv-container" data-id="city" data-uid="MTAyMC8zMDE0NS82NzAw">
+        <script type="text/javascript">
+         (function(d, s) {
+             var j, e = d.getElementsByTagName(s)[0];
+
+             if (typeof LivereTower === 'function') { return; }
+
+             j = d.createElement(s);
+             j.src = 'https://cdn-city.livere.com/js/embed.dist.js';
+             j.async = true;
+
+             e.parentNode.insertBefore(j, e);
+         })(document, 'script');
+        </script>
+      <noscript> 为正常使用来必力评论功能请激活JavaScript</noscript>
       </div>
+      <!-- City版安装代码已完成 -->
+
     
   </div>
 
@@ -772,33 +740,14 @@ Checking connectivity... done.
 
   
 
-  
-    
-  
 
-  <script type="text/javascript">
-    var duoshuoQuery = {short_name:"hunterlin"};
-    (function() {
-      var ds = document.createElement('script');
-      ds.type = 'text/javascript';ds.async = true;
-      ds.id = 'duoshuo-script';
-      ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
-      ds.charset = 'UTF-8';
-      (document.getElementsByTagName('head')[0]
-      || document.getElementsByTagName('body')[0]).appendChild(ds);
-    })();
-  </script>
 
-  
-    
-    
-    <script src="/lib/ua-parser-js/dist/ua-parser.min.js?v=0.7.9"></script>
-    <script src="/js/src/hook-duoshuo.js"></script>
   
 
 
 
 
+	
 
 
 

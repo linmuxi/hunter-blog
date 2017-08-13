@@ -154,6 +154,18 @@
 
 
 
+  <div style="display: none;">
+    <script src="//s95.cnzz.com/z_stat.php?id=1259167020&web_id=1259167020" language="JavaScript"></script>
+
+	<!--
+<script type="text/javascript">var cnzz_protocol = (("https:" == document.location.protocol) ? " https://" : " http://");document.write(unescape("%3Cspan id='cnzz_stat_icon_1259167020'%3E%3C/span%3E%3Cscript src='" + cnzz_protocol + "s4.cnzz.com/z_stat.php%3Fid%3D1259167020%26show%3Dpic' type='text/javascript'%3E%3C/script%3E"));</script>
+    -->
+
+
+  </div>
+
+
+
 
 
   
@@ -343,13 +355,6 @@
 
           
             
-              <span class="post-comments-count">
-                <span class="post-meta-divider">|</span>
-                <a href="/2016/02/17/node-js-eventobj-EventEmitter/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/02/17/node-js-eventobj-EventEmitter/" itemprop="commentCount"></span>
-                </a>
-              </span>
-            
           
 
           
@@ -387,21 +392,7 @@
       
         <p>这篇主要分享下Node.js事件对象EventEmiiter的介绍和使用<br><a id="more"></a></p>
 <p><strong>前言</strong><br>Node.js 所有的异步 I/O 操作在完成时都会发送一个事件到事件队列。<br>Node.js里面的许多对象都会分发事件：一个net.Server对象会在每次有新连接时分发一个事件， 一个fs.readStream对象会在文件被打开的时候发出一个事件。 所有这些产生事件的对象都是 events.EventEmitter 的实例。<br>大多数时候我们不会直接使用 EventEmitter，而是在对象中继承它。包括 fs、net、 http 在内的，只要是支持事件响应的核心模块都是 EventEmitter 的子类。</p>
-<p><strong>EventEmitter类</strong><br>events模块只提供了一个对象：EventEmitter。EventEmitter的核心就是事件触发与事件监听器功能的封装。<br>可以通过require(“events”)来访问该模块。</p>
-<pre><code class="js">use &#39;strict&#39;
-// 引入 events 模块
-var events = require(&#39;events&#39;);
-// 创建 eventEmitter 对象
-var eventEmitter = new events.EventEmitter();
-//注册test_event事件的监听器
-eventEmitter.on(&#39;test_event&#39;, function() { 
-    console.log(&#39;test_event 事件触发&#39;); 
-}); 
-//1秒后向eventEmitter对象发送事件test_event,此时会调用test_event的监听器
-setTimeout(function() { 
-    eventEmitter.emit(&#39;test_event&#39;); 
-}, 1000);
-</code></pre>
+<p><strong>EventEmitter类</strong><br>events模块只提供了一个对象：EventEmitter。EventEmitter的核心就是事件触发与事件监听器功能的封装。<br>可以通过require(“events”)来访问该模块。<br><figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line">use <span class="string">'strict'</span></div><div class="line"><span class="comment">// 引入 events 模块</span></div><div class="line"><span class="keyword">var</span> events = <span class="built_in">require</span>(<span class="string">'events'</span>);</div><div class="line"><span class="comment">// 创建 eventEmitter 对象</span></div><div class="line"><span class="keyword">var</span> eventEmitter = <span class="keyword">new</span> events.EventEmitter();</div><div class="line"><span class="comment">//注册test_event事件的监听器</span></div><div class="line">eventEmitter.on(<span class="string">'test_event'</span>, <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123; </div><div class="line">	<span class="built_in">console</span>.log(<span class="string">'test_event 事件触发'</span>); </div><div class="line">&#125;); </div><div class="line"><span class="comment">//1秒后向eventEmitter对象发送事件test_event,此时会调用test_event的监听器</span></div><div class="line">setTimeout(<span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123; </div><div class="line">	eventEmitter.emit(<span class="string">'test_event'</span>); </div><div class="line">&#125;, <span class="number">1000</span>);</div></pre></td></tr></table></figure></p>
 <p><strong>EventEmitter类信息</strong></p>
 <ul>
 <li>Events<ul>
@@ -427,26 +418,7 @@ setTimeout(function() {
 </li>
 </ul>
 <p>用法参考：<a href="http://nodejs.cn/doc/node/events.html" target="_blank" rel="external">http://nodejs.cn/doc/node/events.html</a></p>
-<p><strong>继承EventEmitter</strong></p>
-<pre><code class="js">&#39;use strict&#39;
-var util = require(&#39;util&#39;);
-var EventEmitter = require(&#39;events&#39;).EventEmitter;
-
-function MyObject() {
-    EventEmitter.call(this);
-}
-// 通过util提供的方法使MyObject继承EventEmitter的方法
-util.inherits(MyObject,EventEmitter);
-
-var obj = new MyObject();
-obj.on(&quot;data&quot;,function(arg1,arg2) {
-    console.log(&quot;接受事件：&quot;+arg1+&quot;  &quot;+arg2);
-});
-
-setTimeout(function() {
-    obj.emit(&quot;data&quot;,&quot;hello&quot;,&quot;world&quot;);
-},1000);
-</code></pre>
+<p><strong>继承EventEmitter</strong><br><figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div></pre></td><td class="code"><pre><div class="line"><span class="meta">'use strict'</span></div><div class="line"><span class="keyword">var</span> util = <span class="built_in">require</span>(<span class="string">'util'</span>);</div><div class="line"><span class="keyword">var</span> EventEmitter = <span class="built_in">require</span>(<span class="string">'events'</span>).EventEmitter;</div><div class="line"></div><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">MyObject</span>(<span class="params"></span>) </span>&#123;</div><div class="line">	EventEmitter.call(<span class="keyword">this</span>);</div><div class="line">&#125;</div><div class="line"><span class="comment">// 通过util提供的方法使MyObject继承EventEmitter的方法</span></div><div class="line">util.inherits(MyObject,EventEmitter);</div><div class="line"></div><div class="line"><span class="keyword">var</span> obj = <span class="keyword">new</span> MyObject();</div><div class="line">obj.on(<span class="string">"data"</span>,<span class="function"><span class="keyword">function</span>(<span class="params">arg1,arg2</span>) </span>&#123;</div><div class="line">	<span class="built_in">console</span>.log(<span class="string">"接受事件："</span>+arg1+<span class="string">"  "</span>+arg2);</div><div class="line">&#125;);</div><div class="line"></div><div class="line">setTimeout(<span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</div><div class="line">	obj.emit(<span class="string">"data"</span>,<span class="string">"hello"</span>,<span class="string">"world"</span>);</div><div class="line">&#125;,<span class="number">1000</span>);</div></pre></td></tr></table></figure></p>
 <p>通过继承EventEmitter，obj拥有了事件注册和触发等功能，很多node.js核心模块中的事件响应都是基于这种方法来实现的。</p>
 
       
@@ -541,9 +513,25 @@ setTimeout(function() {
           
   <div class="comments" id="comments">
     
-      <div class="ds-thread" data-thread-key="2016/02/17/node-js-eventobj-EventEmitter/"
-           data-title="Node.js事件对象EventEmitter" data-url="http://www.linmuxi.com/2016/02/17/node-js-eventobj-EventEmitter/">
+      <!-- 来必力City版安装代码 -->
+      <div id="lv-container" data-id="city" data-uid="MTAyMC8zMDE0NS82NzAw">
+        <script type="text/javascript">
+         (function(d, s) {
+             var j, e = d.getElementsByTagName(s)[0];
+
+             if (typeof LivereTower === 'function') { return; }
+
+             j = d.createElement(s);
+             j.src = 'https://cdn-city.livere.com/js/embed.dist.js';
+             j.async = true;
+
+             e.parentNode.insertBefore(j, e);
+         })(document, 'script');
+        </script>
+      <noscript> 为正常使用来必力评论功能请激活JavaScript</noscript>
       </div>
+      <!-- City版安装代码已完成 -->
+
     
   </div>
 
@@ -742,33 +730,14 @@ setTimeout(function() {
 
   
 
-  
-    
-  
 
-  <script type="text/javascript">
-    var duoshuoQuery = {short_name:"hunterlin"};
-    (function() {
-      var ds = document.createElement('script');
-      ds.type = 'text/javascript';ds.async = true;
-      ds.id = 'duoshuo-script';
-      ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
-      ds.charset = 'UTF-8';
-      (document.getElementsByTagName('head')[0]
-      || document.getElementsByTagName('body')[0]).appendChild(ds);
-    })();
-  </script>
 
-  
-    
-    
-    <script src="/lib/ua-parser-js/dist/ua-parser.min.js?v=0.7.9"></script>
-    <script src="/js/src/hook-duoshuo.js"></script>
   
 
 
 
 
+	
 
 
 

@@ -156,6 +156,18 @@
 
 
 
+  <div style="display: none;">
+    <script src="//s95.cnzz.com/z_stat.php?id=1259167020&web_id=1259167020" language="JavaScript"></script>
+
+	<!--
+<script type="text/javascript">var cnzz_protocol = (("https:" == document.location.protocol) ? " https://" : " http://");document.write(unescape("%3Cspan id='cnzz_stat_icon_1259167020'%3E%3C/span%3E%3Cscript src='" + cnzz_protocol + "s4.cnzz.com/z_stat.php%3Fid%3D1259167020%26show%3Dpic' type='text/javascript'%3E%3C/script%3E"));</script>
+    -->
+
+
+  </div>
+
+
+
 
 
   
@@ -345,13 +357,6 @@
 
           
             
-              <span class="post-comments-count">
-                <span class="post-meta-divider">|</span>
-                <a href="/2016/01/25/node-js-log4js/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/01/25/node-js-log4js/" itemprop="commentCount"></span>
-                </a>
-              </span>
-            
           
 
           
@@ -387,74 +392,9 @@
       
 
       
-        <p>Nodejs采用log4js进行日志管理，log4js的输出级别有6个: trace, debug, info, warn, error, fatal<br><a id="more"></a><br><strong> 安装log4js </strong></p>
-<pre><code class="dos">npm install log4js
-</code></pre>
-<p><strong> 代码app.js </strong></p>
-<pre><code class="js">var express = require(&quot;express&quot;);
-var app = express();
-
-var log4js = require(&quot;./logger&quot;);
-var logger = log4js.logger(&quot;normal&quot;,&quot;info&quot;);
-
-/**
-日志级别对应规则：
-http responses 3xx, level = WARN
-http responses 4xx &amp; 5xx, level = ERROR
-else, level = INFO
-**/
-app.use(log4js.connectLogger(logger,{level:&quot;auto&quot;}));
-
-app.all(&quot;*&quot;,function(req,res,next){
-    logger.info(req.ip+&quot;  &quot;+req.originalUrl+&quot; access&quot;);
-    next();
-});
-
-app.all(&quot;/hello&quot;,function(req,res,next){
-    res.sendfile(&quot;hello.html&quot;);
-});
-app.all(&quot;/hello2&quot;,function(req,res,next){
-    res.send(&quot;hello&quot;);
-});
-
-app.listen(3000,function(){
-    logger.trace(&quot;服务启动trace&quot;);
-    logger.debug(&quot;服务启动debug&quot;);
-    logger.info(&quot;服务启动info&quot;);
-    logger.warn(&quot;服务启动warn&quot;);
-    logger.error(&quot;服务启动error&quot;);
-    logger.fatal(&quot;服务启动fatal&quot;);
-    console.log(&quot;服务启动console.log&quot;);
-});
-</code></pre>
-<p><strong> 代码logger.js </strong></p>
-<pre><code class="js">var log4js = require(&quot;log4js&quot;);
-log4js.configure({
-    appenders:[
-        {
-            type:&quot;console&quot;//控制台输出日志
-        },
-        {
-            type:&quot;file&quot;,// 文件记录日志
-            filename:&#39;logs/access.log&#39;,// logs目录必须手动新建
-            maxLogSize:1024,//文件最大size 单位：K
-            backups:3,// 备份文件总数,默认1
-            category:&#39;normal&#39;//日志类型，下面getLogger对象就是根据这个
-        }
-    ],
-    replaceConsole:true    //以[INFO] console代替console默认样式
-});
-
-exports.logger = function(category,level){
-    var logger = log4js.getLogger(category);
-    logger.setLevel(level);
-    return logger;
-}
-
-exports.connectLogger = function(logger,options){
-    return log4js.connectLogger(logger,options);
-}
-</code></pre>
+        <p>Nodejs采用log4js进行日志管理，log4js的输出级别有6个: trace, debug, info, warn, error, fatal<br><a id="more"></a><br><strong> 安装log4js </strong><br><figure class="highlight dos"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">npm install log4js</div></pre></td></tr></table></figure></p>
+<p><strong> 代码app.js </strong><br><figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> express = <span class="built_in">require</span>(<span class="string">"express"</span>);</div><div class="line"><span class="keyword">var</span> app = express();</div><div class="line"></div><div class="line"><span class="keyword">var</span> log4js = <span class="built_in">require</span>(<span class="string">"./logger"</span>);</div><div class="line"><span class="keyword">var</span> logger = log4js.logger(<span class="string">"normal"</span>,<span class="string">"info"</span>);</div><div class="line"></div><div class="line"><span class="comment">/**</span></div><div class="line">日志级别对应规则：</div><div class="line">http responses 3xx, level = WARN</div><div class="line">http responses 4xx &amp; 5xx, level = ERROR</div><div class="line">else, level = INFO</div><div class="line">**/</div><div class="line">app.use(log4js.connectLogger(logger,&#123;<span class="attr">level</span>:<span class="string">"auto"</span>&#125;));</div><div class="line"></div><div class="line">app.all(<span class="string">"*"</span>,<span class="function"><span class="keyword">function</span>(<span class="params">req,res,next</span>)</span>&#123;</div><div class="line">	logger.info(req.ip+<span class="string">"  "</span>+req.originalUrl+<span class="string">" access"</span>);</div><div class="line">	next();</div><div class="line">&#125;);</div><div class="line"></div><div class="line">app.all(<span class="string">"/hello"</span>,<span class="function"><span class="keyword">function</span>(<span class="params">req,res,next</span>)</span>&#123;</div><div class="line">	res.sendfile(<span class="string">"hello.html"</span>);</div><div class="line">&#125;);</div><div class="line">app.all(<span class="string">"/hello2"</span>,<span class="function"><span class="keyword">function</span>(<span class="params">req,res,next</span>)</span>&#123;</div><div class="line">	res.send(<span class="string">"hello"</span>);</div><div class="line">&#125;);</div><div class="line"></div><div class="line">app.listen(<span class="number">3000</span>,<span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</div><div class="line">	logger.trace(<span class="string">"服务启动trace"</span>);</div><div class="line">	logger.debug(<span class="string">"服务启动debug"</span>);</div><div class="line">	logger.info(<span class="string">"服务启动info"</span>);</div><div class="line">	logger.warn(<span class="string">"服务启动warn"</span>);</div><div class="line">	logger.error(<span class="string">"服务启动error"</span>);</div><div class="line">	logger.fatal(<span class="string">"服务启动fatal"</span>);</div><div class="line">	<span class="built_in">console</span>.log(<span class="string">"服务启动console.log"</span>);</div><div class="line">&#125;);</div></pre></td></tr></table></figure></p>
+<p><strong> 代码logger.js </strong><br><figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> log4js = <span class="built_in">require</span>(<span class="string">"log4js"</span>);</div><div class="line">log4js.configure(&#123;</div><div class="line">	<span class="attr">appenders</span>:[</div><div class="line">		&#123;</div><div class="line">			<span class="attr">type</span>:<span class="string">"console"</span><span class="comment">//控制台输出日志</span></div><div class="line">		&#125;,</div><div class="line">		&#123;</div><div class="line">			<span class="attr">type</span>:<span class="string">"file"</span>,<span class="comment">// 文件记录日志</span></div><div class="line">			filename:<span class="string">'logs/access.log'</span>,<span class="comment">// logs目录必须手动新建</span></div><div class="line">			maxLogSize:<span class="number">1024</span>,<span class="comment">//文件最大size 单位：K</span></div><div class="line">			backups:<span class="number">3</span>,<span class="comment">// 备份文件总数,默认1</span></div><div class="line">			category:<span class="string">'normal'</span><span class="comment">//日志类型，下面getLogger对象就是根据这个</span></div><div class="line">		&#125;</div><div class="line">	],</div><div class="line">	<span class="attr">replaceConsole</span>:<span class="literal">true</span>	<span class="comment">//以[INFO] console代替console默认样式</span></div><div class="line">&#125;);</div><div class="line"></div><div class="line">exports.logger = <span class="function"><span class="keyword">function</span>(<span class="params">category,level</span>)</span>&#123;</div><div class="line">	<span class="keyword">var</span> logger = log4js.getLogger(category);</div><div class="line">	logger.setLevel(level);</div><div class="line">	<span class="keyword">return</span> logger;</div><div class="line">&#125;</div><div class="line"></div><div class="line">exports.connectLogger = <span class="function"><span class="keyword">function</span>(<span class="params">logger,options</span>)</span>&#123;</div><div class="line">	<span class="keyword">return</span> log4js.connectLogger(logger,options);</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
 <p><strong> 运行输出 </strong><br><img src="http://7xqlat.com1.z0.glb.clouddn.com/log4js.png" alt="Log4js打印效果"></p>
 
       
@@ -549,9 +489,25 @@ exports.connectLogger = function(logger,options){
           
   <div class="comments" id="comments">
     
-      <div class="ds-thread" data-thread-key="2016/01/25/node-js-log4js/"
-           data-title="Node.js日志管理log4js" data-url="http://www.linmuxi.com/2016/01/25/node-js-log4js/">
+      <!-- 来必力City版安装代码 -->
+      <div id="lv-container" data-id="city" data-uid="MTAyMC8zMDE0NS82NzAw">
+        <script type="text/javascript">
+         (function(d, s) {
+             var j, e = d.getElementsByTagName(s)[0];
+
+             if (typeof LivereTower === 'function') { return; }
+
+             j = d.createElement(s);
+             j.src = 'https://cdn-city.livere.com/js/embed.dist.js';
+             j.async = true;
+
+             e.parentNode.insertBefore(j, e);
+         })(document, 'script');
+        </script>
+      <noscript> 为正常使用来必力评论功能请激活JavaScript</noscript>
       </div>
+      <!-- City版安装代码已完成 -->
+
     
   </div>
 
@@ -750,33 +706,14 @@ exports.connectLogger = function(logger,options){
 
   
 
-  
-    
-  
 
-  <script type="text/javascript">
-    var duoshuoQuery = {short_name:"hunterlin"};
-    (function() {
-      var ds = document.createElement('script');
-      ds.type = 'text/javascript';ds.async = true;
-      ds.id = 'duoshuo-script';
-      ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
-      ds.charset = 'UTF-8';
-      (document.getElementsByTagName('head')[0]
-      || document.getElementsByTagName('body')[0]).appendChild(ds);
-    })();
-  </script>
 
-  
-    
-    
-    <script src="/lib/ua-parser-js/dist/ua-parser.min.js?v=0.7.9"></script>
-    <script src="/js/src/hook-duoshuo.js"></script>
   
 
 
 
 
+	
 
 
 

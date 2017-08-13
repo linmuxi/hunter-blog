@@ -154,6 +154,18 @@
 
 
 
+  <div style="display: none;">
+    <script src="//s95.cnzz.com/z_stat.php?id=1259167020&web_id=1259167020" language="JavaScript"></script>
+
+	<!--
+<script type="text/javascript">var cnzz_protocol = (("https:" == document.location.protocol) ? " https://" : " http://");document.write(unescape("%3Cspan id='cnzz_stat_icon_1259167020'%3E%3C/span%3E%3Cscript src='" + cnzz_protocol + "s4.cnzz.com/z_stat.php%3Fid%3D1259167020%26show%3Dpic' type='text/javascript'%3E%3C/script%3E"));</script>
+    -->
+
+
+  </div>
+
+
+
 
 
   
@@ -343,13 +355,6 @@
 
           
             
-              <span class="post-comments-count">
-                <span class="post-meta-divider">|</span>
-                <a href="/2016/03/25/gulp-compress-hexo-01/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/03/25/gulp-compress-hexo-01/" itemprop="commentCount"></span>
-                </a>
-              </span>
-            
           
 
           
@@ -387,69 +392,9 @@
       
         <p>标题取的有点模糊不清，主要是想说下如何通过gulp来压缩hexo生成的html、js、css、png内容<br><a id="more"></a></p>
 <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>gulp：基于nodejs流的自动化构建工具<br>关于gulp的介绍与安装请自行参考官网描述，本章不做阐述</p>
-<h2 id="步骤"><a href="#步骤" class="headerlink" title="步骤"></a>步骤</h2><h3 id="Step1：hexo根目录新增gulpfile-js文件"><a href="#Step1：hexo根目录新增gulpfile-js文件" class="headerlink" title="Step1：hexo根目录新增gulpfile.js文件"></a>Step1：hexo根目录新增gulpfile.js文件</h3><pre><code class="js">var gulp = require(&#39;gulp&#39;);
-//html压缩
-var htmlmin = require(&#39;gulp-htmlmin&#39;);
-//js压缩
-var jsmin = require(&#39;gulp-jsmin&#39;);
-//文件重命名
-var rename = require(&#39;gulp-rename&#39;);
-//图片压缩png/jpg/gif
-var imagemin = require(&#39;gulp-imagemin&#39;);
-//png压缩
-var pngquant = require(&#39;imagemin-pngquant&#39;);
-//css压缩
-var csso = require(&#39;gulp-csso&#39;);
-
-var root = &quot;./public&quot;;
-var buildDir = root;
-var datas={
-    html:[root+&quot;/**/*.html&quot;],
-    image:[root+&quot;/**/*.png&quot;],
-    css:[root+&quot;/**/*.css&quot;],
-    js:[root+&quot;/**/*.js&quot;,&#39;!*min.js&#39;]
-}
-
-// 压缩html
-gulp.task(&quot;htmlmin&quot;,function(){
-    gulp.src(datas.html)
-    .pipe(htmlmin({collapseWhitespace:true,minifyJS:true,minifyCSS:true,removeComments:true}))
-    .pipe(gulp.dest(buildDir));
-});
-
-// png图片压缩
-gulp.task(&quot;imagemin&quot;,function(){
-    gulp.src(datas.image)
-    .pipe(imagemin({
-        progressive:true,
-        svgoPlugins:[{removeViewBox:false}],
-        use:[pngquant()] //压缩率64%
-    }))
-    .pipe(gulp.dest(buildDir));
-});
-
-// js压缩
-gulp.task(&quot;jsmin&quot;,function(){
-    gulp.src(datas.js)
-    .pipe(jsmin())
-    //.pipe(rename({suffix:&#39;.min&#39;}))
-    .pipe(gulp.dest(buildDir));
-});
-
-// css压缩
-gulp.task(&quot;cssmin&quot;,function(){
-    gulp.src(datas.css)
-    .pipe(csso())
-    .pipe(gulp.dest(buildDir));
-});
-
-gulp.task(&quot;default&quot;,[&quot;htmlmin&quot;,&quot;imagemin&quot;,&quot;jsmin&quot;,&quot;cssmin&quot;]);
-</code></pre>
-<h3 id="Step2：执行命令"><a href="#Step2：执行命令" class="headerlink" title="Step2：执行命令"></a>Step2：执行命令</h3><pre><code>hexo clean
-hexo ge
-gulp
-hexo d
-</code></pre><h2 id="最后"><a href="#最后" class="headerlink" title="最后"></a>最后</h2><p>gulp提供了相当多的插件，大家可以自行去了解使用，还是挺好使的</p>
+<h2 id="步骤"><a href="#步骤" class="headerlink" title="步骤"></a>步骤</h2><h3 id="Step1：hexo根目录新增gulpfile-js文件"><a href="#Step1：hexo根目录新增gulpfile-js文件" class="headerlink" title="Step1：hexo根目录新增gulpfile.js文件"></a>Step1：hexo根目录新增gulpfile.js文件</h3><figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> gulp = <span class="built_in">require</span>(<span class="string">'gulp'</span>);</div><div class="line"><span class="comment">//html压缩</span></div><div class="line"><span class="keyword">var</span> htmlmin = <span class="built_in">require</span>(<span class="string">'gulp-htmlmin'</span>);</div><div class="line"><span class="comment">//js压缩</span></div><div class="line"><span class="keyword">var</span> jsmin = <span class="built_in">require</span>(<span class="string">'gulp-jsmin'</span>);</div><div class="line"><span class="comment">//文件重命名</span></div><div class="line"><span class="keyword">var</span> rename = <span class="built_in">require</span>(<span class="string">'gulp-rename'</span>);</div><div class="line"><span class="comment">//图片压缩png/jpg/gif</span></div><div class="line"><span class="keyword">var</span> imagemin = <span class="built_in">require</span>(<span class="string">'gulp-imagemin'</span>);</div><div class="line"><span class="comment">//png压缩</span></div><div class="line"><span class="keyword">var</span> pngquant = <span class="built_in">require</span>(<span class="string">'imagemin-pngquant'</span>);</div><div class="line"><span class="comment">//css压缩</span></div><div class="line"><span class="keyword">var</span> csso = <span class="built_in">require</span>(<span class="string">'gulp-csso'</span>);</div><div class="line"></div><div class="line"><span class="keyword">var</span> root = <span class="string">"./public"</span>;</div><div class="line"><span class="keyword">var</span> buildDir = root;</div><div class="line"><span class="keyword">var</span> datas=&#123;</div><div class="line">	<span class="attr">html</span>:[root+<span class="string">"/**/*.html"</span>],</div><div class="line">	<span class="attr">image</span>:[root+<span class="string">"/**/*.png"</span>],</div><div class="line">	<span class="attr">css</span>:[root+<span class="string">"/**/*.css"</span>],</div><div class="line">	<span class="attr">js</span>:[root+<span class="string">"/**/*.js"</span>,<span class="string">'!*min.js'</span>]</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="comment">// 压缩html</span></div><div class="line">gulp.task(<span class="string">"htmlmin"</span>,<span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</div><div class="line">	gulp.src(datas.html)</div><div class="line">	.pipe(htmlmin(&#123;<span class="attr">collapseWhitespace</span>:<span class="literal">true</span>,<span class="attr">minifyJS</span>:<span class="literal">true</span>,<span class="attr">minifyCSS</span>:<span class="literal">true</span>,<span class="attr">removeComments</span>:<span class="literal">true</span>&#125;))</div><div class="line">	.pipe(gulp.dest(buildDir));</div><div class="line">&#125;);</div><div class="line"></div><div class="line"><span class="comment">// png图片压缩</span></div><div class="line">gulp.task(<span class="string">"imagemin"</span>,<span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</div><div class="line">	gulp.src(datas.image)</div><div class="line">	.pipe(imagemin(&#123;</div><div class="line">		<span class="attr">progressive</span>:<span class="literal">true</span>,</div><div class="line">		<span class="attr">svgoPlugins</span>:[&#123;<span class="attr">removeViewBox</span>:<span class="literal">false</span>&#125;],</div><div class="line">		<span class="attr">use</span>:[pngquant()] <span class="comment">//压缩率64%</span></div><div class="line">	&#125;))</div><div class="line">	.pipe(gulp.dest(buildDir));</div><div class="line">&#125;);</div><div class="line"></div><div class="line"><span class="comment">// js压缩</span></div><div class="line">gulp.task(<span class="string">"jsmin"</span>,<span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</div><div class="line">	gulp.src(datas.js)</div><div class="line">	.pipe(jsmin())</div><div class="line">	<span class="comment">//.pipe(rename(&#123;suffix:'.min'&#125;))</span></div><div class="line">	.pipe(gulp.dest(buildDir));</div><div class="line">&#125;);</div><div class="line"></div><div class="line"><span class="comment">// css压缩</span></div><div class="line">gulp.task(<span class="string">"cssmin"</span>,<span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</div><div class="line">	gulp.src(datas.css)</div><div class="line">	.pipe(csso())</div><div class="line">	.pipe(gulp.dest(buildDir));</div><div class="line">&#125;);</div><div class="line"></div><div class="line">gulp.task(<span class="string">"default"</span>,[<span class="string">"htmlmin"</span>,<span class="string">"imagemin"</span>,<span class="string">"jsmin"</span>,<span class="string">"cssmin"</span>]);</div></pre></td></tr></table></figure>
+<h3 id="Step2：执行命令"><a href="#Step2：执行命令" class="headerlink" title="Step2：执行命令"></a>Step2：执行命令</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">hexo clean</div><div class="line">hexo ge</div><div class="line">gulp</div><div class="line">hexo d</div></pre></td></tr></table></figure>
+<h2 id="最后"><a href="#最后" class="headerlink" title="最后"></a>最后</h2><p>gulp提供了相当多的插件，大家可以自行去了解使用，还是挺好使的</p>
 <h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><p><a href="http://gulpjs.com/" target="_blank" rel="external">gulp官网</a><br><a href="http://www.gulpjs.com.cn/" target="_blank" rel="external">gulp中文</a></p>
 
       
@@ -546,9 +491,25 @@ hexo d
           
   <div class="comments" id="comments">
     
-      <div class="ds-thread" data-thread-key="2016/03/25/gulp-compress-hexo-01/"
-           data-title="使用gulp来压缩hexo中的静态资源文件" data-url="http://www.linmuxi.com/2016/03/25/gulp-compress-hexo-01/">
+      <!-- 来必力City版安装代码 -->
+      <div id="lv-container" data-id="city" data-uid="MTAyMC8zMDE0NS82NzAw">
+        <script type="text/javascript">
+         (function(d, s) {
+             var j, e = d.getElementsByTagName(s)[0];
+
+             if (typeof LivereTower === 'function') { return; }
+
+             j = d.createElement(s);
+             j.src = 'https://cdn-city.livere.com/js/embed.dist.js';
+             j.async = true;
+
+             e.parentNode.insertBefore(j, e);
+         })(document, 'script');
+        </script>
+      <noscript> 为正常使用来必力评论功能请激活JavaScript</noscript>
       </div>
+      <!-- City版安装代码已完成 -->
+
     
   </div>
 
@@ -772,33 +733,14 @@ hexo d
 
   
 
-  
-    
-  
 
-  <script type="text/javascript">
-    var duoshuoQuery = {short_name:"hunterlin"};
-    (function() {
-      var ds = document.createElement('script');
-      ds.type = 'text/javascript';ds.async = true;
-      ds.id = 'duoshuo-script';
-      ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
-      ds.charset = 'UTF-8';
-      (document.getElementsByTagName('head')[0]
-      || document.getElementsByTagName('body')[0]).appendChild(ds);
-    })();
-  </script>
 
-  
-    
-    
-    <script src="/lib/ua-parser-js/dist/ua-parser.min.js?v=0.7.9"></script>
-    <script src="/js/src/hook-duoshuo.js"></script>
   
 
 
 
 
+	
 
 
 

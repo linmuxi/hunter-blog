@@ -154,6 +154,18 @@
 
 
 
+  <div style="display: none;">
+    <script src="//s95.cnzz.com/z_stat.php?id=1259167020&web_id=1259167020" language="JavaScript"></script>
+
+	<!--
+<script type="text/javascript">var cnzz_protocol = (("https:" == document.location.protocol) ? " https://" : " http://");document.write(unescape("%3Cspan id='cnzz_stat_icon_1259167020'%3E%3C/span%3E%3Cscript src='" + cnzz_protocol + "s4.cnzz.com/z_stat.php%3Fid%3D1259167020%26show%3Dpic' type='text/javascript'%3E%3C/script%3E"));</script>
+    -->
+
+
+  </div>
+
+
+
 
 
   
@@ -343,13 +355,6 @@
 
           
             
-              <span class="post-comments-count">
-                <span class="post-meta-divider">|</span>
-                <a href="/2016/02/18/commonJS-amd-cmd-umd-intro/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/02/18/commonJS-amd-cmd-umd-intro/" itemprop="commentCount"></span>
-                </a>
-              </span>
-            
           
 
           
@@ -389,135 +394,22 @@
 <p><strong>前言</strong><br>为什么要制定这些前端模块规范？由于JavaScript的崛起，很多基于js编写的应用组件给予了我们很大的便利，但是不可以避免会出现一个问题就是很多组件并不能愉快的在一起协同工作，例如会出现命名冲突、文件依赖等问题,参考下<a href="https://github.com/seajs/seajs/issues/547" target="_blank" rel="external">前端模块化开发的价值</a><br>为了解决这些问题，一些牛人们就制定出了前端模块化规范，他们规定开发者们都采用一种约定好的模式来进行代码编写，以避免对整个生态圈的污染。</p>
 <p><strong>他们的异同</strong><br>CommonJS是运行在服务端的模块规范，Node.js实现了这种规范<br>AMD、CMD、UMD是运行在浏览器端的模块规范，常用到的库有seajs，requirejs</p>
 <p><strong>CommonJS</strong><br>据CommonJS规范，一个单独的文件就是一个模块，每一个模块都是一个单独的作用域。加载模块使用require方法，该方法读取一个文件并执行，最后返回文件内部的exports对象，CommonJS以同步方式加载模块。</p>
-<p>模块定义</p>
-<pre><code class="js">//MyUtil.js
-&#39;use strict&#39;;
-function util(args){
-    this.show = function(){
-        console.log(&quot;hello &quot;+args.name);
-    }
-}
-module.exports = util;
-</code></pre>
-<p>模块加载</p>
-<pre><code class="js">//index.js
-&#39;use strict&#39;;
-//require以同步方式加载模块
-
-//加载jquery模块
-var jquery = require(&#39;jquery&#39;);
-
-//加载自定义模块.js
-var MyUtil = require(&#39;./MyUtil&#39;);
-
-//加载common目录下面的index.js
-//var common = require(&#39;./common&#39;);
-
-var util = new MyUtil({name:&quot;hunter&quot;});
-util.show();
-</code></pre>
-<p>执行Node.js应用</p>
-<pre><code class="bash">node index.js
-</code></pre>
+<p>模块定义<br><figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line"><span class="comment">//MyUtil.js</span></div><div class="line"><span class="meta">'use strict'</span>;</div><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">util</span>(<span class="params">args</span>)</span>&#123;</div><div class="line">	<span class="keyword">this</span>.show = <span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</div><div class="line">		<span class="built_in">console</span>.log(<span class="string">"hello "</span>+args.name);</div><div class="line">	&#125;</div><div class="line">&#125;</div><div class="line"><span class="built_in">module</span>.exports = util;</div></pre></td></tr></table></figure></p>
+<p>模块加载<br><figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line"><span class="comment">//index.js</span></div><div class="line"><span class="meta">'use strict'</span>;</div><div class="line"><span class="comment">//require以同步方式加载模块</span></div><div class="line"></div><div class="line"><span class="comment">//加载jquery模块</span></div><div class="line"><span class="keyword">var</span> jquery = <span class="built_in">require</span>(<span class="string">'jquery'</span>);</div><div class="line"></div><div class="line"><span class="comment">//加载自定义模块.js</span></div><div class="line"><span class="keyword">var</span> MyUtil = <span class="built_in">require</span>(<span class="string">'./MyUtil'</span>);</div><div class="line"></div><div class="line"><span class="comment">//加载common目录下面的index.js</span></div><div class="line"><span class="comment">//var common = require('./common');</span></div><div class="line"></div><div class="line"><span class="keyword">var</span> util = <span class="keyword">new</span> MyUtil(&#123;<span class="attr">name</span>:<span class="string">"hunter"</span>&#125;);</div><div class="line">util.show();</div></pre></td></tr></table></figure></p>
+<p>执行Node.js应用<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">node index.js</div></pre></td></tr></table></figure></p>
 <p><strong>AMD</strong><br>全称”Asynchronous Module Definition”(异步模块加载规范) , requirejs库实现了该规范。<br><!-- 定义模块使用define，加载模块使用requirejs或require。 --></p>
-<p>模块定义</p>
-<pre><code class="js">define(function(){
-    return {};
-})
-</code></pre>
-<p>模块加载</p>
-<pre><code class="js">&#39;use strict&#39;;
-//加载jquery模块和sub模块
-requirejs([&#39;lib/jquery&#39;,&#39;app/sub&#39;],function($,sub){
-})
-</code></pre>
+<p>模块定义<br><figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">define(<span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</div><div class="line">	<span class="keyword">return</span> &#123;&#125;;</div><div class="line">&#125;)</div></pre></td></tr></table></figure></p>
+<p>模块加载<br><figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="meta">'use strict'</span>;</div><div class="line"><span class="comment">//加载jquery模块和sub模块</span></div><div class="line">requirejs([<span class="string">'lib/jquery'</span>,<span class="string">'app/sub'</span>],<span class="function"><span class="keyword">function</span>(<span class="params">$,sub</span>)</span>&#123;</div><div class="line">&#125;)</div></pre></td></tr></table></figure></p>
 <p>关于requirejs库的详细使用可以参考：<a href="http://requirejs.org" target="_blank" rel="external">http://requirejs.org</a></p>
 <p><strong>CMD</strong><br>全称”Common Module Definition”(通用模块加载规范)，seajs库实现了该规范。</p>
-<p>模块定义及加载</p>
-<pre><code class="js">// 所有模块都通过 define 来定义
-define(function(require, exports, module) {
-
-  // 通过 require 引入依赖
-  var $ = require(&#39;jquery&#39;);
-  var Spinning = require(&#39;./spinning&#39;);
-
-  // 通过 exports 对外提供接口
-  exports.doSomething = ...
-
-  // 或者通过 module.exports 提供整个接口
-  module.exports = ...
-
-});
-</code></pre>
+<p>模块定义及加载<br><figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// 所有模块都通过 define 来定义</span></div><div class="line">define(<span class="function"><span class="keyword">function</span>(<span class="params">require, exports, module</span>) </span>&#123;</div><div class="line"></div><div class="line">  <span class="comment">// 通过 require 引入依赖</span></div><div class="line">  <span class="keyword">var</span> $ = <span class="built_in">require</span>(<span class="string">'jquery'</span>);</div><div class="line">  <span class="keyword">var</span> Spinning = <span class="built_in">require</span>(<span class="string">'./spinning'</span>);</div><div class="line"></div><div class="line">  <span class="comment">// 通过 exports 对外提供接口</span></div><div class="line">  exports.doSomething = ...</div><div class="line"></div><div class="line">  <span class="comment">// 或者通过 module.exports 提供整个接口</span></div><div class="line">  <span class="built_in">module</span>.exports = ...</div><div class="line"></div><div class="line">&#125;);</div></pre></td></tr></table></figure></p>
 <p>关于seajs库的详细使用可以参考：<a href="http://seajs.org" target="_blank" rel="external">http://seajs.org</a></p>
 <p><strong>UMD</strong><br>全称”Universal Module Definition”(通用模块规范)<br>UMD是AMD和CommonJS的糅合,因为AMD、CommonJS规范是两种不一致的规范，虽然他们应用的场景也不太一致，但是人们仍然是期望有一种统一的规范来支持这两种规范,于是UMD规范诞生了。</p>
-<p>采用UMD规范编写的组件：</p>
-<pre><code class="js">// app.js
-(function (root, factory) {
-    if (typeof define === &#39;function&#39; &amp;&amp; define.amd) {
-        // AMD
-        define([&#39;jquery&#39;], factory);
-    } else if (typeof exports === &#39;object&#39;) {
-        // Node, CommonJS-like
-        module.exports = factory(require(&#39;jquery&#39;));
-    } else {
-        // Browser globals (root is window)
-        root.returnExports = factory(root.jQuery);
-    }
-}(this, function ($) {
-    // methods
-    function myFunc(){
-        console.log(&quot;Jquery:&quot;+$);
-    };
-
-    // exposed public method
-    return myFunc;
-}));
-</code></pre>
-<p>RequireJS调用</p>
-<pre><code class="js">//加载require.js文件
-&lt;script src=&quot;require.js&quot;&gt;&lt;/script&gt;
-&lt;script&gt;
-    //加载app模块
-    requirejs([&#39;app&#39;],function(app){
-        app();
-    })
-&lt;/script&gt;
-</code></pre>
-<p>Node.js调用</p>
-<pre><code class="js">&#39;use strict&#39;;
-require(&#39;./app&#39;)();
-</code></pre>
-<p>原生调用</p>
-<pre><code class="html">&lt;script src=&quot;jquery.js&quot;&gt;&lt;/script&gt;
-&lt;script src=&quot;app.js&quot;&gt;&lt;/script&gt;
-&lt;script&gt;
-    this.returnExports();
-&lt;/script&gt;
-</code></pre>
-<p>上面三种调用方式输出的结果是一样的，如果想让编写的组件支持AMD和CommonJS规范，那么就采用UMD来包装下吧。<br>jQuery就采用这个方式包装了下让其可以支持AMD和CommonJS规范。</p>
-<pre><code class="js">if ( typeof module === &quot;object&quot; &amp;&amp; module &amp;&amp; typeof module.exports === &quot;object&quot; ) {
-    // Expose jQuery as module.exports in loaders that implement the Node
-    // module pattern (including browserify). Do not create the global, since
-    // the user will be storing it themselves locally, and globals are frowned
-    // upon in the Node module world.
-    module.exports = jQuery;
-} else {
-    // Otherwise expose jQuery to the global object as usual
-    window.jQuery = window.$ = jQuery;
-
-    // Register as a named AMD module, since jQuery can be concatenated with other
-    // files that may use define, but not via a proper concatenation script that
-    // understands anonymous AMD modules. A named AMD is safest and most robust
-    // way to register. Lowercase jquery is used because AMD module names are
-    // derived from file names, and jQuery is normally delivered in a lowercase
-    // file name. Do this after creating the global so that if an AMD module wants
-    // to call noConflict to hide this version of jQuery, it will work.
-    if ( typeof define === &quot;function&quot; &amp;&amp; define.amd ) {
-        define( &quot;jquery&quot;, [], function () { return jQuery; } );
-    }
-}
-</code></pre>
+<p>采用UMD规范编写的组件：<br><figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// app.js</span></div><div class="line">(<span class="function"><span class="keyword">function</span> (<span class="params">root, factory</span>) </span>&#123;</div><div class="line">    <span class="keyword">if</span> (<span class="keyword">typeof</span> define === <span class="string">'function'</span> &amp;&amp; define.amd) &#123;</div><div class="line">        <span class="comment">// AMD</span></div><div class="line">        define([<span class="string">'jquery'</span>], factory);</div><div class="line">    &#125; <span class="keyword">else</span> <span class="keyword">if</span> (<span class="keyword">typeof</span> exports === <span class="string">'object'</span>) &#123;</div><div class="line">        <span class="comment">// Node, CommonJS-like</span></div><div class="line">        <span class="built_in">module</span>.exports = factory(<span class="built_in">require</span>(<span class="string">'jquery'</span>));</div><div class="line">    &#125; <span class="keyword">else</span> &#123;</div><div class="line">        <span class="comment">// Browser globals (root is window)</span></div><div class="line">        root.returnExports = factory(root.jQuery);</div><div class="line">    &#125;</div><div class="line">&#125;(<span class="keyword">this</span>, <span class="function"><span class="keyword">function</span> (<span class="params">$</span>) </span>&#123;</div><div class="line">    <span class="comment">// methods</span></div><div class="line">    <span class="function"><span class="keyword">function</span> <span class="title">myFunc</span>(<span class="params"></span>)</span>&#123;</div><div class="line">    	<span class="built_in">console</span>.log(<span class="string">"Jquery:"</span>+$);</div><div class="line">    &#125;;</div><div class="line"></div><div class="line">    <span class="comment">// exposed public method</span></div><div class="line">    <span class="keyword">return</span> myFunc;</div><div class="line">&#125;));</div></pre></td></tr></table></figure></p>
+<p>RequireJS调用<br><figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line"><span class="comment">//加载require.js文件</span></div><div class="line">&lt;script src=<span class="string">"require.js"</span>&gt;&lt;/script&gt;</div><div class="line">&lt;script&gt;</div><div class="line">    <span class="comment">//加载app模块</span></div><div class="line">	requirejs([<span class="string">'app'</span>],<span class="function"><span class="keyword">function</span>(<span class="params">app</span>)</span>&#123;</div><div class="line">		app();</div><div class="line">	&#125;)</div><div class="line">&lt;<span class="regexp">/script&gt;</span></div></pre></td></tr></table></figure></p>
+<p>Node.js调用<br><figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="meta">'use strict'</span>;</div><div class="line"><span class="built_in">require</span>(<span class="string">'./app'</span>)();</div></pre></td></tr></table></figure></p>
+<p>原生调用<br><figure class="highlight html"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="tag">&lt;<span class="name">script</span> <span class="attr">src</span>=<span class="string">"jquery.js"</span>&gt;</span><span class="undefined"></span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></div><div class="line"><span class="tag">&lt;<span class="name">script</span> <span class="attr">src</span>=<span class="string">"app.js"</span>&gt;</span><span class="undefined"></span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></div><div class="line"><span class="tag">&lt;<span class="name">script</span>&gt;</span><span class="javascript"></span></div><div class="line">	<span class="keyword">this</span>.returnExports();</div><div class="line"><span class="tag">&lt;/<span class="name">script</span>&gt;</span></div></pre></td></tr></table></figure></p>
+<p>上面三种调用方式输出的结果是一样的，如果想让编写的组件支持AMD和CommonJS规范，那么就采用UMD来包装下吧。<br>jQuery就采用这个方式包装了下让其可以支持AMD和CommonJS规范。<br><figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">if</span> ( <span class="keyword">typeof</span> <span class="built_in">module</span> === <span class="string">"object"</span> &amp;&amp; <span class="built_in">module</span> &amp;&amp; <span class="keyword">typeof</span> <span class="built_in">module</span>.exports === <span class="string">"object"</span> ) &#123;</div><div class="line">	<span class="comment">// Expose jQuery as module.exports in loaders that implement the Node</span></div><div class="line">	<span class="comment">// module pattern (including browserify). Do not create the global, since</span></div><div class="line">	<span class="comment">// the user will be storing it themselves locally, and globals are frowned</span></div><div class="line">	<span class="comment">// upon in the Node module world.</span></div><div class="line">	<span class="built_in">module</span>.exports = jQuery;</div><div class="line">&#125; <span class="keyword">else</span> &#123;</div><div class="line">	<span class="comment">// Otherwise expose jQuery to the global object as usual</span></div><div class="line">	<span class="built_in">window</span>.jQuery = <span class="built_in">window</span>.$ = jQuery;</div><div class="line"></div><div class="line">	<span class="comment">// Register as a named AMD module, since jQuery can be concatenated with other</span></div><div class="line">	<span class="comment">// files that may use define, but not via a proper concatenation script that</span></div><div class="line">	<span class="comment">// understands anonymous AMD modules. A named AMD is safest and most robust</span></div><div class="line">	<span class="comment">// way to register. Lowercase jquery is used because AMD module names are</span></div><div class="line">	<span class="comment">// derived from file names, and jQuery is normally delivered in a lowercase</span></div><div class="line">	<span class="comment">// file name. Do this after creating the global so that if an AMD module wants</span></div><div class="line">	<span class="comment">// to call noConflict to hide this version of jQuery, it will work.</span></div><div class="line">	<span class="keyword">if</span> ( <span class="keyword">typeof</span> define === <span class="string">"function"</span> &amp;&amp; define.amd ) &#123;</div><div class="line">		define( <span class="string">"jquery"</span>, [], <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123; <span class="keyword">return</span> jQuery; &#125; );</div><div class="line">	&#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
 
       
     </div>
@@ -611,9 +503,25 @@ require(&#39;./app&#39;)();
           
   <div class="comments" id="comments">
     
-      <div class="ds-thread" data-thread-key="2016/02/18/commonJS-amd-cmd-umd-intro/"
-           data-title="CommonJS,AMD,CMD及UMD规范介绍" data-url="http://www.linmuxi.com/2016/02/18/commonJS-amd-cmd-umd-intro/">
+      <!-- 来必力City版安装代码 -->
+      <div id="lv-container" data-id="city" data-uid="MTAyMC8zMDE0NS82NzAw">
+        <script type="text/javascript">
+         (function(d, s) {
+             var j, e = d.getElementsByTagName(s)[0];
+
+             if (typeof LivereTower === 'function') { return; }
+
+             j = d.createElement(s);
+             j.src = 'https://cdn-city.livere.com/js/embed.dist.js';
+             j.async = true;
+
+             e.parentNode.insertBefore(j, e);
+         })(document, 'script');
+        </script>
+      <noscript> 为正常使用来必力评论功能请激活JavaScript</noscript>
       </div>
+      <!-- City版安装代码已完成 -->
+
     
   </div>
 
@@ -812,33 +720,14 @@ require(&#39;./app&#39;)();
 
   
 
-  
-    
-  
 
-  <script type="text/javascript">
-    var duoshuoQuery = {short_name:"hunterlin"};
-    (function() {
-      var ds = document.createElement('script');
-      ds.type = 'text/javascript';ds.async = true;
-      ds.id = 'duoshuo-script';
-      ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
-      ds.charset = 'UTF-8';
-      (document.getElementsByTagName('head')[0]
-      || document.getElementsByTagName('body')[0]).appendChild(ds);
-    })();
-  </script>
 
-  
-    
-    
-    <script src="/lib/ua-parser-js/dist/ua-parser.min.js?v=0.7.9"></script>
-    <script src="/js/src/hook-duoshuo.js"></script>
   
 
 
 
 
+	
 
 
 

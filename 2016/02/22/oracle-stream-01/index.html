@@ -154,6 +154,18 @@
 
 
 
+  <div style="display: none;">
+    <script src="//s95.cnzz.com/z_stat.php?id=1259167020&web_id=1259167020" language="JavaScript"></script>
+
+	<!--
+<script type="text/javascript">var cnzz_protocol = (("https:" == document.location.protocol) ? " https://" : " http://");document.write(unescape("%3Cspan id='cnzz_stat_icon_1259167020'%3E%3C/span%3E%3Cscript src='" + cnzz_protocol + "s4.cnzz.com/z_stat.php%3Fid%3D1259167020%26show%3Dpic' type='text/javascript'%3E%3C/script%3E"));</script>
+    -->
+
+
+  </div>
+
+
+
 
 
   
@@ -343,13 +355,6 @@
 
           
             
-              <span class="post-comments-count">
-                <span class="post-meta-divider">|</span>
-                <a href="/2016/02/22/oracle-stream-01/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/02/22/oracle-stream-01/" itemprop="commentCount"></span>
-                </a>
-              </span>
-            
           
 
           
@@ -392,177 +397,37 @@
 <p>二、修改数据库域名(注意修改完后要重启数据库)<br>查看数据库域名<br><code>select * from global_name;</code> //boyuupq.REGRESS.RDBMS.DEV.US.ORACLE.COM</p>
 <p>修改数据库域名<br><code>alter database rename global_name to boyuupq_10_18;</code></p>
 <p>执行完这步之后，查询发现数据库域名还是上面的结果，新建dblink名称后面也会自动拼接上这后缀。<br>这时可以执行：<code>update global_name set global_name = boyuupq_10_18;</code></p>
-<p>三、新建流管理员strmadmin(使用sysdba帐号)</p>
-<pre><code class="sql">SQL&gt;conn /as sysdba
-SQL&gt; create user strmadmin identified by strmadmin default tablespace users temporary tablespace temp;
-SQL&gt; execute dbms_defer_sys.register_propagator(&#39;strmadmin&#39;);
-SQL&gt; grant execute any procedure to strmadmin;
-SQL&gt; execute dbms_repcat_admin.grant_admin_any_repgroup(&#39;strmadmin&#39;);
-SQL&gt; execute dbms_repcat_admin.grant_admin_any_schema(username =&gt; &#39;strmadmin&#39;);
-SQL&gt; grant comment any table to strmadmin;
-SQL&gt; grant lock any table to strmadmin;
-SQL&gt; grant select any dictionary to strmadmin;
-</code></pre>
-<p>四、用流管理员strmadmin新增到从库的dblink</p>
-<pre><code class="sql">SQL&gt; conn strmadmin/strmadmin
-SQL&gt; create database link &quot;boyuupq_10_19&quot; connect to strmadmin identified by strmadmin using &#39;boyuupq_10_19&#39;;
-</code></pre>
-<p>五、查询dblink</p>
-<pre><code class="sql">SQL&gt; select owner,db_link,host from all_db_links;
-OWNER         DB_LINK                                 HOST   
-STRMADMIN  boyuupq_10_19    boyuupq_10_19
-</code></pre>
+<p>三、新建流管理员strmadmin(使用sysdba帐号)<br><figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">SQL&gt;conn /as sysdba</div><div class="line">SQL&gt; create user strmadmin identified by strmadmin default tablespace users temporary tablespace temp;</div><div class="line">SQL&gt; execute dbms_defer_sys.register_propagator('strmadmin');</div><div class="line">SQL&gt; grant execute any procedure to strmadmin;</div><div class="line">SQL&gt; execute dbms_repcat_admin.grant_admin_any_repgroup('strmadmin');</div><div class="line">SQL&gt; execute dbms_repcat_admin.grant_admin_any_schema(username =&gt; 'strmadmin');</div><div class="line">SQL&gt; grant comment any table to strmadmin;</div><div class="line">SQL&gt; grant lock any table to strmadmin;</div><div class="line">SQL&gt; grant select any dictionary to strmadmin;</div></pre></td></tr></table></figure></p>
+<p>四、用流管理员strmadmin新增到从库的dblink<br><figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">SQL&gt; conn strmadmin/strmadmin</div><div class="line">SQL&gt; create database link "boyuupq_10_19" connect to strmadmin identified by strmadmin using 'boyuupq_10_19';</div></pre></td></tr></table></figure></p>
+<p>五、查询dblink<br><figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">SQL&gt; select owner,db_link,host from all_db_links;</div><div class="line">OWNER         DB_LINK                                 HOST   </div><div class="line">STRMADMIN  boyuupq_10_19    boyuupq_10_19</div></pre></td></tr></table></figure></p>
 <h2 id="B"><a href="#B" class="headerlink" title="B"></a>B</h2><p>一、修改数据库域名(注意修改完后要重启数据库)<br>查看数据库域名<br><code>select * from global_name;</code> //boyuupq.REGRESS.RDBMS.DEV.US.ORACLE.COM</p>
 <p>修改数据库域名<br><code>alter database rename global_name to boyuupq_10_19;</code></p>
 <p>执行完这步之后，查询发现数据库域名还是上面的结果，新建dblink名称后面也会自动拼接上这后缀。<br>这时可以执行：<code>update global_name set global_name = boyuupq_10_19;</code></p>
-<p>二、新建流管理员strmadmin(使用sysdba帐号)</p>
-<pre><code class="sql">SQL&gt;conn /as sysdba
-SQL&gt; create user strmadmin identified by strmadmin default tablespace users temporary tablespace temp;
-SQL&gt; execute dbms_defer_sys.register_propagator(&#39;strmadmin&#39;);
-SQL&gt; grant execute any procedure to strmadmin;
-SQL&gt; execute dbms_repcat_admin.grant_admin_any_repgroup(&#39;strmadmin&#39;);
-SQL&gt; execute dbms_repcat_admin.grant_admin_any_schema(username =&gt; &#39;strmadmin&#39;);
-SQL&gt; grant comment any table to strmadmin;
-SQL&gt; grant lock any table to strmadmin;
-SQL&gt; grant select any dictionary to strmadmin;
-</code></pre>
+<p>二、新建流管理员strmadmin(使用sysdba帐号)<br><figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">SQL&gt;conn /as sysdba</div><div class="line">SQL&gt; create user strmadmin identified by strmadmin default tablespace users temporary tablespace temp;</div><div class="line">SQL&gt; execute dbms_defer_sys.register_propagator('strmadmin');</div><div class="line">SQL&gt; grant execute any procedure to strmadmin;</div><div class="line">SQL&gt; execute dbms_repcat_admin.grant_admin_any_repgroup('strmadmin');</div><div class="line">SQL&gt; execute dbms_repcat_admin.grant_admin_any_schema(username =&gt; 'strmadmin');</div><div class="line">SQL&gt; grant comment any table to strmadmin;</div><div class="line">SQL&gt; grant lock any table to strmadmin;</div><div class="line">SQL&gt; grant select any dictionary to strmadmin;</div></pre></td></tr></table></figure></p>
 <blockquote>
 <p>上面的操作主要是配置数据库名称、流管理员、dblink，下面将要进行流队列、捕获进程、传播进程、应用进程的配置</p>
 </blockquote>
-<h3 id="创建流队列"><a href="#创建流队列" class="headerlink" title="创建流队列"></a>创建流队列</h3><p>主库：</p>
-<pre><code class="sql">connect strmadmin/strmadmin;
-begin 
-    dbms_streams_adm.set_up_queue( 
-        queue_table =&gt; &#39;boyuupq_10_18_queue_table&#39;, 
-        queue_name =&gt; &#39;boyuupq_10_18_queue&#39;); 
-end; 
-/
-</code></pre>
-<p>从库：</p>
-<pre><code class="sql">connect strmadmin/strmadmin;
-begin 
-    dbms_streams_adm.set_up_queue( 
-        queue_table =&gt; &#39;boyuupq_10_19_queue_table&#39;, 
-        queue_name =&gt; &#39;boyuupq_10_19_queue&#39;); 
-end; 
-/
-</code></pre>
-<h3 id="创建捕获进程-主库"><a href="#创建捕获进程-主库" class="headerlink" title="创建捕获进程(主库)"></a>创建捕获进程(主库)</h3><pre><code class="sql">connect strmadmin/strmadmin;
-begin 
-    dbms_streams_adm.add_schema_rules( 
-        schema_name =&gt; &#39;sa&#39;, 
-        streams_type =&gt; &#39;capture&#39;, 
-        streams_name =&gt; &#39;capture_boyuupq_10_18&#39;, 
-        queue_name =&gt; &#39;strmadmin.boyuupq_10_18_queue&#39;, 
-        include_dml =&gt; true, 
-        include_ddl =&gt; true, 
-        include_tagged_lcr =&gt; false, 
-        source_database =&gt; null, 
-        inclusion_rule =&gt; true); 
-end; 
-/
-</code></pre>
-<h3 id="创建传播进程-主库"><a href="#创建传播进程-主库" class="headerlink" title="创建传播进程(主库)"></a>创建传播进程(主库)</h3><pre><code class="sql">connect strmadmin/strmadmin;
-begin 
-    dbms_streams_adm.add_schema_propagation_rules( 
-        schema_name =&gt; &#39;sa&#39;, 
-        streams_name =&gt; &#39;boyuupq18_to_boyuupq19&#39;, 
-        source_queue_name =&gt; &#39;strmadmin.boyuupq_10_18_queue&#39;, 
-        destination_queue_name =&gt; &#39;strmadmin.boyuupq_10_19_queue@book&#39;, 
-        include_dml =&gt; true, 
-        include_ddl =&gt; true, 
-        include_tagged_lcr =&gt; false, 
-        source_database =&gt; &#39;boyuupq_10_18&#39;, //主库数据库名称，注意这里的配置是否正确
-        inclusion_rule =&gt; true); 
-end; 
-/
-</code></pre>
-<h3 id="修改propagation休眠时间为0，表示实时传播LCR"><a href="#修改propagation休眠时间为0，表示实时传播LCR" class="headerlink" title="修改propagation休眠时间为0，表示实时传播LCR"></a>修改propagation休眠时间为0，表示实时传播LCR</h3><pre><code class="sql">begin 
-    dbms_aqadm.alter_propagation_schedule( 
-        queue_name =&gt; &#39;boyuupq_10_18_queue&#39;, 
-        destination =&gt; &#39;boyuupq_10_19&#39;, //到从库的dblink名称
-        latency =&gt; 0); 
-end; 
-/
-</code></pre>
-<h3 id="创建应用进程-从库"><a href="#创建应用进程-从库" class="headerlink" title="创建应用进程(从库)"></a>创建应用进程(从库)</h3><pre><code class="sql">connect strmadmin/strmadmin;
-begin 
-    dbms_streams_adm.add_schema_rules( 
-        schema_name =&gt; &#39;sa&#39;, 
-        streams_type =&gt; &#39;apply&#39;, 
-        streams_name =&gt; &#39;apply_boyuupq_10_19&#39;, 
-        queue_name =&gt; &#39;strmadmin.boyuupq_10_19_queue&#39;, 
-        include_dml =&gt; true, 
-        include_ddl =&gt; true, 
-        include_tagged_lcr =&gt; false, 
-        source_database =&gt; &#39;boyuupq_10_18&#39;, //主库数据库名称
-        inclusion_rule =&gt; true); 
-end; 
-/
-</code></pre>
-<h3 id="启动应用进程-从库-先应用、后捕获，传播自动启动"><a href="#启动应用进程-从库-先应用、后捕获，传播自动启动" class="headerlink" title="启动应用进程(从库,先应用、后捕获，传播自动启动)"></a>启动应用进程(从库,先应用、后捕获，传播自动启动)</h3><pre><code class="sql">connect strmadmin/strmadmin;
-#启动Apply进程 
-begin 
-    dbms_apply_adm.start_apply( 
-        apply_name =&gt; &#39;apply_boyuupq_10_19&#39;); 
-end; 
-/
-</code></pre>
-<h3 id="启动捕获进程-主库"><a href="#启动捕获进程-主库" class="headerlink" title="启动捕获进程(主库)"></a>启动捕获进程(主库)</h3><pre><code class="sql">connect strmadmin/strmadmin;
-#启动Capture进程 
-begin 
-    dbms_capture_adm.start_capture( 
-        capture_name =&gt; &#39;capture_boyuupq_10_18&#39;); 
-end; 
-/
-</code></pre>
+<h3 id="创建流队列"><a href="#创建流队列" class="headerlink" title="创建流队列"></a>创建流队列</h3><p>主库：<br><figure class="highlight sql"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">connect strmadmin/strmadmin;</div><div class="line"><span class="keyword">begin</span> </div><div class="line">	dbms_streams_adm.set_up_queue( </div><div class="line">		queue_table =&gt; <span class="string">'boyuupq_10_18_queue_table'</span>, </div><div class="line">		queue_name =&gt; <span class="string">'boyuupq_10_18_queue'</span>); </div><div class="line"><span class="keyword">end</span>; </div><div class="line">/</div></pre></td></tr></table></figure></p>
+<p>从库：<br><figure class="highlight sql"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">connect strmadmin/strmadmin;</div><div class="line"><span class="keyword">begin</span> </div><div class="line">	dbms_streams_adm.set_up_queue( </div><div class="line">		queue_table =&gt; <span class="string">'boyuupq_10_19_queue_table'</span>, </div><div class="line">		queue_name =&gt; <span class="string">'boyuupq_10_19_queue'</span>); </div><div class="line"><span class="keyword">end</span>; </div><div class="line">/</div></pre></td></tr></table></figure></p>
+<h3 id="创建捕获进程-主库"><a href="#创建捕获进程-主库" class="headerlink" title="创建捕获进程(主库)"></a>创建捕获进程(主库)</h3><figure class="highlight sql"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line">connect strmadmin/strmadmin;</div><div class="line"><span class="keyword">begin</span> </div><div class="line">	dbms_streams_adm.add_schema_rules( </div><div class="line">		schema_name =&gt; <span class="string">'sa'</span>, </div><div class="line">		streams_type =&gt; <span class="string">'capture'</span>, </div><div class="line">		streams_name =&gt; <span class="string">'capture_boyuupq_10_18'</span>, </div><div class="line">		queue_name =&gt; <span class="string">'strmadmin.boyuupq_10_18_queue'</span>, </div><div class="line">		include_dml =&gt; <span class="literal">true</span>, </div><div class="line">		include_ddl =&gt; <span class="literal">true</span>, </div><div class="line">		include_tagged_lcr =&gt; <span class="literal">false</span>, </div><div class="line">		source_database =&gt; <span class="literal">null</span>, </div><div class="line">		inclusion_rule =&gt; <span class="literal">true</span>); </div><div class="line"><span class="keyword">end</span>; </div><div class="line">/</div></pre></td></tr></table></figure>
+<h3 id="创建传播进程-主库"><a href="#创建传播进程-主库" class="headerlink" title="创建传播进程(主库)"></a>创建传播进程(主库)</h3><figure class="highlight sql"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line">connect strmadmin/strmadmin;</div><div class="line"><span class="keyword">begin</span> </div><div class="line">	dbms_streams_adm.add_schema_propagation_rules( </div><div class="line">		schema_name =&gt; <span class="string">'sa'</span>, </div><div class="line">		streams_name =&gt; <span class="string">'boyuupq18_to_boyuupq19'</span>, </div><div class="line">		source_queue_name =&gt; <span class="string">'strmadmin.boyuupq_10_18_queue'</span>, </div><div class="line">		destination_queue_name =&gt; <span class="string">'strmadmin.boyuupq_10_19_queue@book'</span>, </div><div class="line">		include_dml =&gt; <span class="literal">true</span>, </div><div class="line">		include_ddl =&gt; <span class="literal">true</span>, </div><div class="line">		include_tagged_lcr =&gt; <span class="literal">false</span>, </div><div class="line">		source_database =&gt; <span class="string">'boyuupq_10_18'</span>, //主库数据库名称，注意这里的配置是否正确</div><div class="line">		inclusion_rule =&gt; <span class="literal">true</span>); </div><div class="line"><span class="keyword">end</span>; </div><div class="line">/</div></pre></td></tr></table></figure>
+<h3 id="修改propagation休眠时间为0，表示实时传播LCR"><a href="#修改propagation休眠时间为0，表示实时传播LCR" class="headerlink" title="修改propagation休眠时间为0，表示实时传播LCR"></a>修改propagation休眠时间为0，表示实时传播LCR</h3><figure class="highlight sql"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">begin</span> </div><div class="line">	dbms_aqadm.alter_propagation_schedule( </div><div class="line">		queue_name =&gt; <span class="string">'boyuupq_10_18_queue'</span>, </div><div class="line">		destination =&gt; <span class="string">'boyuupq_10_19'</span>, //到从库的dblink名称</div><div class="line">		latency =&gt; <span class="number">0</span>); </div><div class="line"><span class="keyword">end</span>; </div><div class="line">/</div></pre></td></tr></table></figure>
+<h3 id="创建应用进程-从库"><a href="#创建应用进程-从库" class="headerlink" title="创建应用进程(从库)"></a>创建应用进程(从库)</h3><figure class="highlight sql"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line">connect strmadmin/strmadmin;</div><div class="line"><span class="keyword">begin</span> </div><div class="line">	dbms_streams_adm.add_schema_rules( </div><div class="line">		schema_name =&gt; <span class="string">'sa'</span>, </div><div class="line">		streams_type =&gt; <span class="string">'apply'</span>, </div><div class="line">		streams_name =&gt; <span class="string">'apply_boyuupq_10_19'</span>, </div><div class="line">		queue_name =&gt; <span class="string">'strmadmin.boyuupq_10_19_queue'</span>, </div><div class="line">		include_dml =&gt; <span class="literal">true</span>, </div><div class="line">		include_ddl =&gt; <span class="literal">true</span>, </div><div class="line">		include_tagged_lcr =&gt; <span class="literal">false</span>, </div><div class="line">		source_database =&gt; <span class="string">'boyuupq_10_18'</span>, //主库数据库名称</div><div class="line">		inclusion_rule =&gt; <span class="literal">true</span>); </div><div class="line"><span class="keyword">end</span>; </div><div class="line">/</div></pre></td></tr></table></figure>
+<h3 id="启动应用进程-从库-先应用、后捕获，传播自动启动"><a href="#启动应用进程-从库-先应用、后捕获，传播自动启动" class="headerlink" title="启动应用进程(从库,先应用、后捕获，传播自动启动)"></a>启动应用进程(从库,先应用、后捕获，传播自动启动)</h3><figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">connect strmadmin/strmadmin;</div><div class="line">#启动Apply进程 </div><div class="line">begin </div><div class="line">	dbms_apply_adm.start_apply( </div><div class="line">		apply_name =&gt; 'apply_boyuupq_10_19'); </div><div class="line">end; </div><div class="line">/</div></pre></td></tr></table></figure>
+<h3 id="启动捕获进程-主库"><a href="#启动捕获进程-主库" class="headerlink" title="启动捕获进程(主库)"></a>启动捕获进程(主库)</h3><figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">connect strmadmin/strmadmin;</div><div class="line">#启动Capture进程 </div><div class="line">begin </div><div class="line">	dbms_capture_adm.start_capture( </div><div class="line">		capture_name =&gt; 'capture_boyuupq_10_18'); </div><div class="line">end; </div><div class="line">/</div></pre></td></tr></table></figure>
 <blockquote>
 <p>到这里流配置就完成了，可以通过下面的sql语句进行运行状况的查询</p>
 </blockquote>
-<h3 id="查询stream运行状况"><a href="#查询stream运行状况" class="headerlink" title="查询stream运行状况"></a>查询stream运行状况</h3><p>主库：</p>
-<pre><code class="sql">--捕获进程信息
-SELECT * FROM dba_capture;
---传播进程信息
-SELECT * FROM dba_propagation;
---已经捕获到的表对象
-SELECT * FROM DBA_CAPTURE_PREPARED_TABLES order by SCN;
---已经捕获到的schema对象
-SELECT * from dba_capture_prepared_schemas;
-</code></pre>
-<p>从库：</p>
-<pre><code class="sql">--应用进程信息
-select * from dba_apply;
---应用进程错误详细信息
-select * from dba_apply_error;
---当前已经实例化的schema对象
-select * from dba_apply_instantiated_schemas;
---当前已经实例化并同步过来的对象(表)
-select * from dba_apply_instantiated_objects;
-</code></pre>
+<h3 id="查询stream运行状况"><a href="#查询stream运行状况" class="headerlink" title="查询stream运行状况"></a>查询stream运行状况</h3><p>主库：<br><figure class="highlight sql"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line"><span class="comment">--捕获进程信息</span></div><div class="line"><span class="keyword">SELECT</span> * <span class="keyword">FROM</span> dba_capture;</div><div class="line"><span class="comment">--传播进程信息</span></div><div class="line"><span class="keyword">SELECT</span> * <span class="keyword">FROM</span> dba_propagation;</div><div class="line"><span class="comment">--已经捕获到的表对象</span></div><div class="line"><span class="keyword">SELECT</span> * <span class="keyword">FROM</span> DBA_CAPTURE_PREPARED_TABLES <span class="keyword">order</span> <span class="keyword">by</span> <span class="keyword">SCN</span>;</div><div class="line"><span class="comment">--已经捕获到的schema对象</span></div><div class="line"><span class="keyword">SELECT</span> * <span class="keyword">from</span> dba_capture_prepared_schemas;</div></pre></td></tr></table></figure></p>
+<p>从库：<br><figure class="highlight sql"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line"><span class="comment">--应用进程信息</span></div><div class="line"><span class="keyword">select</span> * <span class="keyword">from</span> dba_apply;</div><div class="line"><span class="comment">--应用进程错误详细信息</span></div><div class="line"><span class="keyword">select</span> * <span class="keyword">from</span> dba_apply_error;</div><div class="line"><span class="comment">--当前已经实例化的schema对象</span></div><div class="line"><span class="keyword">select</span> * <span class="keyword">from</span> dba_apply_instantiated_schemas;</div><div class="line"><span class="comment">--当前已经实例化并同步过来的对象(表)</span></div><div class="line"><span class="keyword">select</span> * <span class="keyword">from</span> dba_apply_instantiated_objects;</div></pre></td></tr></table></figure></p>
 <blockquote>
 <p>下面提供了停止相应流进程的操作</p>
 </blockquote>
-<h3 id="停止捕获进程-主库"><a href="#停止捕获进程-主库" class="headerlink" title="停止捕获进程(主库)"></a>停止捕获进程(主库)</h3><pre><code class="sql">connect strmadmin/strmadmin;
-#停止Capture进程 
-begin 
-    dbms_capture_adm.stop_capture( 
-        capture_name =&gt; &#39;capture_boyuupq_10_18&#39;); 
-end; 
-/
-</code></pre>
-<h3 id="停止应用进程-从库"><a href="#停止应用进程-从库" class="headerlink" title="停止应用进程(从库)"></a>停止应用进程(从库)</h3><pre><code class="sql">connect strmadmin/strmadmin;
-#停止Apply进程 
-begin 
-    dbms_apply_adm.stop_apply( 
-        apply_name =&gt; &#39;apply_boyuupq_10_19&#39;); 
-end; 
-/
-</code></pre>
-<h3 id="删除传播进程、应用进程"><a href="#删除传播进程、应用进程" class="headerlink" title="删除传播进程、应用进程"></a>删除传播进程、应用进程</h3><pre><code class="sql">exec dbms_capture_adm.drop_capture(&quot;capture_boyuupq_10_18&quot;);
-exec dbms_apply_adm.drop_apply(&#39;apply_boyuupq_10_19&#39;);
-</code></pre>
-<h3 id="删除所有流配置信息"><a href="#删除所有流配置信息" class="headerlink" title="删除所有流配置信息"></a>删除所有流配置信息</h3><pre><code>exec dbms_streams_adm.remove_streams_configuration();
-</code></pre>
+<h3 id="停止捕获进程-主库"><a href="#停止捕获进程-主库" class="headerlink" title="停止捕获进程(主库)"></a>停止捕获进程(主库)</h3><figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">connect strmadmin/strmadmin;</div><div class="line">#停止Capture进程 </div><div class="line">begin </div><div class="line">	dbms_capture_adm.stop_capture( </div><div class="line">		capture_name =&gt; 'capture_boyuupq_10_18'); </div><div class="line">end; </div><div class="line">/</div></pre></td></tr></table></figure>
+<h3 id="停止应用进程-从库"><a href="#停止应用进程-从库" class="headerlink" title="停止应用进程(从库)"></a>停止应用进程(从库)</h3><figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">connect strmadmin/strmadmin;</div><div class="line">#停止Apply进程 </div><div class="line">begin </div><div class="line">	dbms_apply_adm.stop_apply( </div><div class="line">		apply_name =&gt; 'apply_boyuupq_10_19'); </div><div class="line">end; </div><div class="line">/</div></pre></td></tr></table></figure>
+<h3 id="删除传播进程、应用进程"><a href="#删除传播进程、应用进程" class="headerlink" title="删除传播进程、应用进程"></a>删除传播进程、应用进程</h3><figure class="highlight sql"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">exec dbms_capture_adm.drop_capture("capture_boyuupq_10_18");</div><div class="line">exec dbms_apply_adm.drop_apply('apply_boyuupq_10_19');</div></pre></td></tr></table></figure>
+<h3 id="删除所有流配置信息"><a href="#删除所有流配置信息" class="headerlink" title="删除所有流配置信息"></a>删除所有流配置信息</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">exec dbms_streams_adm.remove_streams_configuration();</div></pre></td></tr></table></figure>
+
       
     </div>
 
@@ -655,9 +520,25 @@ exec dbms_apply_adm.drop_apply(&#39;apply_boyuupq_10_19&#39;);
           
   <div class="comments" id="comments">
     
-      <div class="ds-thread" data-thread-key="2016/02/22/oracle-stream-01/"
-           data-title="Oracle单向高级流复制的使用" data-url="http://www.linmuxi.com/2016/02/22/oracle-stream-01/">
+      <!-- 来必力City版安装代码 -->
+      <div id="lv-container" data-id="city" data-uid="MTAyMC8zMDE0NS82NzAw">
+        <script type="text/javascript">
+         (function(d, s) {
+             var j, e = d.getElementsByTagName(s)[0];
+
+             if (typeof LivereTower === 'function') { return; }
+
+             j = d.createElement(s);
+             j.src = 'https://cdn-city.livere.com/js/embed.dist.js';
+             j.async = true;
+
+             e.parentNode.insertBefore(j, e);
+         })(document, 'script');
+        </script>
+      <noscript> 为正常使用来必力评论功能请激活JavaScript</noscript>
       </div>
+      <!-- City版安装代码已完成 -->
+
     
   </div>
 
@@ -881,33 +762,14 @@ exec dbms_apply_adm.drop_apply(&#39;apply_boyuupq_10_19&#39;);
 
   
 
-  
-    
-  
 
-  <script type="text/javascript">
-    var duoshuoQuery = {short_name:"hunterlin"};
-    (function() {
-      var ds = document.createElement('script');
-      ds.type = 'text/javascript';ds.async = true;
-      ds.id = 'duoshuo-script';
-      ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
-      ds.charset = 'UTF-8';
-      (document.getElementsByTagName('head')[0]
-      || document.getElementsByTagName('body')[0]).appendChild(ds);
-    })();
-  </script>
 
-  
-    
-    
-    <script src="/lib/ua-parser-js/dist/ua-parser.min.js?v=0.7.9"></script>
-    <script src="/js/src/hook-duoshuo.js"></script>
   
 
 
 
 
+	
 
 
 

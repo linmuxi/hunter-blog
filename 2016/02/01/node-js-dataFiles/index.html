@@ -158,6 +158,18 @@
 
 
 
+  <div style="display: none;">
+    <script src="//s95.cnzz.com/z_stat.php?id=1259167020&web_id=1259167020" language="JavaScript"></script>
+
+	<!--
+<script type="text/javascript">var cnzz_protocol = (("https:" == document.location.protocol) ? " https://" : " http://");document.write(unescape("%3Cspan id='cnzz_stat_icon_1259167020'%3E%3C/span%3E%3Cscript src='" + cnzz_protocol + "s4.cnzz.com/z_stat.php%3Fid%3D1259167020%26show%3Dpic' type='text/javascript'%3E%3C/script%3E"));</script>
+    -->
+
+
+  </div>
+
+
+
 
 
   
@@ -347,13 +359,6 @@
 
           
             
-              <span class="post-comments-count">
-                <span class="post-meta-divider">|</span>
-                <a href="/2016/02/01/node-js-dataFiles/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/02/01/node-js-dataFiles/" itemprop="commentCount"></span>
-                </a>
-              </span>
-            
           
 
           
@@ -390,13 +395,7 @@
 
       
         <p>这篇主要分享Hexo中DataFiles的使用,记录这篇的原因是，官网提供的DataFiles Doc介绍在我本地没有运行出效果来。<br><a id="more"></a><br>下面是官网的Doc：<br><img src="http://7xqlat.com1.z0.glb.clouddn.com/hexo_datafiles.png" alt="DataFiles Doc"><br>步骤很简单<br>第一步：在source下面新建_data目录，目录下面就是定义的数据文件。可支持yml格式文件。<br>第二步：在模版文件(ejs、swig)中使用for标签进行迭代输出。<br>但是，实际运行的效果是页面不解析这种for标签写法,直接将标签源码输出<br><img src="http://7xqlat.com1.z0.glb.clouddn.com/hexo_datafiles_02.png" alt="不支持for这种写法"><br>查看本地hexo版本：<br><img src="http://7xqlat.com1.z0.glb.clouddn.com/hexo_version.png" alt="Hexo版本"></p>
-<p>修改后的for标签写法：</p>
-<pre><code class="html">&lt;% if (site.data.menu) { %&gt;
-    &lt;% for (item in site.data.menu) { %&gt;
-        &lt;li&gt;&lt;%= item %&gt; &lt;%= site.data.menu[item] %&gt;&lt;/li&gt;
-    &lt;% } %&gt;
-&lt;% } %&gt;
-</code></pre>
+<p>修改后的for标签写法：<br><figure class="highlight html"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="tag">&lt;<span class="name">%</span> <span class="attr">if</span> (<span class="attr">site.data.menu</span>) &#123; %&gt;</span></div><div class="line">	<span class="tag">&lt;<span class="name">%</span> <span class="attr">for</span> (<span class="attr">item</span> <span class="attr">in</span> <span class="attr">site.data.menu</span>) &#123; %&gt;</span></div><div class="line">		<span class="tag">&lt;<span class="name">li</span>&gt;</span><span class="tag">&lt;<span class="name">%=</span> <span class="attr">item</span> %&gt;</span> <span class="tag">&lt;<span class="name">%=</span> <span class="attr">site.data.menu</span>[<span class="attr">item</span>] %&gt;</span><span class="tag">&lt;/<span class="name">li</span>&gt;</span></div><div class="line">	<span class="tag">&lt;<span class="name">%</span> &#125; %&gt;</span></div><div class="line"><span class="tag">&lt;<span class="name">%</span> &#125; %&gt;</span></div></pre></td></tr></table></figure></p>
 <p>到这里，数据就能正常输出到页面了。</p>
 <p>参考：<br><a href="http://ammonsonline.com/using-hexo-data-files/" target="_blank" rel="external">http://ammonsonline.com/using-hexo-data-files/</a></p>
 
@@ -492,9 +491,25 @@
           
   <div class="comments" id="comments">
     
-      <div class="ds-thread" data-thread-key="2016/02/01/node-js-dataFiles/"
-           data-title="Data Files的使用" data-url="http://www.linmuxi.com/2016/02/01/node-js-dataFiles/">
+      <!-- 来必力City版安装代码 -->
+      <div id="lv-container" data-id="city" data-uid="MTAyMC8zMDE0NS82NzAw">
+        <script type="text/javascript">
+         (function(d, s) {
+             var j, e = d.getElementsByTagName(s)[0];
+
+             if (typeof LivereTower === 'function') { return; }
+
+             j = d.createElement(s);
+             j.src = 'https://cdn-city.livere.com/js/embed.dist.js';
+             j.async = true;
+
+             e.parentNode.insertBefore(j, e);
+         })(document, 'script');
+        </script>
+      <noscript> 为正常使用来必力评论功能请激活JavaScript</noscript>
       </div>
+      <!-- City版安装代码已完成 -->
+
     
   </div>
 
@@ -693,33 +708,14 @@
 
   
 
-  
-    
-  
 
-  <script type="text/javascript">
-    var duoshuoQuery = {short_name:"hunterlin"};
-    (function() {
-      var ds = document.createElement('script');
-      ds.type = 'text/javascript';ds.async = true;
-      ds.id = 'duoshuo-script';
-      ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
-      ds.charset = 'UTF-8';
-      (document.getElementsByTagName('head')[0]
-      || document.getElementsByTagName('body')[0]).appendChild(ds);
-    })();
-  </script>
 
-  
-    
-    
-    <script src="/lib/ua-parser-js/dist/ua-parser.min.js?v=0.7.9"></script>
-    <script src="/js/src/hook-duoshuo.js"></script>
   
 
 
 
 
+	
 
 
 
