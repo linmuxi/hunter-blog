@@ -5,7 +5,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://www.linmuxi.com/"/>
-  <updated>2017-03-07T08:06:12.534Z</updated>
+  <updated>2018-02-11T06:45:49.926Z</updated>
   <id>http://www.linmuxi.com/</id>
   
   <author>
@@ -14,6 +14,28 @@
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>plan-2018-001</title>
+    <link href="http://www.linmuxi.com/2018/02/11/plan-2018-001/"/>
+    <id>http://www.linmuxi.com/2018/02/11/plan-2018-001/</id>
+    <published>2018-02-11T06:35:55.000Z</published>
+    <updated>2018-02-11T06:45:49.926Z</updated>
+    
+    <content type="html"><![CDATA[<p>工作原因好像很久没有记录点什么了；年末稍微清闲点了，尝试计划来写点东西，计划内容很小清新，不复杂（其实是写不出复杂的东西来）；<br>plan：<br>1、ELK环境搭建<br>2、elasticsearch集群部署<br>3、风控生产JVM奔溃异常分析过程<br>4、dubbo线程飙升异常分析过程<br>5、kafka实操：修改offset重复消费或跳过消费<br>6、maven之profile入门</p>
+<p>过去的2017年，平稳、祥和；希望2018年来点不一样的，突破自我，取的更好的成绩，加油!</p>
+]]></content>
+    
+    <summary type="html">
+    
+      &lt;p&gt;工作原因好像很久没有记录点什么了；年末稍微清闲点了，尝试计划来写点东西，计划内容很小清新，不复杂（其实是写不出复杂的东西来）；&lt;br&gt;plan：&lt;br&gt;1、ELK环境搭建&lt;br&gt;2、elasticsearch集群部署&lt;br&gt;3、风控生产JVM奔溃异常分析过程&lt;br&gt;4、du
+    
+    </summary>
+    
+    
+      <category term="计划" scheme="http://www.linmuxi.com/tags/%E8%AE%A1%E5%88%92/"/>
+    
+  </entry>
   
   <entry>
     <title>Redis集群配置说明</title>
@@ -1089,39 +1111,6 @@ nts：用于window平台，采用操作系统认证 -->
     <summary type="html">
     
       本篇参考《深入理解Java虚拟机》第3.5.8章-理解GC日志做的测试分析日志
-    
-    </summary>
-    
-      <category term="技术" scheme="http://www.linmuxi.com/categories/%E6%8A%80%E6%9C%AF/"/>
-    
-    
-      <category term="JVM" scheme="http://www.linmuxi.com/tags/JVM/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>测试JVM运行时常量池溢出</title>
-    <link href="http://www.linmuxi.com/2016/03/02/jvm-runtimeconstantpool-oom/"/>
-    <id>http://www.linmuxi.com/2016/03/02/jvm-runtimeconstantpool-oom/</id>
-    <published>2016-03-02T02:26:28.000Z</published>
-    <updated>2017-02-07T08:45:10.665Z</updated>
-    
-    <content type="html"><![CDATA[<p>运行时常量池属于方法区(俗称永久代)，如果要使运行时常量池溢出其实就是使方法区溢出，可以通过调整方法区的大小并配合String.intern方法来实现。<br><a id="more"></a></p>
-<h2 id="Java代码"><a href="#Java代码" class="headerlink" title="Java代码"></a><strong>Java代码</strong></h2><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line"><span class="comment">/**</span></div><div class="line"> * VM Args: -XX:PermSize=10m -XX:MaxPermSize=10m</div><div class="line"> */</div><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">RuntimeConstantPoolOOM</span> </span>&#123;</div><div class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</div><div class="line">		List&lt;String&gt; list = <span class="keyword">new</span> ArrayList&lt;String&gt;();</div><div class="line">		<span class="keyword">int</span> i =<span class="number">1</span>;</div><div class="line">		<span class="keyword">while</span>(<span class="keyword">true</span>)&#123;</div><div class="line">			list.add(String.valueOf(i++).intern());</div><div class="line">		&#125;</div><div class="line">	&#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
-<p>上面代码设置方法区的初始内存和最大内存为10m，并通过intern方法不停往方法区写入数据。</p>
-<p>最后运行的结果如自己所预料的那样，出现方法区溢出<br><img src="http://7xqlat.com1.z0.glb.clouddn.com/oom_permgen_space_01.png" alt="方法区溢出"></p>
-<p>不过，大家请仔细看，上面是基于jdk1.6运行的结果，我们切换到jdk1.7运行再看看，发现不会出现方法区溢出，这是为什么呢？</p>
-<p>查看jdk1.7发布<a href="http://www.oracle.com/technetwork/java/javase/jdk7-relnotes-418459.html" target="_blank" rel="external">notes</a>发现：</p>
-<blockquote>
-<p>Area: HotSpot<br>Synopsis: In JDK 7, interned strings are no longer allocated in the permanent generation of the Java heap, but are instead allocated in the main part of the Java heap (known as the young and old generations), along with the other objects created by the application. This change will result in more data residing in the main Java heap, and less data in the permanent generation, and thus may require heap sizes to be adjusted. Most applications will see only relatively small differences in heap usage due to this change, but larger applications that load many classes or make heavy use of the String.intern() method will see more significant differences.<br>RFE: 6962931</p>
-</blockquote>
-<p>在JDK7中，常量池已经从方法区中迁移到了java堆中。</p>
-<p>为了验证这个问题，我们调整VM的堆内存大小<code>-Xms10m -Xmx10m</code>再运行，结果如下<br><img src="http://7xqlat.com1.z0.glb.clouddn.com/oom_jav_heap_space_01.png" alt="java堆溢出"></p>
-]]></content>
-    
-    <summary type="html">
-    
-      &lt;p&gt;运行时常量池属于方法区(俗称永久代)，如果要使运行时常量池溢出其实就是使方法区溢出，可以通过调整方法区的大小并配合String.intern方法来实现。&lt;br&gt;
     
     </summary>
     
