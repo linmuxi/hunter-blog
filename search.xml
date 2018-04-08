@@ -5,7 +5,7 @@
     <entry>
       <title><![CDATA[承上启下]]></title>
       <url>%2F2018%2F02%2F11%2Fplan-2018-001%2F</url>
-      <content type="text"><![CDATA[工作原因好像很久没有记录点什么了；年末稍微清闲点了，尝试计划来写点东西，计划内容很小清新，不复杂（其实是写不出复杂的东西来）；plan：1、elk环境搭建2、elasticsearch集群部署3、一次生产jvm奔溃异常分析过程4、dubbo线程飙升异常分析过程5、kafka实操：修改offset重复消费或跳过消费6、maven之profile入门 过去的2017年，平稳、祥和；希望2018年来点不一样的，突破自我，取的更好的成绩，加油!]]></content>
+      <content type="text"><![CDATA[工作原因好像很久没有记录点什么了；年末稍微清闲点了，尝试计划来写点东西，计划内容很小清新，不复杂（其实是写不出复杂的东西来）；plan：1、elk环境搭建2、elasticsearch集群部署3、一次生产jvm奔溃异常分析过程4、dubbo线程飙升异常分析过程5、kafka实操：消息回溯 6、maven之profile入门 过去的2017年，平稳、祥和；希望2018年来点不一样的，突破自我，取的更好的成绩，加油!]]></content>
     </entry>
 
     
