@@ -5,7 +5,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://www.linmuxi.com/"/>
-  <updated>2018-04-08T01:47:12.759Z</updated>
+  <updated>2018-04-08T01:53:40.065Z</updated>
   <id>http://www.linmuxi.com/</id>
   
   <author>
@@ -20,15 +20,15 @@
     <link href="http://www.linmuxi.com/2018/02/11/plan-2018-001/"/>
     <id>http://www.linmuxi.com/2018/02/11/plan-2018-001/</id>
     <published>2018-02-11T06:35:55.000Z</published>
-    <updated>2018-04-08T01:47:12.759Z</updated>
+    <updated>2018-04-08T01:53:40.065Z</updated>
     
-    <content type="html"><![CDATA[<p>工作原因好像很久没有记录点什么了；年末稍微清闲点了，尝试计划来写点东西，计划内容很小清新，不复杂（其实是写不出复杂的东西来）；<br>plan：<br>1、elk环境搭建<br>2、elasticsearch集群部署<br>3、一次生产jvm奔溃异常分析过程<br>4、dubbo线程飙升异常分析过程<br>5、kafka实操：消息回溯 <!-- 修改offset重复消费或跳过消费 --><br>6、maven之profile入门</p>
+    <content type="html"><![CDATA[<p>工作原因好像很久没有记录点什么了；趁年末空闲，尝试计划将工作中遇到的一些东西写出来<br>plan：<br>1、elk环境搭建<br>2、elasticsearch集群部署<br>3、一次生产jvm奔溃异常分析过程<br>4、dubbo线程飙升异常分析过程<br>5、kafka实操：消息回溯 <!-- 修改offset重复消费或跳过消费 --><br>6、maven之profile入门</p>
 <p>过去的2017年，平稳、祥和；希望2018年来点不一样的，突破自我，取的更好的成绩，加油!</p>
 ]]></content>
     
     <summary type="html">
     
-      &lt;p&gt;工作原因好像很久没有记录点什么了；年末稍微清闲点了，尝试计划来写点东西，计划内容很小清新，不复杂（其实是写不出复杂的东西来）；&lt;br&gt;plan：&lt;br&gt;1、elk环境搭建&lt;br&gt;2、elasticsearch集群部署&lt;br&gt;3、一次生产jvm奔溃异常分析过程&lt;br&gt;4、du
+      &lt;p&gt;工作原因好像很久没有记录点什么了；趁年末空闲，尝试计划将工作中遇到的一些东西写出来&lt;br&gt;plan：&lt;br&gt;1、elk环境搭建&lt;br&gt;2、elasticsearch集群部署&lt;br&gt;3、一次生产jvm奔溃异常分析过程&lt;br&gt;4、dubbo线程飙升异常分析过程&lt;br&gt;5、kaf
     
     </summary>
     
